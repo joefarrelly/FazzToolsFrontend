@@ -56,9 +56,23 @@ class MenuBar extends React.Component {
     return (
       <div>
         <Link to="/">Home</Link>
-        <Link to="/auth">Login</Link>
+        <LoginLogout />
       </div>
     );
+  }
+}
+
+class LoginLogout extends React.Component {
+  render() {
+    if (cookies.get('userid')) {
+      return (
+        <>
+          <Link to="/account">Account</Link>
+          <Link to="/logout">Logout</Link>
+        </>
+      );
+    }
+    return <Link to="/auth">Login</Link>;
   }
 }
 
@@ -69,6 +83,7 @@ function RouterSetup() {
       <Route path="/auth" component={Auth} />
       <Route path="/redirect" component={AuthRedirect} />
       <Route path="/account" component={Account} />
+      <Route path="/logout" component={Logout} />
     </Switch>
   );
 }
@@ -94,42 +109,54 @@ class Auth extends React.Component {
 }
 
 class AuthRedirect extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { readyToRedirect: false };
+  }
+  async componentDidMount() {
+    const query = new URLSearchParams(this.props.location.search);
+    const response = await axios.post('http://127.0.0.1:8000/api/bnetlogin/', { state: query.get('state'), code: query.get('code'), client_id: '39658b8731b945fcba53f216556351b6'});
+    cookies.set('userid', response.data['user'], { path: '/', sameSite: 'Lax', secure: true});
+    this.setState({ readyToRedirect: true });
+  }
   render() {
-    let query = new URLSearchParams(this.props.location.search);
-    axios.post('http://127.0.0.1:8000/api/bnetlogin/', { state: query.get('state'), code: query.get('code'), client_id: '39658b8731b945fcba53f216556351b6'})
-      .then(response => {
-        console.log(response.data);
-        cookies.set('userid', response.data['user'], { path: '/', sameSite: 'Lax', secure: true});
-      })
-      .catch(error => {
-        console.log(error);
-      })
+    if (this.state.readyToRedirect) return <Redirect to="/account" />
+
     return (
-      <Redirect to={{
-        pathname: "/account",
-        state: { alts: 'dawd'} 
-      }}/>
+      null
     );
   }
 }
 
 class Account extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = { data: []};
   }
 
   async componentDidMount() {
-    const response = await axios.get('http://127.0.0.1:8000/api/alts', { user: cookies.get('userid') });
+    const response = await axios.get('http://127.0.0.1:8000/api/alts/', { params: { user: cookies.get('userid') }});
     this.setState({ data: response.data });
   }
 
   render() {
     return (
       <div>
+        <MenuBar />
         <AltTable alts={this.state.data} />
-        <p>{this.props.location.state.alts}</p>
       </div>
+    );
+  }
+}
+
+class Logout extends React.Component {
+  componentDidMount() {
+    cookies.remove('userid', { path: '/', sameSite: 'Lax', secure: true});
+  }
+
+  render() {
+    return (
+      <Redirect to="/" />
     );
   }
 }
