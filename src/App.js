@@ -1,133 +1,146 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch, Link, Redirect, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
-const alts = [
-  {
-    altId: 23155,
-    name: 'Fazze',
-    realm: 'Doomhammer',
-    class: 'Druid',
-  }, {
-    altId: 64252,
-    name: 'Fazzlink',
-    realm: 'Turalyon',
-    class: 'Shaman',
-  }, {
-    altId: 95871,
-    name: 'Fazzorc',
-    realm: 'Draenor',
-    class: 'Hunter',
-  },
-];
+const cookies = new Cookies();
 
 class AltTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {name: 'Hubert'};
-  }
-
   render() {
+    const rows = [];
+    
+    this.props.alts.forEach((alt) => {
+      rows.push(
+        <AltTableRow alt={alt} key={alt.altId}/>
+      );
+    })
     return (
       <div>
         <table className="AltTable">
           <tbody>
             <tr>
+              <th>ID</th>
+              <th>Faction</th>
+              <th>Level</th>
               <th>Name</th>
               <th>Realm</th>
               <th>Class</th>
             </tr>
-            { this.props.alt.map(NewAlt) }
+            {rows}
           </tbody>
         </table>
-        { this.state.name }
       </div>
     );
   }
 }
 
-function NewAlt(props) {
-  return (
-      <tr key={ props.altId }>
-        <td>{ props.name}</td>
-        <td>{ props.realm}</td>
-        <td>{ props.class}</td>
+class AltTableRow extends React.Component {
+  render() {
+    const alt = this.props.alt;
+    return (
+      <tr>
+        <td>{alt.altId}</td>
+        <td>{alt.altFaction}</td>
+        <td>{alt.altLevel}</td>
+        <td>{alt.altName}</td>
+        <td>{alt.altRealm}</td>
+        <td>{alt.altClass}</td>
       </tr>
     );
+  }
 }
 
-function MenuBar(props) {
-  return (
-    <Router>
+class MenuBar extends React.Component {
+  render() {
+    return (
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/auth">Login</Link>
-            </li>
-          </ul>
-        </nav>
-
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/auth">
-            <Auth />
-          </Route>
-          <Route path="/redirect">
-            <AuthRedirect />
-          </Route>
-        </Switch>
+        <Link to="/">Home</Link>
+        <Link to="/auth">Login</Link>
       </div>
-    </Router>
+    );
+  }
+}
+
+function RouterSetup() {
+  return (
+    <Switch>
+      <Route path="/" component={Home} exact />
+      <Route path="/auth" component={Auth} />
+      <Route path="/redirect" component={AuthRedirect} />
+      <Route path="/account" component={Account} />
+    </Switch>
   );
 }
 
-function Home () {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
+class Home extends React.Component {
+  render() {
+    return (
+      <div>
+        <h2>Home</h2>
+        <MenuBar />
+      </div>
+    );
+  }
 }
 
-function Auth () {
-  window.location.replace('https://eu.battle.net/oauth/authorize?client_id=39658b8731b945fcba53f216556351b6&scope=wow.profile&state=blizzardeumz76c&redirect_uri=http://localhost:3000/redirect/&response_type=code');
-  return (
-    null
-  );
+class Auth extends React.Component {
+  render() {
+    window.location.replace('https://eu.battle.net/oauth/authorize?client_id=39658b8731b945fcba53f216556351b6&scope=wow.profile&state=blizzardeumz76c&redirect_uri=http://localhost:3000/redirect/&response_type=code');
+    return (
+      null
+    );
+  }
 }
 
-function AuthRedirect () {
-  let query = new URLSearchParams(useLocation().search);
-  console.log(query.get('code'));
-  console.log(query.get('state'));
-  axios.post('http://127.0.0.1:8000/api/bnetlogin/', { state: query.get('state'), code: query.get('code'), client_id: '39658b8731b945fcba53f216556351b6'})
-    .then(res => {
-      console.log(res.data);
-    })
-    .catch(error => {
-      console.log(error);
-    })
-  return (
-    <Redirect to ="/" />
-  );
+class AuthRedirect extends React.Component {
+  render() {
+    let query = new URLSearchParams(this.props.location.search);
+    axios.post('http://127.0.0.1:8000/api/bnetlogin/', { state: query.get('state'), code: query.get('code'), client_id: '39658b8731b945fcba53f216556351b6'})
+      .then(response => {
+        console.log(response.data);
+        cookies.set('userid', response.data['user'], { path: '/', sameSite: 'Lax', secure: true});
+      })
+      .catch(error => {
+        console.log(error);
+      })
+    return (
+      <Redirect to={{
+        pathname: "/account",
+        state: { alts: 'dawd'} 
+      }}/>
+    );
+  }
+}
+
+class Account extends React.Component {
+  constructor() {
+    super();
+    this.state = { data: []};
+  }
+
+  async componentDidMount() {
+    const response = await axios.get('http://127.0.0.1:8000/api/alts', { user: cookies.get('userid') });
+    this.setState({ data: response.data });
+  }
+
+  render() {
+    return (
+      <div>
+        <AltTable alts={this.state.data} />
+        <p>{this.props.location.state.alts}</p>
+      </div>
+    );
+  }
 }
 
 function App() {
   return (
-    <div>
-      <AltTable alt={alts} />
-      <MenuBar />
-    </div>
+    <BrowserRouter>
+      <RouterSetup />
+    </BrowserRouter>
     );
 }
-
 
 export default App;
 
