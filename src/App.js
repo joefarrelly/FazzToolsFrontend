@@ -3,29 +3,28 @@ import './App.css';
 import { BrowserRouter, Route, Switch, Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const cookies = new Cookies();
 
 class AltTable extends React.Component {
   render() {
-    const rows = [];
-    
-    this.props.alts.forEach((alt) => {
-      rows.push(
-        <AltTableRow alt={alt} key={alt.altId}/>
-      );
-    })
+    const rows = this.props.alts.map((row, index) => {
+      return <AltTableRow alt={row} key={index}/>;
+    });
+    const cols = this.props.heads.map((col, index) => {
+      return <AltTableHead head={col} key={index}/>;
+    });
+
     return (
       <div>
-        <table className="AltTable">
+        <table className="alt-table">
           <tbody>
             <tr>
-              <th>ID</th>
-              <th>Faction</th>
-              <th>Level</th>
-              <th>Name</th>
-              <th>Realm</th>
-              <th>Class</th>
+              <th>#</th>
+              {cols}
             </tr>
             {rows}
           </tbody>
@@ -35,18 +34,35 @@ class AltTable extends React.Component {
   }
 }
 
+class AltTableHead extends React.Component {
+  render() {
+    return (
+      <th>{this.props.head}</th>
+    );
+  }
+}
+
 class AltTableRow extends React.Component {
   render() {
-    const alt = this.props.alt;
+    const alt = Object.values(this.props.alt);
+    const rowData = alt.map((data, index) => {
+      return <AltTableRowData alt={data} key={index}/>;
+    });
     return (
       <tr>
-        <td>{alt.altId}</td>
-        <td>{alt.altFaction}</td>
-        <td>{alt.altLevel}</td>
-        <td>{alt.altName}</td>
-        <td>{alt.altRealm}</td>
-        <td>{alt.altClass}</td>
+        <td></td>
+        {rowData}
       </tr>
+    );
+  }
+}
+
+class AltTableRowData extends React.Component {
+  render() {
+    return (
+      <td>
+        {this.props.alt}
+      </td>
     );
   }
 }
@@ -55,7 +71,9 @@ class MenuBar extends React.Component {
   render() {
     return (
       <div>
-        <Link to="/">Home</Link>
+        <div>
+          <Link to="/">Home</Link>
+        </div>
         <LoginLogout />
       </div>
     );
@@ -67,12 +85,32 @@ class LoginLogout extends React.Component {
     if (cookies.get('userid')) {
       return (
         <>
-          <Link to="/account">Account</Link>
-          <Link to="/logout">Logout</Link>
+          <div>
+            <Link to="/account">Account</Link>
+          </div>
+          <div>
+            <Link to="/weekly">Weekly</Link>
+          </div>
+          <div>
+            <Link to="/gear">Gear</Link>
+          </div>
+          <div>
+            <Link to="/profession">Profession</Link>
+          </div>
+          <div>
+            <Link to="/achievement">Achievement</Link>
+          </div>
+          <div>
+            <Link to="/logout">Logout</Link>
+          </div>
         </>
       );
     }
-    return <Link to="/auth">Login</Link>;
+    return (
+      <div>
+        <Link to="/auth">Login</Link>
+      </div>
+    );
   }
 }
 
@@ -83,6 +121,10 @@ function RouterSetup() {
       <Route path="/auth" component={Auth} />
       <Route path="/redirect" component={AuthRedirect} />
       <Route path="/account" component={Account} />
+      <Route path="/weekly" component={Weekly} />
+      <Route path="/gear" component={Gear} />
+      <Route path="/profession" component={Profession} />
+      <Route path="/achievement" component={Achievement} />
       <Route path="/logout" component={Logout} />
     </Switch>
   );
@@ -91,10 +133,16 @@ function RouterSetup() {
 class Home extends React.Component {
   render() {
     return (
-      <div>
-        <h2>Home</h2>
-        <MenuBar />
-      </div>
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Home</h2>
+        </Col>
+      </Row>
     );
   }
 }
@@ -131,20 +179,106 @@ class AuthRedirect extends React.Component {
 class Account extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: []};
+    this.state = { data: [], heads: []};
   }
 
   async componentDidMount() {
     const response = await axios.get('http://127.0.0.1:8000/api/alts/', { params: { user: cookies.get('userid') }});
-    this.setState({ data: response.data });
+    this.setState({ data: response.data, heads: Object.keys(response.data[0]) });
   }
 
   render() {
     return (
-      <div>
-        <MenuBar />
-        <AltTable alts={this.state.data} />
-      </div>
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Account</h2>
+          <AltTable alts={this.state.data} heads={this.state.heads}/>
+        </Col>
+      </Row>
+    );
+  }
+}
+
+class Weekly extends React.Component {
+  render() {
+    return (
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Weekly</h2>
+        </Col>
+      </Row>
+    );
+  }
+}
+
+class Gear extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: [], heads: []};
+  }
+
+  async componentDidMount() {
+    const response = await axios.get('http://127.0.0.1:8000/api/altprofessions/', { params: { user: cookies.get('userid') }});
+    this.setState({ data: response.data, heads: Object.keys(response.data[0]) });
+  }
+
+  render() {
+    return (
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Gear</h2>
+          <AltTable alts={this.state.data} heads={this.state.heads}/>
+        </Col>
+      </Row>
+    );
+  }
+}
+
+class Profession extends React.Component {
+  render() {
+    return (
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Profession</h2>
+        </Col>
+      </Row>
+    );
+  }
+}
+
+class Achievement extends React.Component {
+  render() {
+    return (
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Achievement</h2>
+        </Col>
+      </Row>
     );
   }
 }
@@ -164,7 +298,9 @@ class Logout extends React.Component {
 function App() {
   return (
     <BrowserRouter>
-      <RouterSetup />
+      <Container fluid>
+        <RouterSetup />
+      </Container>
     </BrowserRouter>
     );
 }

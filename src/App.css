@@ -48,3 +48,22 @@ th, td {
     padding: 5px;
     text-align: center;
 }
+
+.sidebar {
+  flex:  0 0 230px;
+}
+
+.main-content {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.alt-table {
+    counter-reset:row-num -1;
+}
+.alt-table tr {
+    counter-increment:row-num;
+}
+.alt-table tr td:first-child::before {
+    content:counter(row-num);
+}
