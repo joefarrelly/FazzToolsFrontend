@@ -205,6 +205,11 @@ class Account extends React.Component {
 }
 
 class Weekly extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: [], heads: []};
+  }
+
   render() {
     return (
       <Row>
@@ -215,6 +220,7 @@ class Weekly extends React.Component {
         </Col>
         <Col className="main-content">
           <h2>Weekly</h2>
+          <AltTable alts={this.state.data} heads={this.state.heads}/>
         </Col>
       </Row>
     );
@@ -225,11 +231,6 @@ class Gear extends React.Component {
   constructor(props) {
     super(props);
     this.state = { data: [], heads: []};
-  }
-
-  async componentDidMount() {
-    const response = await axios.get('http://127.0.0.1:8000/api/altprofessions/', { params: { user: cookies.get('userid') }});
-    this.setState({ data: response.data, heads: Object.keys(response.data[0]) });
   }
 
   render() {
@@ -250,6 +251,16 @@ class Gear extends React.Component {
 }
 
 class Profession extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: [], heads: []};
+  }
+
+  async componentDidMount() {
+    const response = await axios.get('http://127.0.0.1:8000/api/altprofessions/', { params: { user: cookies.get('userid') }});
+    this.setState({ data: response.data, heads: Object.keys(response.data[0]) });
+  }
+
   render() {
     return (
       <Row>
@@ -260,6 +271,7 @@ class Profession extends React.Component {
         </Col>
         <Col className="main-content">
           <h2>Profession</h2>
+          <AltTable alts={this.state.data} heads={this.state.heads}/>
         </Col>
       </Row>
     );
@@ -267,6 +279,11 @@ class Profession extends React.Component {
 }
 
 class Achievement extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: [], heads: []};
+  }
+
   render() {
     return (
       <Row>
@@ -277,6 +294,7 @@ class Achievement extends React.Component {
         </Col>
         <Col className="main-content">
           <h2>Achievement</h2>
+          <AltTable alts={this.state.data} heads={this.state.heads}/>
         </Col>
       </Row>
     );
