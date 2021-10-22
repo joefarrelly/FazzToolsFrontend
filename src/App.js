@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { BrowserRouter, Route, Switch, Link, Redirect, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Link, Redirect, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import Container from 'react-bootstrap/Container';
@@ -10,12 +10,31 @@ import Col from 'react-bootstrap/Col';
 const cookies = new Cookies();
 
 function AltTable(props) {
+  function updateAllAlt() {
+    console.log(props);
+  }
   const rows = props.alts.map((row, index) => {
-    return <AltTableRow alt={row} key={index}/>;
+    return <AltTableRow alt={row} key={index} buttons={props.buttons}/>;
   });
   const cols = props.heads.map((col, index) => {
     return <AltTableHead head={col} key={index}/>;
   });
+  if (props.buttons && props.heads[0] === "altId") {
+    return (
+      <div>
+        <table className="alt-table">
+          <tbody>
+            <tr>
+              <th>#</th>
+              {cols}
+              <th><button onClick={() => updateAllAlt()}>Update All</button></th>
+            </tr>
+            {rows}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
   return (
     <div>
       <table className="alt-table">
@@ -38,10 +57,22 @@ function AltTableHead(props) {
 }
 
 function AltTableRow(props) {
+  function updateAlt(altId) {
+    const response = axios.post('http://127.0.0.1:8000/api/scanalt/', { altId: altId});
+  }
   const alt = Object.values(props.alt);
   const rowData = alt.map((data, index) => {
-    return <AltTableRowData alt={data} key={index}/>;
+    return <AltTableRowData alt={data} key={index} buttons={props.buttons} fullalt={props.alt}/>;
   });
+  if (props.buttons && props.alt.altId) {
+    return (
+      <tr>
+        <td></td>
+        {rowData}
+        <td><button onClick={() => updateAlt(props.alt.altId)}>Update</button></td>
+      </tr>
+    );
+  }
   return (
     <tr>
       <td></td>
@@ -51,6 +82,19 @@ function AltTableRow(props) {
 }
 
 function AltTableRowData(props) {
+  if (props.buttons) {
+    if (props.alt !== props.fullalt.alt) {
+      if (props.alt === props.fullalt.profession1 && props.fullalt.profession1 !== 0) {
+        return (
+          <td><Link to={`/profession/${props.fullalt.alt}/${props.fullalt.profession1}`}>{props.alt}</Link></td>   
+        );
+      } else if (props.alt === props.fullalt.profession2 && props.fullalt.profession2 !== 0) {
+        return (
+          <td><Link to={`/profession/${props.fullalt.alt}/${props.fullalt.profession2}`}>{props.alt}</Link></td>   
+        );
+      }
+    }
+  }
   return (
     <td>
       {props.alt}
@@ -110,9 +154,10 @@ function RouterSetup() {
       <Route path="/account" component={Account} />
       <Route path="/weekly" component={Weekly} />
       <Route path="/gear" component={Gear} />
-      <Route path="/profession" component={Profession} />
+      <Route path="/profession" component={Profession} exact />
       <Route path="/achievement" component={Achievement} />
       <Route path="/logout" component={Logout} />
+      <Route path="/profession/:alt/:profession" children={<SingleProfession />} />
     </Switch>
   );
 }
@@ -181,7 +226,7 @@ function Account() {
       </Col>
       <Col className="main-content">
         <h2>Account</h2>
-        <AltTable alts={data} heads={heads}/>
+        <AltTable alts={data} heads={heads} buttons={true}/>
       </Col>
     </Row>
   );
@@ -247,7 +292,7 @@ function Profession() {
       </Col>
       <Col className="main-content">
         <h2>Profession</h2>
-        <AltTable alts={data} heads={heads}/>
+        <AltTable alts={data} heads={heads} buttons={true}/>
       </Col>
     </Row>
   );
@@ -278,6 +323,36 @@ function Logout() {
   });
   return (
     <Redirect to="/" />
+  );
+}
+
+function SingleProfession() {
+  const [data, setData] = useState([]);
+  const [heads, setHeads] = useState([]);
+
+  const { alt, profession } = useParams();
+
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get('http://127.0.0.1:8000/api/altprofessiondatas/', { params: { alt: alt, profession: profession }});
+      setData(response.data);
+      setHeads(Object.keys(response.data[0]));
+    };
+    getData();
+  }, [alt, profession]);
+
+  return (
+    <Row>
+      <Col className="sidebar">
+        <div className="sticky-top">
+          <MenuBar />
+        </div>
+      </Col>
+      <Col className="main-content">
+        <h2>Single Profession</h2>
+        <AltTable alts={data} heads={heads} />
+      </Col>
+    </Row>
   );
 }
 
