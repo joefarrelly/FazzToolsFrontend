@@ -15,7 +15,7 @@ function AltTable(props) {
     return <AltTableRow alt={row} key={index}/>;
   });
   const cols = props.heads.map((col, index) => {
-    return <AltTableHead head={col} key={index}/>;
+    return <th key={index}>{col}</th>;
   });
   return (
     <div>
@@ -32,19 +32,7 @@ function AltTable(props) {
   );
 }
 
-function AltTableHead(props) {
-  if (props.head !== 'altId' && props.head !== 'altRealmSlug' && props.head !== 'altRealmId') {
-    return <th>{props.head}</th>;
-  }
-  return null;
-}
-
 function AltTableRow(props) {
-  delete props.alt.altId;
-  delete props.alt.altRealmSlug;
-  delete props.alt.altRealmId;
-  delete props.alt.altRace;
-  delete props.alt.altClass;
   const alt = Object.values(props.alt);
   const rowData = alt.map((data, index) => {
     return <AltTableRowData alt={data} key={index} fullalt={props.alt}/>;
@@ -58,14 +46,14 @@ function AltTableRow(props) {
 }
 
 function AltTableRowData(props) {
-  if (props.alt !== props.fullalt.alt) {
-    if (props.alt === props.fullalt.profession1 && props.fullalt.profession1 !== 0) {
+  if (props.fullalt.length === 4) {
+    if (props.alt === props.fullalt[2] && props.fullalt[2] !== 'Missing') {
       return (
-        <td><Link to={`/profession/${props.fullalt.alt}/${props.fullalt.profession1}`}>{props.fullalt.get_profession1_display}</Link></td>   
+        <td><Link to={`/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[2].toLowerCase()}`}>{props.fullalt[2]}</Link></td>   
       );
-    } else if (props.alt === props.fullalt.profession2 && props.fullalt.profession2 !== 0) {
+    } else if (props.alt === props.fullalt[3] && props.fullalt[3] !== 'Missing') {
       return (
-        <td><Link to={`/profession/${props.fullalt.alt}/${props.fullalt.profession2}`}>{props.fullalt.get_profession2_display}</Link></td>   
+        <td><Link to={`/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[3].toLowerCase()}`}>{props.fullalt[3]}</Link></td>   
       );
     }
   }
@@ -180,7 +168,7 @@ function RouterSetup() {
       <Route path="/profession" component={Profession} exact />
       <Route path="/achievement" component={Achievement} />
       <Route path="/logout" component={Logout} />
-      <Route path="/profession/:alt/:profession" children={<SingleProfession />} />
+      <Route path="/:alt/:realm/:profession" children={<SingleProfession />} />
     </Switch>
   );
 }
@@ -236,14 +224,12 @@ function Account() {
     setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
   }
   const [data, setData] = useState([]);
-  const [heads, setHeads] = useState([]);
+  const heads = ['Faction', 'Level', 'Race', 'Class', 'Name', 'Realm'];
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/alts/', { params: { user: cookies.get('userid') }});
+      const response = await axios.get('http://127.0.0.1:8000/api/alts/', { params: { user: cookies.get('userid'), fields: ['altFaction', 'altLevel', 'get_altRace_display', 'get_altClass_display', 'altName', 'altRealm'] }});
       setData(response.data);
-      console.log(response.data);
-      setHeads(Object.keys(response.data[0]));
     };
     getData();
   }, []);
@@ -271,7 +257,7 @@ function Account() {
             </div>
           </Col>
         </Row>
-        <AltTable alts={data} heads={heads}/>
+        <AltTable alts={data} heads={heads} />
       </Col>
     </Row>
   );
@@ -317,14 +303,12 @@ function Gear() {
 
 function Profession() {
   const [data, setData] = useState([]);
-  const [heads, setHeads] = useState([]);
+  const heads = ['Name', 'Realm', 'Profession 1', 'Profession 2']
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/altprofessions/', { params: { user: cookies.get('userid') }});
-      console.log(response.data);
+      const response = await axios.get('http://127.0.0.1:8000/api/altprofessions/', { params: { user: cookies.get('userid'), fields: ['.altName', '.altRealm', 'get_profession1_display', 'get_profession2_display'] }});
       setData(response.data);
-      setHeads(Object.keys(response.data[0]));
     };
     getData();
   }, []);
@@ -338,7 +322,7 @@ function Profession() {
       </Col>
       <Col className="main-content">
         <h2>Profession</h2>
-        <AltTable alts={data} heads={heads}/>
+        <AltTable alts={data} heads={heads} />
       </Col>
     </Row>
   );
@@ -375,15 +359,15 @@ function Logout() {
 function SingleProfession() {
   const [data, setData] = useState([]);
 
-  const { alt, profession } = useParams();
+  const { alt, realm, profession } = useParams();
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/altprofessiondatas/', { params: { alt: alt, profession: profession }});
+      const response = await axios.get('http://127.0.0.1:8000/api/altprofessiondatas/', { params: { alt: alt, realm: realm, profession: profession }});
       setData(response.data);
     };
     getData();
-  }, [alt, profession]);
+  }, [alt, realm, profession]);
 
   return (
     <Row>
@@ -393,7 +377,7 @@ function SingleProfession() {
         </div>
       </Col>
       <Col className="main-content">
-        <h2>Single Profession</h2>
+        <h2>{alt.replace(alt[0], alt[0].toUpperCase())} - {realm.replace(realm[0], realm[0].toUpperCase())}: {profession.replace(profession[0], profession[0].toUpperCase())}</h2>
         <ProfessionTable tiers={data} />
       </Col>
     </Row>
