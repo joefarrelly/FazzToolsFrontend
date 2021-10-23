@@ -6,35 +6,17 @@ import Cookies from 'universal-cookie';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Collapse from 'react-bootstrap/Collapse';
 
 const cookies = new Cookies();
 
 function AltTable(props) {
-  function updateAllAlt() {
-    console.log(props);
-  }
   const rows = props.alts.map((row, index) => {
-    return <AltTableRow alt={row} key={index} buttons={props.buttons}/>;
+    return <AltTableRow alt={row} key={index}/>;
   });
   const cols = props.heads.map((col, index) => {
     return <AltTableHead head={col} key={index}/>;
   });
-  if (props.buttons && props.heads[0] === "altId") {
-    return (
-      <div>
-        <table className="alt-table">
-          <tbody>
-            <tr>
-              <th>#</th>
-              {cols}
-              <th><button onClick={() => updateAllAlt()}>Update All</button></th>
-            </tr>
-            {rows}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
   return (
     <div>
       <table className="alt-table">
@@ -51,28 +33,22 @@ function AltTable(props) {
 }
 
 function AltTableHead(props) {
-  return (
-    <th>{props.head}</th>
-  );
+  if (props.head !== 'altId' && props.head !== 'altRealmSlug' && props.head !== 'altRealmId') {
+    return <th>{props.head}</th>;
+  }
+  return null;
 }
 
 function AltTableRow(props) {
-  function updateAlt(altId) {
-    const response = axios.post('http://127.0.0.1:8000/api/scanalt/', { altId: altId});
-  }
+  delete props.alt.altId;
+  delete props.alt.altRealmSlug;
+  delete props.alt.altRealmId;
+  delete props.alt.altRace;
+  delete props.alt.altClass;
   const alt = Object.values(props.alt);
   const rowData = alt.map((data, index) => {
-    return <AltTableRowData alt={data} key={index} buttons={props.buttons} fullalt={props.alt}/>;
+    return <AltTableRowData alt={data} key={index} fullalt={props.alt}/>;
   });
-  if (props.buttons && props.alt.altId) {
-    return (
-      <tr>
-        <td></td>
-        {rowData}
-        <td><button onClick={() => updateAlt(props.alt.altId)}>Update</button></td>
-      </tr>
-    );
-  }
   return (
     <tr>
       <td></td>
@@ -82,23 +58,70 @@ function AltTableRow(props) {
 }
 
 function AltTableRowData(props) {
-  if (props.buttons) {
-    if (props.alt !== props.fullalt.alt) {
-      if (props.alt === props.fullalt.profession1 && props.fullalt.profession1 !== 0) {
-        return (
-          <td><Link to={`/profession/${props.fullalt.alt}/${props.fullalt.profession1}`}>{props.alt}</Link></td>   
-        );
-      } else if (props.alt === props.fullalt.profession2 && props.fullalt.profession2 !== 0) {
-        return (
-          <td><Link to={`/profession/${props.fullalt.alt}/${props.fullalt.profession2}`}>{props.alt}</Link></td>   
-        );
-      }
+  if (props.alt !== props.fullalt.alt) {
+    if (props.alt === props.fullalt.profession1 && props.fullalt.profession1 !== 0) {
+      return (
+        <td><Link to={`/profession/${props.fullalt.alt}/${props.fullalt.profession1}`}>{props.fullalt.get_profession1_display}</Link></td>   
+      );
+    } else if (props.alt === props.fullalt.profession2 && props.fullalt.profession2 !== 0) {
+      return (
+        <td><Link to={`/profession/${props.fullalt.alt}/${props.fullalt.profession2}`}>{props.fullalt.get_profession2_display}</Link></td>   
+      );
     }
   }
   return (
     <td>
       {props.alt}
     </td>
+  );
+}
+
+function ProfessionTable(props) {
+  const tableData = props.tiers.map((data, index) => {
+    return <ProfessionTableCol tier={data} key={index} />;
+  });
+  return (
+    <>
+      {tableData}
+    </>
+  );
+}
+
+function ProfessionTableCol(props) {
+  const [open, setOpen] = useState(false);
+
+  const rows = props.tier[1];
+  const rowData = rows.map((data, index) => {
+    return <ProfessionTableRow recipe={data} key={index} />;
+  });
+  function changeCollapse() {
+    setOpen(!open);
+  }
+  return (
+    <div>
+      <div className="inline-div">
+        <button className="prof-collapse-button" type="button" onClick={() => changeCollapse()}>{props.tier[0]}</button>
+      </div>
+      <Collapse in={open}>
+        <div className="inline-div content">
+          <table className="prof-table">
+            <tbody>
+              {rowData}
+            </tbody>
+          </table>
+        </div>
+      </Collapse>
+    </div>
+  );
+}
+
+function ProfessionTableRow(props) {
+  return (
+    <tr>
+      <td>
+        {props.recipe}
+      </td>
+    </tr>
   );
 }
 
@@ -205,6 +228,13 @@ function AuthRedirect() {
 }
 
 function Account() {
+  let disable = false;
+  const [update, setUpdate] = useState(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
+  function updateAllAlt() {
+    axios.post('http://127.0.0.1:8000/api/scanalt/', { userid: cookies.get('userid')});
+    cookies.set('lastupdate', new Date().getTime(), { path: '/', sameSite: 'Lax', secure: true});
+    setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
+  }
   const [data, setData] = useState([]);
   const [heads, setHeads] = useState([]);
 
@@ -212,11 +242,14 @@ function Account() {
     async function getData() {
       const response = await axios.get('http://127.0.0.1:8000/api/alts/', { params: { user: cookies.get('userid') }});
       setData(response.data);
+      console.log(response.data);
       setHeads(Object.keys(response.data[0]));
     };
     getData();
   }, []);
-
+  if (new Date().getTime() < (parseInt(cookies.get('lastupdate')) + 300000)) {
+    disable = true;
+  }
   return (
     <Row>
       <Col className="sidebar">
@@ -225,8 +258,20 @@ function Account() {
         </div>
       </Col>
       <Col className="main-content">
-        <h2>Account</h2>
-        <AltTable alts={data} heads={heads} buttons={true}/>
+        <Row>
+          <Col>
+            <h2>Account</h2>
+          </Col>
+          <Col>
+            <div>
+              <div className="update-date-div">
+                <button disabled={disable} onClick={() => updateAllAlt()}>Update</button>
+              </div>
+              <div className="update-date-div">Last updated: {update}</div>
+            </div>
+          </Col>
+        </Row>
+        <AltTable alts={data} heads={heads}/>
       </Col>
     </Row>
   );
@@ -277,6 +322,7 @@ function Profession() {
   useEffect(() => {
     async function getData() {
       const response = await axios.get('http://127.0.0.1:8000/api/altprofessions/', { params: { user: cookies.get('userid') }});
+      console.log(response.data);
       setData(response.data);
       setHeads(Object.keys(response.data[0]));
     };
@@ -292,7 +338,7 @@ function Profession() {
       </Col>
       <Col className="main-content">
         <h2>Profession</h2>
-        <AltTable alts={data} heads={heads} buttons={true}/>
+        <AltTable alts={data} heads={heads}/>
       </Col>
     </Row>
   );
@@ -328,7 +374,6 @@ function Logout() {
 
 function SingleProfession() {
   const [data, setData] = useState([]);
-  const [heads, setHeads] = useState([]);
 
   const { alt, profession } = useParams();
 
@@ -336,7 +381,6 @@ function SingleProfession() {
     async function getData() {
       const response = await axios.get('http://127.0.0.1:8000/api/altprofessiondatas/', { params: { alt: alt, profession: profession }});
       setData(response.data);
-      setHeads(Object.keys(response.data[0]));
     };
     getData();
   }, [alt, profession]);
@@ -350,7 +394,7 @@ function SingleProfession() {
       </Col>
       <Col className="main-content">
         <h2>Single Profession</h2>
-        <AltTable alts={data} heads={heads} />
+        <ProfessionTable tiers={data} />
       </Col>
     </Row>
   );
@@ -365,6 +409,7 @@ function App() {
     </BrowserRouter>
     );
 }
+
 
 export default App;
 

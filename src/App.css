@@ -38,9 +38,9 @@
 }
 
 table, th, td {
-    border: 1px solid black;
+    border: 0.1rem solid black;
     border-collapse: collapse;
-    font-size: 20px;
+    font-size: 1rem;
     background-color: grey;
 }
 
@@ -66,4 +66,25 @@ th, td {
 }
 .alt-table tr td:first-child::before {
     content:counter(row-num);
+}
+
+.update-date-div {
+  display: inline-block;
+}
+
+.prof-table td {
+  text-align: left;
+}
+
+.prof-table-div {
+}
+
+.inline-div {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.prof-collapse-button {
+  width: 15rem;
+  text-align: left;
 }
