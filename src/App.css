@@ -50,7 +50,7 @@ th, td {
 }
 
 .sidebar {
-  flex:  0 0 230px;
+  flex:  0 0 10rem;
 }
 
 .main-content {
@@ -70,6 +70,7 @@ th, td {
 
 .update-date-div {
   display: inline-block;
+  margin: 0.5rem;
 }
 
 .prof-table td {
@@ -87,4 +88,8 @@ th, td {
 .prof-collapse-button {
   width: 15rem;
   text-align: left;
+}
+
+.site-header-right {
+  float: right;
 }

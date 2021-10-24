@@ -10,9 +10,53 @@ import Collapse from 'react-bootstrap/Collapse';
 
 const cookies = new Cookies();
 
+function Header() {
+  let disable = false;
+  const [update, setUpdate] = useState(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
+  function updateAllAlt() {
+    axios.post('http://127.0.0.1:8000/api/scanalt/', { userid: cookies.get('userid')});
+    cookies.set('lastupdate', new Date().getTime(), { path: '/', sameSite: 'Lax', secure: true});
+    setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
+  }
+
+  if (new Date().getTime() < (parseInt(cookies.get('lastupdate')) + 300000)) {
+    disable = true;
+  }
+
+  if (cookies.get('userid')) {
+    return (
+      <Row>
+        <Col>
+          <div className="site-header-left">
+            <h1>Fazz Tools</h1>
+          </div>
+        </Col>
+        <Col>
+          <div className="site-header-right">
+            <div className="update-date-div">
+              <button disabled={disable} onClick={() => updateAllAlt()}>Update</button>
+            </div>
+            <div className="update-date-div">Last updated: {update}</div>
+          </div>
+        </Col>
+      </Row>
+    );
+  }
+
+  return (
+    <Row>
+      <Col>
+        <div class="site-header-left">
+          <h1>Fazz Tools</h1>
+        </div>
+      </Col>
+    </Row>
+  );
+}
+
 function AltTable(props) {
   const rows = props.alts.map((row, index) => {
-    return <AltTableRow alt={row} key={index}/>;
+    return <AltTableRow alt={row} key={index} page={props.page}/>;
   });
   const cols = props.heads.map((col, index) => {
     return <th key={index}>{col}</th>;
@@ -35,7 +79,7 @@ function AltTable(props) {
 function AltTableRow(props) {
   const alt = Object.values(props.alt);
   const rowData = alt.map((data, index) => {
-    return <AltTableRowData alt={data} key={index} fullalt={props.alt}/>;
+    return <AltTableRowData alt={data} key={index} fullalt={props.alt} page={props.page}/>;
   });
   return (
     <tr>
@@ -46,7 +90,7 @@ function AltTableRow(props) {
 }
 
 function AltTableRowData(props) {
-  if (props.fullalt.length === 4) {
+  if (props.page === 'profession') {
     if (props.alt === props.fullalt[2] && props.fullalt[2] !== 'Missing') {
       return (
         <td><Link to={`/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[2].toLowerCase()}`}>{props.fullalt[2]}</Link></td>   
@@ -175,16 +219,20 @@ function RouterSetup() {
 
 function Home() {
   return (
-    <Row>
-      <Col className="sidebar">
-        <div className="sticky-top">
-          <MenuBar />
-        </div>
-      </Col>
-      <Col className="main-content">
-        <h2>Home</h2>
-      </Col>
-    </Row>
+    <>
+      <Header />
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Home</h2>
+          <p>Landing page coming at some point.</p>
+        </Col>
+      </Row>
+    </>
   );
 }
 
@@ -216,13 +264,6 @@ function AuthRedirect() {
 }
 
 function Account() {
-  let disable = false;
-  const [update, setUpdate] = useState(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
-  function updateAllAlt() {
-    axios.post('http://127.0.0.1:8000/api/scanalt/', { userid: cookies.get('userid')});
-    cookies.set('lastupdate', new Date().getTime(), { path: '/', sameSite: 'Lax', secure: true});
-    setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
-  }
   const [data, setData] = useState([]);
   const heads = ['Faction', 'Level', 'Race', 'Class', 'Name', 'Realm'];
 
@@ -233,33 +274,26 @@ function Account() {
     };
     getData();
   }, []);
-  if (new Date().getTime() < (parseInt(cookies.get('lastupdate')) + 300000)) {
-    disable = true;
-  }
+
   return (
-    <Row>
-      <Col className="sidebar">
-        <div className="sticky-top">
-          <MenuBar />
-        </div>
-      </Col>
-      <Col className="main-content">
-        <Row>
-          <Col>
-            <h2>Account</h2>
-          </Col>
-          <Col>
-            <div>
-              <div className="update-date-div">
-                <button disabled={disable} onClick={() => updateAllAlt()}>Update</button>
-              </div>
-              <div className="update-date-div">Last updated: {update}</div>
-            </div>
-          </Col>
-        </Row>
-        <AltTable alts={data} heads={heads} />
-      </Col>
-    </Row>
+    <>
+      <Header />
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <Row>
+            <Col>
+              <h2>Account</h2>
+            </Col>
+          </Row>
+          <AltTable alts={data} heads={heads} />
+        </Col>
+      </Row>
+    </>
   );
 }
 
@@ -268,36 +302,50 @@ function Weekly() {
   const [heads, setHeads] = useState([]);
 
   return (
-    <Row>
-      <Col className="sidebar">
-        <div className="sticky-top">
-          <MenuBar />
-        </div>
-      </Col>
-      <Col className="main-content">
-        <h2>Weekly</h2>
-        <AltTable alts={data} heads={heads}/>
-      </Col>
-    </Row>
+    <>
+      <Header />
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Weekly</h2>
+          <AltTable alts={data} heads={heads}/>
+        </Col>
+      </Row>
+    </>
   );
 }
 
 function Gear() {
   const [data, setData] = useState([]);
-  const [heads, setHeads] = useState([]);
+  const heads = ['Name', 'Realm', 'Avg', 'Head', 'Neck', 'Shoulder', 'Back', 'Chest', 'Tabard', 'Shirt', 'Wrist', 'Hands', 'Belt', 'Legs', 'Feet', 'Ring 1', 'Ring 2', 'Trinket 1', 'Trinket 2', 'Weapon 1', 'Weapon 2'];
+
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get('http://127.0.0.1:8000/api/altequipments/', { params: { user: cookies.get('userid') }});
+      setData(response.data);
+    };
+    getData();
+  }, []);
 
   return (
-    <Row>
-      <Col className="sidebar">
-        <div className="sticky-top">
-          <MenuBar />
-        </div>
-      </Col>
-      <Col className="main-content">
-        <h2>Gear</h2>
-        <AltTable alts={data} heads={heads}/>
-      </Col>
-    </Row>
+    <>
+      <Header />
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Gear</h2>
+          <AltTable alts={data} heads={heads}/>
+        </Col>
+      </Row>
+    </>
   );
 }
 
@@ -314,17 +362,20 @@ function Profession() {
   }, []);
 
   return (
-    <Row>
-      <Col className="sidebar">
-        <div className="sticky-top">
-          <MenuBar />
-        </div>
-      </Col>
-      <Col className="main-content">
-        <h2>Profession</h2>
-        <AltTable alts={data} heads={heads} />
-      </Col>
-    </Row>
+    <>
+      <Header />
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Profession</h2>
+          <AltTable alts={data} heads={heads} page={'profession'}/>
+        </Col>
+      </Row>
+    </>
   );
 }
 
@@ -333,17 +384,20 @@ function Achievement() {
   const [heads, setHeads] = useState([]);
 
   return (
-    <Row>
-      <Col className="sidebar">
-        <div className="sticky-top">
-          <MenuBar />
-        </div>
-      </Col>
-      <Col className="main-content">
-        <h2>Achievement</h2>
-        <AltTable alts={data} heads={heads}/>
-      </Col>
-    </Row>
+    <>
+      <Header />
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Achievement</h2>
+          <AltTable alts={data} heads={heads}/>
+        </Col>
+      </Row>
+    </>
   );
 }
 
@@ -370,17 +424,20 @@ function SingleProfession() {
   }, [alt, realm, profession]);
 
   return (
-    <Row>
-      <Col className="sidebar">
-        <div className="sticky-top">
-          <MenuBar />
-        </div>
-      </Col>
-      <Col className="main-content">
-        <h2>{alt.replace(alt[0], alt[0].toUpperCase())} - {realm.replace(realm[0], realm[0].toUpperCase())}: {profession.replace(profession[0], profession[0].toUpperCase())}</h2>
-        <ProfessionTable tiers={data} />
-      </Col>
-    </Row>
+    <>
+      <Header />
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>{alt.replace(alt[0], alt[0].toUpperCase())} - {realm.replace(realm[0], realm[0].toUpperCase())}: {profession.replace(profession[0], profession[0].toUpperCase())}</h2>
+          <ProfessionTable tiers={data} />
+        </Col>
+      </Row>
+    </>
   );
 }
 
