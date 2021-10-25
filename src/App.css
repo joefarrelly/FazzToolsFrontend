@@ -45,7 +45,7 @@ table, th, td {
 }
 
 th, td {
-    padding: 5px;
+    padding:0.1rem;
     text-align: center;
 }
 
@@ -90,6 +90,25 @@ th, td {
   text-align: left;
 }
 
+.prof-collapse-button:hover {
+  background-color: darkgrey;
+}
+
 .site-header-right {
   float: right;
+}
+
+.recipe-list {
+  background-color: lightgrey;
+  border-style: solid;
+  cursor: pointer;
+  width: 18rem;
+}
+
+.recipe-list:hover {
+  background-color: darkgrey;
+}
+
+.recipe-mats {
+/*  margin-left: 0.5rem;*/
 }

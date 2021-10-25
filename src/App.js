@@ -19,7 +19,7 @@ function Header() {
     setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
   }
 
-  if (new Date().getTime() < (parseInt(cookies.get('lastupdate')) + 300000)) {
+  if (new Date().getTime() < (parseInt(cookies.get('lastupdate')) + 3)) {
     disable = true;
   }
 
@@ -135,12 +135,8 @@ function ProfessionTableCol(props) {
         <button className="prof-collapse-button" type="button" onClick={() => changeCollapse()}>{props.tier[0]}</button>
       </div>
       <Collapse in={open}>
-        <div className="inline-div content">
-          <table className="prof-table">
-            <tbody>
-              {rowData}
-            </tbody>
-          </table>
+        <div className="inline-div">
+          {rowData}
         </div>
       </Collapse>
     </div>
@@ -148,12 +144,34 @@ function ProfessionTableCol(props) {
 }
 
 function ProfessionTableRow(props) {
+  const [open, setOpen] = useState(false);
+
+  function changeCollapse() {
+    setOpen(!open);
+  }
+
   return (
-    <tr>
-      <td>
-        {props.recipe}
-      </td>
-    </tr>
+    <div>
+      <div className="inline-div recipe-list" onClick={() => changeCollapse()}>
+        <div className="inline-div">
+          {props.recipe[0]}
+        </div>
+      </div>
+      <div className="inline-div">
+        <Collapse in={open}>
+          <div className="inline-div recipe-mats">
+              <div className="inline-div">{props.recipe[1]}</div>
+              <div className="inline-div">{props.recipe[2]}</div>
+              <div className="inline-div"> - </div>
+              <div className="inline-div"> - </div>
+              <div className="inline-div"> - </div>
+              <div className="inline-div"> - </div>
+              <div className="inline-div"> - </div>
+              <div className="inline-div"> - </div>
+          </div>
+        </Collapse>
+      </div>
+    </div>
   );
 }
 
