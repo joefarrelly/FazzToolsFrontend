@@ -14,7 +14,7 @@ function Header() {
   let disable = false;
   const [update, setUpdate] = useState(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
   function updateAllAlt() {
-    axios.post('http://127.0.0.1:8000/api/scanalt/', { userid: cookies.get('userid')});
+    axios.post('http://127.0.0.1:8000/api/custom/scanalt/', { userid: cookies.get('userid')});
     cookies.set('lastupdate', new Date().getTime(), { path: '/', sameSite: 'Lax', secure: true});
     setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
   }
@@ -146,6 +146,10 @@ function ProfessionTableCol(props) {
 function ProfessionTableRow(props) {
   const [open, setOpen] = useState(false);
 
+  const mats = props.recipe.slice(3).map((mat, index) => {
+    return <div className="inline-div" key={index}>&nbsp;-&nbsp;{mat[1]} {mat[0]}</div>;
+  });
+
   function changeCollapse() {
     setOpen(!open);
   }
@@ -160,14 +164,7 @@ function ProfessionTableRow(props) {
       <div className="inline-div">
         <Collapse in={open}>
           <div className="inline-div recipe-mats">
-              <div className="inline-div">{props.recipe[1]}</div>
-              <div className="inline-div">{props.recipe[2]}</div>
-              <div className="inline-div"> - </div>
-              <div className="inline-div"> - </div>
-              <div className="inline-div"> - </div>
-              <div className="inline-div"> - </div>
-              <div className="inline-div"> - </div>
-              <div className="inline-div"> - </div>
+              {mats}
           </div>
         </Collapse>
       </div>
@@ -268,7 +265,7 @@ function AuthRedirect() {
   useEffect(() => {
     async function getData() {
       const query = new URLSearchParams(location.search);
-      const response = await axios.post('http://127.0.0.1:8000/api/bnetlogin/', { state: query.get('state'), code: query.get('code'), client_id: '39658b8731b945fcba53f216556351b6'});
+      const response = await axios.post('http://127.0.0.1:8000/api/custom/bnetlogin/', { state: query.get('state'), code: query.get('code'), client_id: '39658b8731b945fcba53f216556351b6'});
       cookies.set('userid', response.data['user'], { path: '/', sameSite: 'Lax', secure: true});
       setReadyToRedirect(true);
     };
@@ -287,7 +284,7 @@ function Account() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/alts/', { params: { user: cookies.get('userid'), fields: ['altFaction', 'altLevel', 'get_altRace_display', 'get_altClass_display', 'altName', 'altRealm'] }});
+      const response = await axios.get('http://127.0.0.1:8000/api/profile/alts/', { params: { user: cookies.get('userid'), fields: ['altFaction', 'altLevel', 'get_altRace_display', 'get_altClass_display', 'altName', 'altRealm'] }});
       setData(response.data);
     };
     getData();
@@ -343,7 +340,7 @@ function Gear() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/altequipments/', { params: { user: cookies.get('userid') }});
+      const response = await axios.get('http://127.0.0.1:8000/api/profile/altequipments/', { params: { user: cookies.get('userid') }});
       setData(response.data);
     };
     getData();
@@ -373,7 +370,7 @@ function Profession() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/altprofessions/', { params: { user: cookies.get('userid'), fields: ['.altName', '.altRealm', 'get_profession1_display', 'get_profession2_display'] }});
+      const response = await axios.get('http://127.0.0.1:8000/api/profile/altprofessions/', { params: { user: cookies.get('userid'), fields: ['.altName', '.altRealm', 'get_profession1_display', 'get_profession2_display'] }});
       setData(response.data);
     };
     getData();
@@ -435,7 +432,7 @@ function SingleProfession() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/altprofessiondatas/', { params: { alt: alt, realm: realm, profession: profession }});
+      const response = await axios.get('http://127.0.0.1:8000/api/profile/altprofessiondatas/', { params: { alt: alt, realm: realm, profession: profession }});
       setData(response.data);
     };
     getData();
