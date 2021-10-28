@@ -90,7 +90,16 @@ th, td {
   text-align: left;
 }
 
+.prof-category-collapse-button {
+  width: 10rem;
+  text-align: left;
+}
+
 .prof-collapse-button:hover {
+  background-color: darkgrey;
+}
+
+.prof-category-collapse-button:hover {
   background-color: darkgrey;
 }
 
@@ -109,6 +118,48 @@ th, td {
   background-color: darkgrey;
 }
 
-.recipe-mats {
-/*  margin-left: 0.5rem;*/
+.uncommon{
+    border: ridge;
+    border-color: #1EFF00;
+    border-width: 4px;
+    border-radius: 4px;
 }
+/*.uncommon-text{
+    color: #FFFFFF;
+}*/
+.common{
+    border: ridge;
+    border-color: #FFFFFF;
+    border-width: 4px;
+    border-radius: 4px;
+}
+/*.common-text{
+    color: #1EFF00;
+}*/
+.rare{
+    border: ridge;
+    border-color: #0070DD;
+    border-width: 4px;
+    border-radius: 4px;
+}
+/*.rare-text{
+    color: #0070DD;
+}*/
+.epic{
+    border: ridge;
+    border-color: #A335EE;
+    border-width: 4px;
+    border-radius: 4px;
+}
+/*.epic-text{
+    color: #A335EE;
+}*/
+.legendary{
+    border: ridge;
+    border-color: #FF8000;
+    border-width: 4px;
+    border-radius: 4px;
+}
+/*.legendary-text{
+    color: #FF8000;
+}*/

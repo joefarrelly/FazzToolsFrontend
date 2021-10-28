@@ -124,7 +124,7 @@ function ProfessionTableCol(props) {
 
   const rows = props.tier[1];
   const rowData = rows.map((data, index) => {
-    return <ProfessionTableRow recipe={data} key={index} />;
+    return <ProfessionTableRowTemp recipe={data} key={index} />;
   });
   function changeCollapse() {
     setOpen(!open);
@@ -143,11 +143,36 @@ function ProfessionTableCol(props) {
   );
 }
 
+function ProfessionTableRowTemp(props) {
+  const [open, setOpen] = useState(false);
+
+  const temps = props.recipe[1];
+  const tempData = temps.map((data, index) => {
+    return <ProfessionTableRow recipe={data} key={index} />;
+  });
+  function changeCollapse() {
+    setOpen(!open);
+  }
+  return (
+    <div>
+      <div>
+        <button className="prof-category-collapse-button" type="button" onClick={() => changeCollapse()}>{props.recipe[0]}</button>
+      </div>
+      <Collapse in={open}>
+        <div className="inline-div">
+          {tempData}
+        </div>
+      </Collapse>
+    </div>
+  );
+}
+
+
 function ProfessionTableRow(props) {
   const [open, setOpen] = useState(false);
 
   const mats = props.recipe.slice(3).map((mat, index) => {
-    return <div className="inline-div" key={index}>&nbsp;-&nbsp;{mat[1]} {mat[0]}</div>;
+    return <div className="inline-div" key={index}>&nbsp;{mat[1]}x <img className={mat[3].toLowerCase()} src={mat[2]} title={mat[0]} width="48" height="48" /></div>;
   });
 
   function changeCollapse() {
@@ -158,7 +183,8 @@ function ProfessionTableRow(props) {
     <div>
       <div className="inline-div recipe-list" onClick={() => changeCollapse()}>
         <div className="inline-div">
-          {props.recipe[0]}
+          {props.recipe[0]}<br />
+          Rank: {props.recipe[1]} Quantity: {props.recipe[2]}
         </div>
       </div>
       <div className="inline-div">
