@@ -91,7 +91,7 @@ th, td {
 }
 
 .prof-category-collapse-button {
-  width: 10rem;
+  width: 15rem;
   text-align: left;
 }
 
@@ -163,3 +163,29 @@ th, td {
 /*.legendary-text{
     color: #FF8000;
 }*/
+
+.mount-collapse-button {
+  width: 22rem;
+  text-align: left;
+}
+
+.mount-collapse-button:hover {
+  background-color: darkgrey;
+}
+
+.mount-container {
+  width: 22rem;
+  display: flex;
+  background-color: darkgrey;
+  border: solid;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.left {
+  margin: 0.3rem;
+}
+
+.right {
+  margin: 0.3rem;
+}
