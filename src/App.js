@@ -19,7 +19,7 @@ function Header() {
     setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
   }
 
-  if (new Date().getTime() < (parseInt(cookies.get('lastupdate')) + 3)) {
+  if (new Date().getTime() < (parseInt(cookies.get('lastupdate')) + 300000)) {
     disable = true;
   }
 
@@ -263,7 +263,7 @@ function LoginLogout() {
           <Link to="/account">Account</Link>
         </div>
         <div>
-          <Link to="/weekly">Weekly</Link>
+          <Link to="/keybind">Keybind</Link>
         </div>
         <div>
           <Link to="/gear">Gear</Link>
@@ -294,7 +294,7 @@ function RouterSetup() {
       <Route path="/auth" component={Auth} />
       <Route path="/redirect" component={AuthRedirect} />
       <Route path="/account" component={Account} />
-      <Route path="/weekly" component={Weekly} />
+      <Route path="/keybind" component={Keybind} />
       <Route path="/gear" component={Gear} />
       <Route path="/profession" component={Profession} exact />
       <Route path="/mount" component={Mount} />
@@ -324,7 +324,7 @@ function Home() {
 }
 
 function Auth() {
-  window.location.replace('https://eu.battle.net/oauth/authorize?client_id=39658b8731b945fcba53f216556351b6&scope=wow.profile&state=blizzardeumz76c&redirect_uri=http://localhost:3000/redirect/&response_type=code');
+  window.location.replace('https://eu.battle.net/oauth/authorize?client_id=39658b8731b945fcba53f216556351b6&scope=wow.profile&state=blizzardeumz76c&redirect_uri=https://fazztools.hopto.org/redirect/&response_type=code');
   return (
     null
   );
@@ -384,9 +384,9 @@ function Account() {
   );
 }
 
-function Weekly() {
-  const [data, setData] = useState([]);
-  const [heads, setHeads] = useState([]);
+function Keybind() {
+  const data = []
+  const heads = ['Name', 'Realm', 'Class', 'Spec 1', 'Spec 2', 'Spec 3', 'Spec 4']
 
   return (
     <>
@@ -398,7 +398,7 @@ function Weekly() {
           </div>
         </Col>
         <Col className="main-content">
-          <h2>Weekly</h2>
+          <h2>Keybind</h2>
           <AltTable alts={data} heads={heads}/>
         </Col>
       </Row>
