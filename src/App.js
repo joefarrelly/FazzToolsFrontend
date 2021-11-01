@@ -49,7 +49,6 @@ function Header() {
       <Col>
         <div class="site-header-left">
           <h1>Fazz Tools</h1>
-          {config.url.API_URL}
         </div>
       </Col>
     </Row>
