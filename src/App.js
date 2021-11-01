@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Collapse from 'react-bootstrap/Collapse';
+import { config } from './Constants';
 
 const cookies = new Cookies();
 
@@ -14,7 +15,7 @@ function Header() {
   let disable = false;
   const [update, setUpdate] = useState(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
   function updateAllAlt() {
-    axios.post('http://127.0.0.1:8000/api/custom/scanalt/', { userid: cookies.get('userid')});
+    axios.post(config.url.API_URL + '/api/custom/scanalt/', { userid: cookies.get('userid')});
     cookies.set('lastupdate', new Date().getTime(), { path: '/', sameSite: 'Lax', secure: true});
     setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
   }
@@ -48,6 +49,7 @@ function Header() {
       <Col>
         <div class="site-header-left">
           <h1>Fazz Tools</h1>
+          {config.url.API_URL}
         </div>
       </Col>
     </Row>
@@ -324,7 +326,7 @@ function Home() {
 }
 
 function Auth() {
-  window.location.replace('https://eu.battle.net/oauth/authorize?client_id=39658b8731b945fcba53f216556351b6&scope=wow.profile&state=blizzardeumz76c&redirect_uri=https://fazztools.hopto.org/redirect/&response_type=code');
+  window.location.replace('https://eu.battle.net/oauth/authorize?client_id=39658b8731b945fcba53f216556351b6&scope=wow.profile&state=blizzardeumz76c&redirect_uri=' + config.url.REDIRECT_URL + '/redirect/&response_type=code');
   return (
     null
   );
@@ -337,7 +339,7 @@ function AuthRedirect() {
   useEffect(() => {
     async function getData() {
       const query = new URLSearchParams(location.search);
-      const response = await axios.post('http://127.0.0.1:8000/api/custom/bnetlogin/', { state: query.get('state'), code: query.get('code'), client_id: '39658b8731b945fcba53f216556351b6'});
+      const response = await axios.post(config.url.API_URL + '/api/custom/bnetlogin/', { state: query.get('state'), code: query.get('code'), client_id: '39658b8731b945fcba53f216556351b6'});
       cookies.set('userid', response.data['user'], { path: '/', sameSite: 'Lax', secure: true});
       setReadyToRedirect(true);
     };
@@ -356,7 +358,7 @@ function Account() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/profile/alts/', { params: { user: cookies.get('userid'), fields: ['altFaction', 'altLevel', 'get_altRace_display', 'get_altClass_display', 'altName', 'altRealm'] }});
+      const response = await axios.get(config.url.API_URL + '/api/profile/alts/', { params: { user: cookies.get('userid'), fields: ['altFaction', 'altLevel', 'get_altRace_display', 'get_altClass_display', 'altName', 'altRealm'] }});
       setData(response.data);
     };
     getData();
@@ -412,7 +414,7 @@ function Gear() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/profile/altequipments/', { params: { user: cookies.get('userid') }});
+      const response = await axios.get(config.url.API_URL + '/api/profile/altequipments/', { params: { user: cookies.get('userid') }});
       setData(response.data);
     };
     getData();
@@ -442,7 +444,7 @@ function Profession() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/profile/altprofessions/', { params: { user: cookies.get('userid'), fields: ['.altName', '.altRealm', 'get_profession1_display', 'get_profession2_display'] }});
+      const response = await axios.get(config.url.API_URL + '/api/profile/altprofessions/', { params: { user: cookies.get('userid'), fields: ['.altName', '.altRealm', 'get_profession1_display', 'get_profession2_display'] }});
       setData(response.data);
     };
     getData();
@@ -472,7 +474,7 @@ function Mount() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/profile/usermounts/', { params: { user: cookies.get('userid') }});
+      const response = await axios.get(config.url.API_URL + '/api/profile/usermounts/', { params: { user: cookies.get('userid') }});
       setData(response.data);
     };
     getData();
@@ -512,7 +514,7 @@ function SingleProfession() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/profile/altprofessiondatas/', { params: { alt: alt, realm: realm, profession: profession }});
+      const response = await axios.get(config.url.API_URL + '/api/profile/altprofessiondatas/', { params: { alt: alt, realm: realm, profession: profession }});
       setData(response.data);
     };
     getData();
