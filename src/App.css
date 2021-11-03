@@ -45,7 +45,8 @@ table, th, td {
 }
 
 th, td {
-    padding:0.1rem;
+    /*padding:0.1rem;*/
+    padding: 0.1rem 1rem 0.1rem 1rem;
     text-align: center;
 }
 
@@ -188,4 +189,41 @@ th, td {
 
 .right {
   margin: 0.3rem;
+}
+
+.Warrior{
+    background-color: #C79C6E;
+}
+.Paladin{
+    background-color: #F58CBA;
+}
+.Hunter{
+    background-color: #ABD473;
+}
+.Rogue{
+    background-color: #FFF569;
+}
+.Priest{
+    background-color: #FFFFFF;
+}
+.Shaman{
+    background-color: #0070DE;
+}
+.Mage{
+    background-color: #69CCF0;
+}
+.Warlock{
+    background-color: #9482C9;
+}
+.Monk{
+    background-color: #00FF96;
+}
+.Druid{
+    background-color: #FF7D0A;
+}
+.DemonHunter{
+    background-color: #A330C9;
+}
+.DeathKnight{
+    background-color: #C41F3B;  
 }

@@ -102,8 +102,15 @@ function AltTableRowData(props) {
       );
     }
   }
+  if (props.page === 'gear') {
+    return (
+      <td>
+        {props.alt}
+      </td>
+    );
+  }
   return (
-    <td>
+    <td className={props.fullalt[3].replace(/\s/g, '')}>
       {props.alt}
     </td>
   );
@@ -430,7 +437,7 @@ function Gear() {
         </Col>
         <Col className="main-content">
           <h2>Gear</h2>
-          <AltTable alts={data} heads={heads}/>
+          <AltTable alts={data} heads={heads} page={'gear'} />
         </Col>
       </Row>
     </>
