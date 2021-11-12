@@ -92,22 +92,64 @@ function AltTableRow(props) {
 
 function AltTableRowData(props) {
   if (props.page === 'profession') {
-    if (props.alt === props.fullalt[2] && props.fullalt[2] !== 'Missing') {
+    if (props.alt === props.fullalt[2]) {
       return (
-        <td><Link to={`/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[2].toLowerCase()}`}>{props.fullalt[2]}</Link></td>   
+        null
       );
-    } else if (props.alt === props.fullalt[3] && props.fullalt[3] !== 'Missing') {
+    }
+    if (props.alt === props.fullalt[3] && props.fullalt[3] !== 'Missing') {
       return (
-        <td><Link to={`/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[3].toLowerCase()}`}>{props.fullalt[3]}</Link></td>   
+        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[3].toLowerCase()}`}>{props.fullalt[3]}</Link></td>   
+      );
+    } else if (props.alt === props.fullalt[4] && props.fullalt[4] !== 'Missing') {
+      return (
+        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[4].toLowerCase()}`}>{props.fullalt[4]}</Link></td>   
+      );
+    } else {
+      return (
+        <td className={props.fullalt[2].replace(/\s/g, '')}>{props.alt}</td>
       );
     }
   }
   if (props.page === 'gear') {
+    if (props.alt === props.fullalt[2]) {
+      return (
+        null
+      );
+    }
     return (
-      <td>
+      <td className={props.fullalt[2].replace(/\s/g, '')}>
         {props.alt}
       </td>
     );
+  }
+  if (props.page === 'kb') {
+    if (props.alt === props.fullalt[2]) {
+      return (
+        null
+      );
+    }
+    if (props.alt === props.fullalt[3] && props.fullalt[3] !== '---') {
+      return (
+        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[3].toLowerCase()}`}>{props.fullalt[3]}</Link></td>   
+      );
+    } else if (props.alt === props.fullalt[4] && props.fullalt[4] !== '---') {
+      return (
+        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[4].toLowerCase()}`}>{props.fullalt[4]}</Link></td>   
+      );
+    } else if (props.alt === props.fullalt[5] && props.fullalt[5] !== '---') {
+      return (
+        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[5].toLowerCase()}`}>{props.fullalt[5]}</Link></td>   
+      );
+    } else if (props.alt === props.fullalt[6] && props.fullalt[6] !== '---') {
+      return (
+        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[6].toLowerCase()}`}>{props.fullalt[6]}</Link></td>   
+      );
+    } else {
+      return (
+        <td className={props.fullalt[2].replace(/\s/g, '')}>{props.alt}</td>
+      );
+    }
   }
   return (
     <td className={props.fullalt[3].replace(/\s/g, '')}>
@@ -202,6 +244,14 @@ function ProfessionTableRow(props) {
           </div>
         </Collapse>
       </div>
+    </div>
+  );
+}
+
+function KeybindTable(props) {
+  return (
+    <div>
+      <span>HELLO</span>
     </div>
   );
 }
@@ -302,12 +352,13 @@ function RouterSetup() {
       <Route path="/auth" component={Auth} />
       <Route path="/redirect" component={AuthRedirect} />
       <Route path="/account" component={Account} />
-      <Route path="/keybind" component={Keybind} />
+      <Route path="/keybind" component={Keybind} exact />
       <Route path="/gear" component={Gear} />
       <Route path="/profession" component={Profession} exact />
       <Route path="/mount" component={Mount} />
       <Route path="/logout" component={Logout} />
-      <Route path="/:alt/:realm/:profession" children={<SingleProfession />} />
+      <Route path="/keybind/:alt/:realm/:spec" children={<SingleKeybind />} />
+      <Route path="/profession/:alt/:realm/:profession" children={<SingleProfession />} />
     </Switch>
   );
 }
@@ -393,8 +444,21 @@ function Account() {
 }
 
 function Keybind() {
-  const data = []
-  const heads = ['Name', 'Realm', 'Class', 'Spec 1', 'Spec 2', 'Spec 3', 'Spec 4']
+  const [data, setData] = useState([]);
+  const heads = ['Name', 'Realm', 'Spec 1', 'Spec 2', 'Spec 3', 'Spec 4'];
+  const [inputKey, setInputKey] = useState(Date.now());
+
+  function handleKeyChange(newKey) {
+    setInputKey(newKey);
+  }
+
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get(config.url.API_URL + '/api/profile/users/', { params: { user: cookies.get('userid'), page: 'all'}});
+      setData(response.data);
+    };
+    getData();
+  }, []);
 
   return (
     <>
@@ -406,11 +470,43 @@ function Keybind() {
           </div>
         </Col>
         <Col className="main-content">
-          <h2>Keybind</h2>
-          <AltTable alts={data} heads={heads}/>
+          <div className="inline-div">
+            <h2>Keybind</h2>
+          </div>
+          <KeybindUpload inputKey={inputKey} onChange={handleKeyChange} />
+          <AltTable alts={data} heads={heads} page='kb' />
         </Col>
       </Row>
     </>
+  );
+}
+
+function KeybindUpload(props) {
+  const [disable, setDisable] = useState(true);
+  const [selectedFile, setSelectedFile] = useState();
+
+  function changeHandler(event) {
+    setSelectedFile(event.target.files[0]);
+    setDisable(false);
+  }
+
+  async function submitHandler() {
+    const formData = new FormData();
+    formData.append('userId', cookies.get('userid'))
+    formData.append('userFile', selectedFile, cookies.get('userid') + '.lua');
+    await axios.put(config.url.API_URL + '/api/profile/users/' + cookies.get('userid') + '/', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
+    props.onChange(Date.now());
+    setSelectedFile('');
+    setDisable(true);
+  }
+
+  return (
+    <div className="file-submit inline-div">
+      <input type="file" name="file" accept=".lua" key={props.inputKey} onChange={(event) => changeHandler(event)} />
+      <div className="inline-div">
+        <button disabled={disable} onClick={() => submitHandler()}>Submit</button>
+      </div>
+    </div>
   );
 }
 
@@ -450,7 +546,7 @@ function Profession() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get(config.url.API_URL + '/api/profile/altprofessions/', { params: { user: cookies.get('userid'), fields: ['.altName', '.altRealm', 'get_profession1_display', 'get_profession2_display'] }});
+      const response = await axios.get(config.url.API_URL + '/api/profile/altprofessions/', { params: { user: cookies.get('userid'), fields: ['.altName', '.altRealm', '.get_altClass_display', 'get_profession1_display', 'get_profession2_display'] }});
       setData(response.data);
     };
     getData();
@@ -538,6 +634,37 @@ function SingleProfession() {
         <Col className="main-content">
           <h2>{alt.replace(alt[0], alt[0].toUpperCase())} - {realm.replace(realm[0], realm[0].toUpperCase())}: {profession.replace(profession[0], profession[0].toUpperCase())}</h2>
           <ProfessionTable tiers={data} />
+        </Col>
+      </Row>
+    </>
+  );
+}
+
+function SingleKeybind() {
+  const [data, setData] = useState([]);
+
+  const { alt, realm, spec } = useParams();
+
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get(config.url.API_URL + '/api/profile/users/', { params: { user: cookies.get('userid'), page: 'single', alt: alt, realm: realm, spec: spec}});
+      setData(response.data);
+    };
+    getData();
+  }, [alt, realm, spec]);
+
+  return (
+    <>
+      <Header />
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>{alt.replace(alt[0], alt[0].toUpperCase())} - {realm.replace(realm[0], realm[0].toUpperCase())}: {spec.replace(spec[0], spec[0].toUpperCase())}</h2>
+          <KeybindTable tiers={data} />
         </Col>
       </Row>
     </>
