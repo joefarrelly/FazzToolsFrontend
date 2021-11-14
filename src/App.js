@@ -24,6 +24,18 @@ function Header() {
     disable = true;
   }
 
+  async function getLastUpdate() {
+    const response = await axios.get(config.url.API_URL + '/api/profile/users/', { params: { user: cookies.get('userid'), page: 'header'}});
+    // console.log(response.data);
+    // console.log(new Date().getTime());
+    cookies.set('lastupdate', response.data[0], { path: '/', sameSite: 'Lax', secure: true});
+    setUpdate(new Date(response.data[0]).toLocaleString());
+  }
+
+  if (! cookies.get('lastupdate')) {
+    getLastUpdate();
+  }
+
   if (cookies.get('userid')) {
     return (
       <Row>
@@ -494,6 +506,7 @@ function KeybindUpload(props) {
     const formData = new FormData();
     formData.append('userId', cookies.get('userid'))
     formData.append('userFile', selectedFile, cookies.get('userid') + '.lua');
+    formData.append('userLastUpdate', new Date().toISOString());
     await axios.put(config.url.API_URL + '/api/profile/users/' + cookies.get('userid') + '/', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
     props.onChange(Date.now());
     setSelectedFile('');
