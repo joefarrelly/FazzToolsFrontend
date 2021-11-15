@@ -505,7 +505,7 @@ function KeybindUpload(props) {
   async function submitHandler() {
     const formData = new FormData();
     formData.append('userId', cookies.get('userid'))
-    formData.append('userFile', selectedFile, cookies.get('userid') + '.lua');
+    formData.append('userFile', selectedFile);
     formData.append('userLastUpdate', new Date().toISOString());
     await axios.put(config.url.API_URL + '/api/profile/users/' + cookies.get('userid') + '/', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
     props.onChange(Date.now());
