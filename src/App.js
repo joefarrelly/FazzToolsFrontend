@@ -261,10 +261,37 @@ function ProfessionTableRow(props) {
 }
 
 function KeybindTable(props) {
+  const rows = props.binds.map((row, index) => {
+    return <KeybindTableRow bind={row} key={index} />;
+  });
+
   return (
     <div>
-      <span>HELLO</span>
+      <table>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>spell</th>
+            <th>name</th>
+            <th>bind</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
     </div>
+  );
+}
+
+function KeybindTableRow(props) {
+  const cols = props.bind.map((col, index) => {
+    return <td key={index}>{col}</td>
+  });
+  return (
+    <tr>
+      {cols}
+    </tr>
   );
 }
 
@@ -677,7 +704,7 @@ function SingleKeybind() {
         </Col>
         <Col className="main-content">
           <h2>{alt.replace(alt[0], alt[0].toUpperCase())} - {realm.replace(realm[0], realm[0].toUpperCase())}: {spec.replace(spec[0], spec[0].toUpperCase())}</h2>
-          <KeybindTable tiers={data} />
+          <KeybindTable binds={data} />
         </Col>
       </Row>
     </>
