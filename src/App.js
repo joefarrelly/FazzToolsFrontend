@@ -261,7 +261,7 @@ function ProfessionTableRow(props) {
 }
 
 function KeybindTable(props) {
-  const rows = props.binds.map((row, index) => {
+  const rows = props.binds[1].map((row, index) => {
     return <KeybindTableRow bind={row} key={index} />;
   });
 
@@ -270,10 +270,11 @@ function KeybindTable(props) {
       <table>
         <thead>
           <tr>
-            <th>id</th>
-            <th>spell</th>
-            <th>name</th>
-            <th>bind</th>
+            <th colSpan="2">{props.binds[0]}</th>
+          </tr>
+          <tr>
+            <th>Spell</th>
+            <th>Bind</th>
           </tr>
         </thead>
         <tbody>
@@ -685,6 +686,10 @@ function SingleKeybind() {
 
   const { alt, realm, spec } = useParams();
 
+  const tables = data.map((table, index) => {
+    return <Col key={index}><KeybindTable binds={table} /></Col>;
+  });
+
   useEffect(() => {
     async function getData() {
       const response = await axios.get(config.url.API_URL + '/api/profile/users/', { params: { user: cookies.get('userid'), page: 'single', alt: alt, realm: realm, spec: spec}});
@@ -704,7 +709,9 @@ function SingleKeybind() {
         </Col>
         <Col className="main-content">
           <h2>{alt.replace(alt[0], alt[0].toUpperCase())} - {realm.replace(realm[0], realm[0].toUpperCase())}: {spec.replace(spec[0], spec[0].toUpperCase())}</h2>
-          <KeybindTable binds={data} />
+          <Row>
+            {tables}
+          </Row>
         </Col>
       </Row>
     </>

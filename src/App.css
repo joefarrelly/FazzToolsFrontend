@@ -41,13 +41,21 @@ table, th, td {
     border: 0.1rem solid black;
     border-collapse: collapse;
     font-size: 1rem;
-    background-color: grey;
+    /*background-color: grey;*/
 }
 
 th, td {
     /*padding:0.1rem;*/
     padding: 0.1rem 1rem 0.1rem 1rem;
     text-align: center;
+}
+
+th {
+    background-color: grey;
+}
+
+td {
+    background-color: lightgrey;
 }
 
 .sidebar {
