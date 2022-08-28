@@ -111,11 +111,11 @@ function AltTableRowData(props) {
     }
     if (props.alt === props.fullalt[3] && props.fullalt[3] !== 'Missing') {
       return (
-        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[3].toLowerCase()}`}>{props.fullalt[3]}</Link></td>   
+        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace('\'', '')}/${props.fullalt[3].toLowerCase()}`}>{props.fullalt[3]}</Link></td>   
       );
     } else if (props.alt === props.fullalt[4] && props.fullalt[4] !== 'Missing') {
       return (
-        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[4].toLowerCase()}`}>{props.fullalt[4]}</Link></td>   
+        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace('\'', '')}/${props.fullalt[4].toLowerCase()}`}>{props.fullalt[4]}</Link></td>   
       );
     } else {
       return (
@@ -309,8 +309,11 @@ function MountTable(props) {
 
 function MountTableCol(props) {
   const [open, setOpen] = useState(false);
-
-  const rows = props.alt[1].map((row, index) => {
+  // console.log(props.alt)
+  // const collected = props.alt[1].collected.map((row, index) => {
+  //   return <MountTableRow alt={row} key={index} />;
+  // });
+  const uncollected = props.alt[1].uncollected.map((row, index) => {
     return <MountTableRow alt={row} key={index} />;
   });
   function changeCollapse() {
@@ -320,11 +323,11 @@ function MountTableCol(props) {
   return (
     <div>
       <div className="inline-div">
-        <button className="mount-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]}</button>
+        <button className="mount-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]} <span class="site-header-right">0/1</span></button>
       </div>
         <Collapse in={open}>
         <div className="inline-div">
-          {rows}
+          {uncollected}
         </div>
       </Collapse>
     </div>
@@ -621,6 +624,7 @@ function Mount() {
       setData(response.data);
     };
     getData();
+
   }, []);
 
   return (
