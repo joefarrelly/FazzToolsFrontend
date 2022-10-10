@@ -310,9 +310,9 @@ function MountTable(props) {
 function MountTableCol(props) {
   const [open, setOpen] = useState(false);
   // console.log(props.alt)
-  // const collected = props.alt[1].collected.map((row, index) => {
-  //   return <MountTableRow alt={row} key={index} />;
-  // });
+  const collected = props.alt[1].collected.map((row, index) => {
+    return <MountTableRow alt={row} key={index} />;
+  });
   const uncollected = props.alt[1].uncollected.map((row, index) => {
     return <MountTableRow alt={row} key={index} />;
   });
@@ -327,6 +327,7 @@ function MountTableCol(props) {
       </div>
         <Collapse in={open}>
         <div className="inline-div">
+          {collected}
           {uncollected}
         </div>
       </Collapse>
