@@ -336,6 +336,7 @@ function MountTableCol(props) {
 }
 
 function MountTableRow(props) {
+  console.log(props)
   return (
     <div className="mount-container">
       <div className="inline-div left">{props.alt[0]}</div>
