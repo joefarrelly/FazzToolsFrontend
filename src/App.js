@@ -339,9 +339,9 @@ function MountTableRow(props) {
   console.log(props)
   return (
     <div className="mount-container">
-      <div className="inline-div left">{props.alt[0]}</div>
+      <div className="inline-div left">{props.alt['name']}</div>
       <div className="inline-div right epic">
-        <img src={props.alt[1]} title={props.alt[0]} alt="No Icon" width="56" height="56" />
+        <img src={props.alt['icon']} title={props.alt['name']} alt="No Icon" width="56" height="56" />
       </div>
     </div>
   );
