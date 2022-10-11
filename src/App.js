@@ -641,7 +641,7 @@ function Mount() {
         </Col>
         <Col className="main-content">
           <h2>Mount {data[11][1]}/{data[13][1]}</h2>
-          <MountTable alts={data[0:10]} heads={heads} />
+          <MountTable alts={data.slice(0, 10)} heads={heads} />
         </Col>
       </Row>
     </>
