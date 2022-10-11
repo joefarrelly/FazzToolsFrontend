@@ -314,7 +314,7 @@ function MountTableCol(props) {
     return <MountTableRow alt={row} key={index} grayclass='epic' />;
   });
   const uncollected = props.alt[1].uncollected.map((row, index) => {
-    return <MountTableRow alt={row} key={index} grayclass='uncollected' />;
+    return <MountTableRow alt={row} key={index} grayclass='epic uncollected' />;
   });
   function changeCollapse() {
     setOpen(!open);
