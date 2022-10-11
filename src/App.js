@@ -640,8 +640,8 @@ function Mount() {
           </div>
         </Col>
         <Col className="main-content">
-          <h2>Mount</h2>
-          <MountTable alts={data} heads={heads} />
+          <h2>Mount {data[11][1]}/{data[13][1]}</h2>
+          <MountTable alts={data[0:10]} heads={heads} />
         </Col>
       </Row>
     </>
