@@ -173,6 +173,12 @@ td {
     color: #FF8000;
 }*/
 
+.uncollected{
+    filter:  gray;
+    -webkit-filter: grayscale(1);
+    filter: grayscale(1);
+}
+
 .mount-collapse-button {
   width: 22rem;
   text-align: left;

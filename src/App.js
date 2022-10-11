@@ -311,10 +311,10 @@ function MountTableCol(props) {
   const [open, setOpen] = useState(false);
   // console.log(props.alt)
   const collected = props.alt[1].collected.map((row, index) => {
-    return <MountTableRow alt={row} key={index} />;
+    return <MountTableRow alt={row} key={index} grayclass='epic' />;
   });
   const uncollected = props.alt[1].uncollected.map((row, index) => {
-    return <MountTableRow alt={row} key={index} />;
+    return <MountTableRow alt={row} key={index} grayclass='uncollected' />;
   });
   function changeCollapse() {
     setOpen(!open);
@@ -340,7 +340,7 @@ function MountTableRow(props) {
   return (
     <div className="mount-container">
       <div className="inline-div left">{props.alt['name']}</div>
-      <div className="inline-div right epic">
+      <div className={"inline-div right " + props.grayclass}>
         <img src={props.alt['icon']} title={props.alt['name']} alt="No Icon" width="56" height="56" />
       </div>
     </div>
