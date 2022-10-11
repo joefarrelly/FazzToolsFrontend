@@ -629,6 +629,7 @@ function Mount() {
 
   }, []);
 
+  console.log(data);
   return (
     <>
       <Header />
