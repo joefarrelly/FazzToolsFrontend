@@ -643,7 +643,7 @@ function Mount() {
           </div>
         </Col>
         <Col className="main-content">
-          <h2>Mount {}/</h2>
+          <h2>Mount {count_data[0][1]}/</h2>
           <MountTable alts={data.slice(0, 10)} heads={heads} />
         </Col>
       </Row>
