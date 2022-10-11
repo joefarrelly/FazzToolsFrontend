@@ -630,7 +630,7 @@ function Mount() {
   }, []);
 
   console.log(data);
-  console.log(data.slice([11, 14));
+  console.log(data.slice(11, 14));
   return (
     <>
       <Header />
