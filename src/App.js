@@ -635,7 +635,7 @@ function Mount() {
   console.log(count_data);
   console.log(count_data.slice(0, 1));
   const test = count_data.slice(0, 1);
-  console.log(test.slice(1, 1));
+  console.log(test[1]);
   return (
     <>
       <Header />
