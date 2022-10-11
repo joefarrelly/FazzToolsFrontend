@@ -323,7 +323,7 @@ function MountTableCol(props) {
   return (
     <div>
       <div className="inline-div">
-        <button className="mount-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]} <span class="site-header-right">0/1</span></button>
+        <button className="mount-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]} <span class="site-header-right">{props.alt[1].collected_count}/{props.alt[1].total_count}</span></button>
       </div>
         <Collapse in={open}>
         <div className="inline-div">
