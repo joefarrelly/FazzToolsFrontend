@@ -624,7 +624,7 @@ function Mount() {
     async function getData() {
       const response = await axios.get(config.url.API_URL + '/api/profile/usermounts/', { params: { user: cookies.get('userid') }});
       setData(response.data);
-      let count_data = data.slice(11, 14);
+      var count_data = data.slice(11, 14);
       console.log(count_data);
       console.log(count_data[2][1]);
     };
