@@ -624,11 +624,11 @@ function Mount() {
     async function getData() {
       const response = await axios.get(config.url.API_URL + '/api/profile/usermounts/', { params: { user: cookies.get('userid') }});
       setData(response.data);
-      var count_data = data.slice(11, 14);
-      console.log(count_data);
-      console.log(count_data[2][1]);
     };
     getData();
+    var count_data = data.slice(11, 14);
+    console.log(count_data);
+    console.log(count_data[2][1]);
 
   }, []);
 
