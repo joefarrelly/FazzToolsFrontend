@@ -632,8 +632,8 @@ function Mount() {
   // console.log(data);
   // console.log(data.slice(11, 14));
   const count_data = data.slice(11, 14);
-  console.log(count_data);
-  console.log(count_data[2]);
+  // console.log(count_data);
+  // console.log(count_data[2]);
   return (
     <>
       <Header />
@@ -644,7 +644,7 @@ function Mount() {
           </div>
         </Col>
         <Col className="main-content">
-          <h2>Mount {count_data.slice(0, 1).slice(1, 1)}/</h2>
+          <h2>Mount {count_data[0]}/{count_data[2]}</h2>
           <MountTable alts={data.slice(0, 10)} heads={heads} />
         </Col>
       </Row>
