@@ -361,10 +361,10 @@ function PetTable(props) {
 function PetTableCol(props) {
   const [open, setOpen] = useState(false);
   // console.log(props.alt)
-  const collected = props.alt[1].collected?.map((row, index) => {
+  const collected = props.alt[1].collected.map((row, index) => {
     return <PetTableRow alt={row} key={index} grayclass='epic' />;
   });
-  const uncollected = props.alt[1].uncollected?.map((row, index) => {
+  const uncollected = props.alt[1].uncollected.map((row, index) => {
     return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
   });
   function changeCollapse() {
