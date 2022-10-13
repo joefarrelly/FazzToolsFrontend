@@ -374,7 +374,7 @@ function PetTableCol(props) {
   return (
     <div>
       <div className="inline-div">
-        <button className="pett-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]} <span class="site-header-right">{props.alt[1].collected_count}/{props.alt[1].total_count}</span></button>
+        <button className="pet-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]} <span class="site-header-right">{props.alt[1].collected_count}/{props.alt[1].total_count}</span></button>
       </div>
         <Collapse in={open}>
         <div className="inline-div">
