@@ -347,6 +347,57 @@ function MountTableRow(props) {
   );
 }
 
+function PetTable(props) {
+  const cols = props.alts.map((col, index) => {
+    return <PetTableCol alt={col} key={index} />;
+  });
+  return (
+    <>
+      {cols}
+    </>
+  );
+}
+
+function PetTableCol(props) {
+  const [open, setOpen] = useState(false);
+  // console.log(props.alt)
+  const collected = props.alt[1].collected.map((row, index) => {
+    return <PetTableRow alt={row} key={index} grayclass='epic' />;
+  });
+  const uncollected = props.alt[1].uncollected.map((row, index) => {
+    return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
+  });
+  function changeCollapse() {
+    setOpen(!open);
+  }
+
+  return (
+    <div>
+      <div className="inline-div">
+        <button className="pett-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]} <span class="site-header-right">{props.alt[1].collected_count}/{props.alt[1].total_count}</span></button>
+      </div>
+        <Collapse in={open}>
+        <div className="inline-div">
+          {collected}
+          {uncollected}
+        </div>
+      </Collapse>
+    </div>
+  );
+}
+
+function PetTableRow(props) {
+  // console.log(props)
+  return (
+    <div className="pet-container">
+      <div className="inline-div left">{props.alt['name']}</div>
+      <div className={"inline-div right " + props.grayclass}>
+        <img src={props.alt['icon']} title={props.alt['name']} alt="No Icon" width="56" height="56" />
+      </div>
+    </div>
+  );
+}
+
 function MenuBar() {
   return (
     <div>
@@ -378,6 +429,9 @@ function LoginLogout() {
           <Link to="/mount">Mount</Link>
         </div>
         <div>
+          <Link to="/pet">Pet</Link>
+        </div>
+        <div>
           <Link to="/logout">Logout</Link>
         </div>
       </>
@@ -401,6 +455,7 @@ function RouterSetup() {
       <Route path="/gear" component={Gear} />
       <Route path="/profession" component={Profession} exact />
       <Route path="/mount" component={Mount} />
+      <Route path="/pet" component={Pet} />
       <Route path="/logout" component={Logout} />
       <Route path="/keybind/:alt/:realm/:spec" children={<SingleKeybind />} />
       <Route path="/profession/:alt/:realm/:profession" children={<SingleProfession />} />
@@ -646,6 +701,42 @@ function Mount() {
         <Col className="main-content">
           <h2>Mount {count_data[0]}/{count_data[2]}</h2>
           <MountTable alts={data.slice(0, 10)} heads={heads} />
+        </Col>
+      </Row>
+    </>
+  );
+}
+
+function Pet() {
+  const [data, setData] = useState([]);
+  const heads = []
+
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get(config.url.API_URL + '/api/profile/userpets/', { params: { user: cookies.get('userid') }});
+      setData(response.data);
+    };
+    getData();
+
+  }, []);
+
+  // console.log(data);
+  // console.log(data.slice(11, 14));
+  const count_data = data.slice(11, 14);
+  // console.log(count_data);
+  // console.log(count_data[2]);
+  return (
+    <>
+      <Header />
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>Pet {count_data[0]}/{count_data[2]}</h2>
+          <PetTable alts={data.slice(0, 10)} heads={heads} />
         </Col>
       </Row>
     </>

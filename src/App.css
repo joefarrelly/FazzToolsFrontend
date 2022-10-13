@@ -197,6 +197,24 @@ td {
   justify-content: flex-end;
 }
 
+.pet-collapse-button {
+  width: 22rem;
+  text-align: left;
+}
+
+.pet-collapse-button:hover {
+  background-color: darkgrey;
+}
+
+.pet-container {
+  width: 22rem;
+  display: flex;
+  background-color: darkgrey;
+  border: solid;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .left {
   margin: 0.3rem;
 }
