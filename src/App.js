@@ -378,7 +378,7 @@ function PetTableCol(props) {
       </div>
         <Collapse in={open}>
         <div className="inline-div">
-          {collected}
+          {/*{collected}*/}
           {/*{uncollected}*/}
         </div>
       </Collapse>
