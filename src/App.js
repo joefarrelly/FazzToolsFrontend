@@ -348,12 +348,12 @@ function MountTableRow(props) {
 }
 
 function PetTable(props) {
-  // const cols = props.alts.map((col, index) => {
-  //   return <PetTableCol alt={col} key={index} />;
-  // });
+  const cols = props.alts.map((col, index) => {
+    return <PetTableCol alt={col} key={index} />;
+  });
   return (
     <>
-      {/*{cols}*/}
+      {cols}
     </>
   );
 }
@@ -386,17 +386,17 @@ function PetTableCol(props) {
   );
 }
 
-function PetTableRow(props) {
-  // console.log(props)
-  return (
-    <div className="pet-container">
-      <div className="inline-div left">{props.alt['name']}</div>
-      <div className={"inline-div right " + props.grayclass}>
-        <img src={props.alt['icon']} title={props.alt['name']} alt="No Icon" width="56" height="56" />
-      </div>
-    </div>
-  );
-}
+// function PetTableRow(props) {
+//   // console.log(props)
+//   return (
+//     <div className="pet-container">
+//       <div className="inline-div left">{props.alt['name']}</div>
+//       <div className={"inline-div right " + props.grayclass}>
+//         <img src={props.alt['icon']} title={props.alt['name']} alt="No Icon" width="56" height="56" />
+//       </div>
+//     </div>
+//   );
+// }
 
 function MenuBar() {
   return (
