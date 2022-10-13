@@ -348,12 +348,12 @@ function MountTableRow(props) {
 }
 
 function PetTable(props) {
-  const cols = props.alts.map((col, index) => {
-    return <PetTableCol alt={col} key={index} />;
-  });
+  // const cols = props.alts.map((col, index) => {
+  //   return <PetTableCol alt={col} key={index} />;
+  // });
   return (
     <>
-      {cols}
+      {/*{cols}*/}
     </>
   );
 }
