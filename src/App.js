@@ -362,14 +362,14 @@ function PetTableCol(props) {
   const [open, setOpen] = useState(false);
   // console.log(props.alt)
   if (props.alt[1].collected.length === 0) {
-    const collected = null;
+    const collected = [];
   } else {
     const collected = props.alt[1].collected.map((row, index) => {
       return <PetTableRow alt={row} key={index} grayclass='epic' />;
     });
   }
   if (props.alt[1].uncollected.length === 0) {
-    const uncollected = null;
+    const uncollected = [];
   } else {
     const uncollected = props.alt[1].uncollected.map((row, index) => {
       return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
