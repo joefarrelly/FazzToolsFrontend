@@ -361,12 +361,20 @@ function PetTable(props) {
 function PetTableCol(props) {
   const [open, setOpen] = useState(false);
   // console.log(props.alt)
-  const collected = props.alt[1].collected.map((row, index) => {
-    return <PetTableRow alt={row} key={index} grayclass='epic' />;
-  });
-  const uncollected = props.alt[1].uncollected.map((row, index) => {
-    return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
-  });
+  if (props.alt[1].collected.length === 0) {
+    const collected = null;
+  } else {
+    const collected = props.alt[1].collected.map((row, index) => {
+      return <PetTableRow alt={row} key={index} grayclass='epic' />;
+    });
+  }
+  if (props.alt[1].uncollected.length === 0) {
+    const uncollected = null;
+  } else {
+    const uncollected = props.alt[1].uncollected.map((row, index) => {
+      return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
+    });
+  }
   function changeCollapse() {
     setOpen(!open);
   }
