@@ -364,9 +364,9 @@ function PetTableCol(props) {
   const collected = props.alt[1].collected.map((row, index) => {
     return <PetTableRow alt={row} key={index} grayclass='epic' />;
   });
-  const uncollected = props.alt[1].uncollected.map((row, index) => {
-    return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
-  });
+  // const uncollected = props.alt[1].uncollected.map((row, index) => {
+  //   return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
+  // });
   function changeCollapse() {
     setOpen(!open);
   }
@@ -379,7 +379,7 @@ function PetTableCol(props) {
         <Collapse in={open}>
         <div className="inline-div">
           {collected}
-          {uncollected}
+          {/*{uncollected}*/}
         </div>
       </Collapse>
     </div>
