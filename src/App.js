@@ -348,43 +348,43 @@ function MountTableRow(props) {
 }
 
 function PetTable(props) {
-  const cols = props.alts.map((col, index) => {
-    return <PetTableCol alt={col} key={index} />;
-  });
+  // const cols = props.alts.map((col, index) => {
+  //   return <PetTableCol alt={col} key={index} />;
+  // });
   return (
     <>
-      {cols}
+      {/*{cols}*/}
     </>
   );
 }
 
-function PetTableCol(props) {
-  const [open, setOpen] = useState(false);
-  // console.log(props.alt)
-  // const collected = props.alt[1].collected.map((row, index) => {
-  //   return <PetTableRow alt={row} key={index} grayclass='epic' />;
-  // });
-  // const uncollected = props.alt[1].uncollected.map((row, index) => {
-  //   return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
-  // });
-  function changeCollapse() {
-    setOpen(!open);
-  }
+// function PetTableCol(props) {
+//   const [open, setOpen] = useState(false);
+//   // console.log(props.alt)
+//   // const collected = props.alt[1].collected.map((row, index) => {
+//   //   return <PetTableRow alt={row} key={index} grayclass='epic' />;
+//   // });
+//   // const uncollected = props.alt[1].uncollected.map((row, index) => {
+//   //   return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
+//   // });
+//   function changeCollapse() {
+//     setOpen(!open);
+//   }
 
-  return (
-    <div>
-      <div className="inline-div">
-        <button className="pet-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]} <span class="site-header-right">{props.alt[1].collected_count}/{props.alt[1].total_count}</span></button>
-      </div>
-        <Collapse in={open}>
-        <div className="inline-div">
-          {/*{collected}*/}
-          {/*{uncollected}*/}
-        </div>
-      </Collapse>
-    </div>
-  );
-}
+//   return (
+//     <div>
+//       <div className="inline-div">
+//         <button className="pet-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]} <span class="site-header-right">{props.alt[1].collected_count}/{props.alt[1].total_count}</span></button>
+//       </div>
+//         <Collapse in={open}>
+//         <div className="inline-div">
+//           {/*{collected}*/}
+//           {/*{uncollected}*/}
+//         </div>
+//       </Collapse>
+//     </div>
+//   );
+// }
 
 // function PetTableRow(props) {
 //   // console.log(props)
