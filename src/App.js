@@ -709,7 +709,7 @@ function Mount() {
 
 function Pet() {
   const [data, setData] = useState([]);
-  // // const heads = []
+  const heads = []
 
   useEffect(() => {
     async function getData() {
@@ -720,7 +720,7 @@ function Pet() {
 
   }, []);
 
-  console.log(data);
+  // console.log(data);
   // console.log(data.slice(11, 14));
   const count_data = data.slice(12, 15);
   // console.log(count_data);
