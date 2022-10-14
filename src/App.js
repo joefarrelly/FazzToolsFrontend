@@ -392,7 +392,9 @@ function PetTableRow(props) {
     <div className="pet-container">
       <div className="inline-div left">{props.alt['name']}</div>
       <div className={"inline-div right " + props.grayclass}>
-        <img src={props.alt['icon']} title={props.alt['name']} alt="No Icon" width="56" height="56" />
+        <a href={props.alt['link']}>
+          <img src={props.alt['icon']} title={props.alt['name']} alt="No Icon" width="56" height="56" />
+        </a>
       </div>
     </div>
   );
