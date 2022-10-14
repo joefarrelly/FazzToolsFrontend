@@ -347,56 +347,56 @@ function MountTableRow(props) {
   );
 }
 
-// function PetTable(props) {
-//   // const cols = props.alts.map((col, index) => {
-//   //   return <PetTableCol alt={col} key={index} />;
-//   // });
-//   return (
-//     <>
-//       {/*{cols}*/}
-//     </>
-//   );
-// }
+function PetTable(props) {
+  const cols = props.alts.map((col, index) => {
+    return <PetTableCol alt={col} key={index} />;
+  });
+  return (
+    <>
+      {cols}
+    </>
+  );
+}
 
-// function PetTableCol(props) {
-//   const [open, setOpen] = useState(false);
-//   // console.log(props.alt)
-//   // const collected = props.alt[1].collected.map((row, index) => {
-//   //   return <PetTableRow alt={row} key={index} grayclass='epic' />;
-//   // });
-//   // const uncollected = props.alt[1].uncollected.map((row, index) => {
-//   //   return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
-//   // });
-//   function changeCollapse() {
-//     setOpen(!open);
-//   }
+function PetTableCol(props) {
+  const [open, setOpen] = useState(false);
+  // console.log(props.alt)
+  const collected = props.alt[1].collected.map((row, index) => {
+    return <PetTableRow alt={row} key={index} grayclass='epic' />;
+  });
+  const uncollected = props.alt[1].uncollected.map((row, index) => {
+    return <PetTableRow alt={row} key={index} grayclass='epic uncollected' />;
+  });
+  function changeCollapse() {
+    setOpen(!open);
+  }
 
-//   return (
-//     <div>
-//       <div className="inline-div">
-//         <button className="pet-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]} <span class="site-header-right">{props.alt[1].collected_count}/{props.alt[1].total_count}</span></button>
-//       </div>
-//         <Collapse in={open}>
-//         <div className="inline-div">
-//           {/*{collected}*/}
-//           {/*{uncollected}*/}
-//         </div>
-//       </Collapse>
-//     </div>
-//   );
-// }
+  return (
+    <div>
+      <div className="inline-div">
+        <button className="pet-collapse-button" type="button" onClick={() => changeCollapse()}>{props.alt[0]} <span class="site-header-right">{props.alt[1].collected_count}/{props.alt[1].total_count}</span></button>
+      </div>
+        <Collapse in={open}>
+        <div className="inline-div">
+          {collected}
+          {uncollected}
+        </div>
+      </Collapse>
+    </div>
+  );
+}
 
-// function PetTableRow(props) {
-//   // console.log(props)
-//   return (
-//     <div className="pet-container">
-//       <div className="inline-div left">{props.alt['name']}</div>
-//       <div className={"inline-div right " + props.grayclass}>
-//         <img src={props.alt['icon']} title={props.alt['name']} alt="No Icon" width="56" height="56" />
-//       </div>
-//     </div>
-//   );
-// }
+function PetTableRow(props) {
+  // console.log(props)
+  return (
+    <div className="pet-container">
+      <div className="inline-div left">{props.alt['name']}</div>
+      <div className={"inline-div right " + props.grayclass}>
+        <img src={props.alt['icon']} title={props.alt['name']} alt="No Icon" width="56" height="56" />
+      </div>
+    </div>
+  );
+}
 
 function MenuBar() {
   return (
@@ -723,7 +723,7 @@ function Pet() {
   console.log(data);
   // console.log(data.slice(11, 14));
   const count_data = data.slice(12, 15);
-  console.log(count_data);
+  // console.log(count_data);
   // console.log(count_data[2]);
   return (
     <>
@@ -735,9 +735,8 @@ function Pet() {
           </div>
         </Col>
         <Col className="main-content">
-          {/*<h2>Pet {count_data[0]}/{count_data[2]}</h2>*/}
-          <h2>Pet</h2>
-          {/*<PetTable alts={data.slice(0, 10)} heads={heads} />*/}
+          <h2>Pet {count_data[0]}/{count_data[2]}</h2>
+          <PetTable alts={data.slice(0, 11)} heads={heads} />
         </Col>
       </Row>
     </>
