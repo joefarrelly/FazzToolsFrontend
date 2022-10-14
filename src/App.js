@@ -708,17 +708,17 @@ function Mount() {
 }
 
 function Pet() {
-  // const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
   // // const heads = []
 
-  // useEffect(() => {
-  //   async function getData() {
-  //     const response = await axios.get(config.url.API_URL + '/api/profile/userpets/', { params: { user: cookies.get('userid') }});
-  //     setData(response.data);
-  //   };
-  //   getData();
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get(config.url.API_URL + '/api/profile/userpets/', { params: { user: cookies.get('userid') }});
+      setData(response.data);
+    };
+    getData();
 
-  // }, []);
+  }, []);
 
   // console.log(data);
   // console.log(data.slice(11, 14));
@@ -734,10 +734,10 @@ function Pet() {
             <MenuBar />
           </div>
         </Col>
-    {/*    <Col className="main-content">
+        <Col className="main-content">
           <h2>Pet {count_data[0]}/{count_data[2]}</h2>
-          {/*<PetTable alts={data.slice(0, 10)} heads={heads} />
-        </Col>*/}
+          {/*<PetTable alts={data.slice(0, 10)} heads={heads} />*/}
+        </Col>
       </Row>
     </>
   );
