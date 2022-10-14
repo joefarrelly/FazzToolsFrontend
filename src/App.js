@@ -708,19 +708,19 @@ function Mount() {
 }
 
 function Pet() {
-  // const [data, setData] = useState([]);
-  // // // const heads = []
+  const [data, setData] = useState([]);
+  // // const heads = []
 
-  // useEffect(() => {
-  //   async function getData() {
-  //     const response = await axios.get(config.url.API_URL + '/api/profile/userpets/', { params: { user: cookies.get('userid') }});
-  //     setData(response.data);
-  //   };
-  //   getData();
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get(config.url.API_URL + '/api/profile/userpets/', { params: { user: cookies.get('userid') }});
+      setData(response.data);
+    };
+    getData();
 
-  // }, []);
+  }, []);
 
-  // console.log(data);
+  console.log(data);
   // console.log(data.slice(11, 14));
   // const count_data = data.slice(11, 14);
   // console.log(count_data);
