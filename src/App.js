@@ -709,7 +709,7 @@ function Mount() {
 
 function Pet() {
   const [data, setData] = useState([]);
-  const heads = []
+  // const heads = []
 
   useEffect(() => {
     async function getData() {
