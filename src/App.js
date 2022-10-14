@@ -347,16 +347,16 @@ function MountTableRow(props) {
   );
 }
 
-function PetTable(props) {
-  // const cols = props.alts.map((col, index) => {
-  //   return <PetTableCol alt={col} key={index} />;
-  // });
-  return (
-    <>
-      {/*{cols}*/}
-    </>
-  );
-}
+// function PetTable(props) {
+//   // const cols = props.alts.map((col, index) => {
+//   //   return <PetTableCol alt={col} key={index} />;
+//   // });
+//   return (
+//     <>
+//       {/*{cols}*/}
+//     </>
+//   );
+// }
 
 // function PetTableCol(props) {
 //   const [open, setOpen] = useState(false);
@@ -736,7 +736,7 @@ function Pet() {
         </Col>
         <Col className="main-content">
           <h2>Pet {count_data[0]}/{count_data[2]}</h2>
-          <PetTable alts={data.slice(0, 10)} heads={heads} />
+          {/*<PetTable alts={data.slice(0, 10)} heads={heads} />*/}
         </Col>
       </Row>
     </>
