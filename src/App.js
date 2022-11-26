@@ -619,7 +619,7 @@ function Gear() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get(config.url.API_URL + '/api/profile/altequipments/', { params: { user: cookies.get('userid') }});
+      const response = await axios.get(config.url.API_URL + '/api/profile/altequipments/', { params: { user: cookies.get('userid'), fields: ['.altName', '.altRealm', '.get_altClass_display', 'head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'belt', 'legs', 'feet', 'ring1', 'ring2', 'trinket1', 'trinket2', 'weapon1', 'weapon2'] }});
       setData(response.data);
     };
     getData();
