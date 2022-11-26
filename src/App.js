@@ -615,7 +615,7 @@ function KeybindUpload(props) {
 
 function Gear() {
   const [data, setData] = useState([]);
-  const heads = ['Name', 'Realm', 'Avg', 'Head', 'Neck', 'Shoulder', 'Back', 'Chest', 'Tabard', 'Shirt', 'Wrist', 'Hands', 'Belt', 'Legs', 'Feet', 'Ring 1', 'Ring 2', 'Trinket 1', 'Trinket 2', 'Weapon 1', 'Weapon 2'];
+  const heads = ['Name', 'Realm', 'Avg', 'Head', 'Neck', 'Shoulder', 'Back', 'Chest', 'Wrist', 'Hands', 'Belt', 'Legs', 'Feet', 'Ring 1', 'Ring 2', 'Trinket 1', 'Trinket 2', 'Weapon 1', 'Weapon 2'];
 
   useEffect(() => {
     async function getData() {
