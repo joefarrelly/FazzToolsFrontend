@@ -147,19 +147,23 @@ function AltTableRowData(props) {
     }
     if (props.alt === props.fullalt[3] && props.fullalt[3] !== '---') {
       return (
-        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[3].toLowerCase()}`}>{props.fullalt[3]}</Link></td>   
+        <td><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[3].toLowerCase()}`}>{props.fullalt[3]}</Link></td>   
       );
     } else if (props.alt === props.fullalt[4] && props.fullalt[4] !== '---') {
       return (
-        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[4].toLowerCase()}`}>{props.fullalt[4]}</Link></td>   
+        <td><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[4].toLowerCase()}`}>{props.fullalt[4]}</Link></td>   
       );
     } else if (props.alt === props.fullalt[5] && props.fullalt[5] !== '---') {
       return (
-        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[5].toLowerCase()}`}>{props.fullalt[5]}</Link></td>   
+        <td><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[5].toLowerCase()}`}>{props.fullalt[5]}</Link></td>   
       );
     } else if (props.alt === props.fullalt[6] && props.fullalt[6] !== '---') {
       return (
-        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[6].toLowerCase()}`}>{props.fullalt[6]}</Link></td>   
+        <td><Link to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[6].toLowerCase()}`}>{props.fullalt[6]}</Link></td>   
+      );
+    } else if (props.alt === '---') {
+      return (
+        <td>{props.alt}</td>
       );
     } else {
       return (
