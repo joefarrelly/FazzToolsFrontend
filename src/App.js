@@ -117,7 +117,7 @@ function AltTableRowData(props) {
       return (
         <td><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace('\'', '')}/${props.fullalt[4].toLowerCase()}`}>{props.fullalt[4]}</Link></td>   
       );
-    } else if (prop.alt === 'Missing') {
+    } else if (props.alt === 'Missing') {
       return (
         <td>{props.alt}</td>
       );
