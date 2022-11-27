@@ -467,7 +467,7 @@ function RouterSetup() {
       <Route path="/redirect" component={AuthRedirect} />
       <Route path="/account" component={Account} />
       <Route path="/keybind" component={Keybind} exact />
-      <Route path="/gear" component={Gear} />
+      <Route path="/gear" component={Gear} exact />
       <Route path="/profession" component={Profession} exact />
       <Route path="/mount" component={Mount} />
       <Route path="/pet" component={Pet} />
