@@ -521,11 +521,11 @@ function AuthRedirect() {
 
 function Account() {
   const [data, setData] = useState([]);
-  const heads = ['Faction', 'Level', 'Race', 'Class', 'Name', 'Realm', 'Account'];
+  const heads = ['Faction', 'Level', 'Race', 'Class', 'Name', 'Realm', 'Account', 'Location', 'Gold'];
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get(config.url.API_URL + '/api/profile/alts/', { params: { user: cookies.get('userid'), fields: ['altFaction', 'altLevel', 'get_altRace_display', 'get_altClass_display', 'altName', 'altRealm', 'altAccountId'] }});
+      const response = await axios.get(config.url.API_URL + '/api/profile/alts/', { params: { user: cookies.get('userid'), fields: ['altFaction', 'altLevel', 'get_altRace_display', 'get_altClass_display', 'altName', 'altRealm', 'altAccountId', 'altLocation', 'altGold'] }});
       setData(response.data);
     };
     getData();
