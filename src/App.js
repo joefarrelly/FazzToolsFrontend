@@ -474,6 +474,7 @@ function RouterSetup() {
       <Route path="/logout" component={Logout} />
       <Route path="/keybind/:alt/:realm/:spec" children={<SingleKeybind />} />
       <Route path="/profession/:alt/:realm/:profession" children={<SingleProfession />} />
+      <Route path="/gear/:alt/:realm" children={<SingleGear />} />
     </Switch>
   );
 }
@@ -632,7 +633,7 @@ function Gear() {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get(config.url.API_URL + '/api/profile/altequipments/', { params: { user: cookies.get('userid'), fields: ['.altName', '.altRealm', '.get_altClass_display', 'head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'belt', 'legs', 'feet', 'ring1', 'ring2', 'trinket1', 'trinket2', 'weapon1', 'weapon2'] }});
+      const response = await axios.get(config.url.API_URL + '/api/profile/altequipments/', { params: { user: cookies.get('userid'), page: 'all', fields: ['.altName', '.altRealm', '.get_altClass_display', 'head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'belt', 'legs', 'feet', 'ring1', 'ring2', 'trinket1', 'trinket2', 'weapon1', 'weapon2'] }});
       setData(response.data);
     };
     getData();
@@ -834,6 +835,47 @@ function SingleKeybind() {
     </>
   );
 }
+
+
+function SingleGear() {
+  const [data, setData] = useState([]);
+
+  const { alt, realm } = useParams();
+
+  // const tables = data.map((table, index) => {
+  //   return <Col key={index}><KeybindTable binds={table} /></Col>;
+  // });
+
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get(config.url.API_URL + '/api/profile/altequipments/', { params: { alt: alt, realm: realm, page: 'single', fields: ['.altName', '.altRealm', '.get_altClass_display', 'head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'belt', 'legs', 'feet', 'ring1', 'ring2', 'trinket1', 'trinket2', 'weapon1', 'weapon2'] }});
+      setData(response.data);
+    };
+    getData();
+  }, [alt, realm]);
+
+  console.log(data);
+
+  return (
+    <>
+      <Header />
+      <Row>
+        <Col className="sidebar">
+          <div className="sticky-top">
+            <MenuBar />
+          </div>
+        </Col>
+        <Col className="main-content">
+          <h2>{alt.replace(alt[0], alt[0].toUpperCase())} - {realm.replace(realm[0], realm[0].toUpperCase())}: Gear</h2>
+          <Row>
+            
+          </Row>
+        </Col>
+      </Row>
+    </>
+  );
+}
+
 
 function App() {
   return (
