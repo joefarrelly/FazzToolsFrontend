@@ -111,15 +111,15 @@ function AltTableRowData(props) {
     }
     if (props.alt === props.fullalt[3] && props.fullalt[3] !== 'Missing') {
       return (
-        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace('\'', '')}/${props.fullalt[3].toLowerCase()}`}>{props.fullalt[3]}</Link></td>   
+        <td><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace('\'', '')}/${props.fullalt[3].toLowerCase()}`}>{props.fullalt[3]}</Link></td>   
       );
     } else if (props.alt === props.fullalt[4] && props.fullalt[4] !== 'Missing') {
       return (
-        <td className={props.fullalt[2].replace(/\s/g, '')}><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace('\'', '')}/${props.fullalt[4].toLowerCase()}`}>{props.fullalt[4]}</Link></td>   
+        <td><Link to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace('\'', '')}/${props.fullalt[4].toLowerCase()}`}>{props.fullalt[4]}</Link></td>   
       );
     } else {
       return (
-        <td className={props.fullalt[2].replace(/\s/g, '')}>{props.alt}</td>
+        <td>{props.alt}</td>
       );
     }
   }
