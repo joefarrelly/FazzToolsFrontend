@@ -119,7 +119,7 @@ function AltTableRowData(props) {
       );
     } else {
       return (
-        <td>{props.alt}</td>
+        <td className={props.fullalt[2].replace(/\s/g, '')}>{props.alt}</td>
       );
     }
   }
