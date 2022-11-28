@@ -133,17 +133,13 @@ function AltTableRowData(props) {
       return (
         null
       );
-    } else if (props.fullalt.includes(props.alt, 3)) {
+    } else if (props.fullalt.includes(props.alt, 4)) {
       return (
         <td>{props.alt}</td>
       );
-    } else if (props.alt === props.fullalt[0] || props.alt === props.fullalt[1]) {
+    } else if (props.alt === props.fullalt[3]) {
       return (
-      <Link to={`/gear/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}`}>
-        <td className={props.fullalt[2].replace(/\s/g, '')}>
-          {props.alt}
-        </td>
-      </Link>
+        <td><Link to={`/gear/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}`}>{props.alt}</Link></td>
     );
     }
     return (
