@@ -128,8 +128,7 @@ function AltTableRowData(props) {
     }
   }
   if (props.page === 'gear') {
-    console.log(props.fullalt.slice(4, 10));
-    if (props.alt === props.fullalt[2] || props.fullalt.slice(4, 10).includes(props.alt))  {
+    if (props.alt === props.fullalt[2])  {
       return (
         null
       );
