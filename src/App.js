@@ -137,13 +137,19 @@ function AltTableRowData(props) {
       return (
         <td>{props.alt}</td>
       );
-    }
-    return (
+    } else if (props.alt === props.fullalt[0] || props.alt === props.fullalt[1]) {
+      return (
       <Link to={`/gear/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}`}>
         <td className={props.fullalt[2].replace(/\s/g, '')}>
           {props.alt}
         </td>
       </Link>
+    );
+    }
+    return (
+      <td className={props.fullalt[2].replace(/\s/g, '')}>
+        {props.alt}
+      </td>
     );
   }
   if (props.page === 'kb') {
