@@ -135,7 +135,9 @@ function AltTableRowData(props) {
       );
     } else if (props.fullalt.includes(props.alt, 3)) {
       return (
-        <td>{props.alt}</td>
+        <Link to={`/gear/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}`}>
+          <td>{props.alt}</td>
+        </Link>
       );
     }
     return (
