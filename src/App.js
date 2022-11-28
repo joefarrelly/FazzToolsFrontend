@@ -135,15 +135,15 @@ function AltTableRowData(props) {
       );
     } else if (props.fullalt.includes(props.alt, 3)) {
       return (
-        <Link to={`/gear/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}`}>
-          <td>{props.alt}</td>
-        </Link>
+        <td>{props.alt}</td>
       );
     }
     return (
-      <td className={props.fullalt[2].replace(/\s/g, '')}>
-        {props.alt}
-      </td>
+      <Link to={`/gear/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}`}>
+        <td className={props.fullalt[2].replace(/\s/g, '')}>
+          {props.alt}
+        </td>
+      </Link>
     );
   }
   if (props.page === 'kb') {
