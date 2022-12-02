@@ -29,14 +29,15 @@ $(document).ready(function () {
                             }
                     );
                     $(this).click(function () {
+                        var sortOrder
                         if ($(this).is('.asc')) {
                             $(this).removeClass('asc');
                             $(this).addClass('desc selected');
-                            var sortOrder = -1;
+                            sortOrder = -1;
                         } else {
                             $(this).addClass('asc selected');
                             $(this).removeClass('desc');
-                            var sortOrder = 1;
+                            sortOrder = 1;
                         }
                         $(this).siblings().removeClass('asc selected');
                         $(this).siblings().removeClass('desc selected');
@@ -45,7 +46,7 @@ $(document).ready(function () {
                             var val1 = ($(a).children('td').eq(col).text().toUpperCase()).replace(/,/g, '');
                             var val2 = ($(b).children('td').eq(col).text().toUpperCase()).replace(/,/g, '');
                             if ($.isNumeric(val1) && $.isNumeric(val2))
-                                return sortOrder == 1 ? val1 - val2 : val2 - val1;
+                                return sortOrder === 1 ? val1 - val2 : val2 - val1;
                             else
                                 return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
                         });
