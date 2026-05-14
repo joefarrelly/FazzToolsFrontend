@@ -13,7 +13,7 @@ npm test -- --watchAll=false  # run tests once
 
 ## Architecture
 
-This is a Create React App (React 17) single-page application. All components live in `src/App.js` — there is no component splitting into separate files.
+This is a Create React App (React 18) single-page application. All components live in `src/App.js` — there is no component splitting into separate files.
 
 **Environment / API config** is in `src/Constants.js`. It exports a `config` object with `config.url.API_URL` and `config.url.REDIRECT_URL` that automatically switch between dev (`localhost`) and prod (`fazztoolsapi.ddns.net`) based on `NODE_ENV`.
 
@@ -23,7 +23,7 @@ This is a Create React App (React 17) single-page application. All components li
 3. `AuthRedirect` POSTs the code to the backend, which returns a `userid`
 4. `userid` is stored in a cookie (`universal-cookie`) and used in all subsequent API requests as a query param
 
-**Routing** uses React Router v5 (`BrowserRouter` + `Switch`). Routes with detail views use URL params (e.g. `/gear/:alt/:realm`, `/keybind/:alt/:realm/:spec`, `/profession/:alt/:realm/:profession`). The `public/_redirects` file handles Netlify SPA routing so all paths serve `index.html`.
+**Routing** uses React Router v6 (`BrowserRouter` + `Routes`). Routes are defined in a `RouterSetup` component. Detail views use URL params (e.g. `/gear/:alt/:realm`, `/keybind/:alt/:realm/:spec`, `/profession/:alt/:realm/:profession`) accessed via `useParams`. The `public/_redirects` file handles Netlify SPA routing so all paths serve `index.html`.
 
 **Page layout pattern**: every page component renders `<Header />` + `<MenuBar />` (sidebar) + main content in a two-column `react-bootstrap` grid. `MenuBar` conditionally shows authenticated links based on whether the `userid` cookie exists.
 
