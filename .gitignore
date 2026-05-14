@@ -11,6 +11,12 @@
 # production
 /build
 
+# github rulesets (import-only, not tracked)
+.github/rulesets/
+
+# claude local settings
+.claude/settings.local.json
+
 # misc
 .DS_Store
 .env.local
