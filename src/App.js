@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { BrowserRouter, Route, Switch, Link, Redirect, useLocation, useParams } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Link, Navigate, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import Container from 'react-bootstrap/Container';
@@ -464,21 +464,21 @@ function LoginLogout() {
 
 function RouterSetup() {
   return (
-    <Switch>
-      <Route path="/" component={Home} exact />
-      <Route path="/auth" component={Auth} />
-      <Route path="/redirect" component={AuthRedirect} />
-      <Route path="/account" component={Account} />
-      <Route path="/keybind" component={Keybind} exact />
-      <Route path="/gear" component={Gear} exact />
-      <Route path="/profession" component={Profession} exact />
-      <Route path="/mount" component={Mount} />
-      <Route path="/pet" component={Pet} />
-      <Route path="/logout" component={Logout} />
-      <Route path="/keybind/:alt/:realm/:spec" children={<SingleKeybind />} />
-      <Route path="/profession/:alt/:realm/:profession" children={<SingleProfession />} />
-      <Route path="/gear/:alt/:realm" children={<SingleGear />} />
-    </Switch>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/redirect" element={<AuthRedirect />} />
+      <Route path="/account" element={<Account />} />
+      <Route path="/keybind" element={<Keybind />} />
+      <Route path="/gear" element={<Gear />} />
+      <Route path="/profession" element={<Profession />} />
+      <Route path="/mount" element={<Mount />} />
+      <Route path="/pet" element={<Pet />} />
+      <Route path="/logout" element={<Logout />} />
+      <Route path="/keybind/:alt/:realm/:spec" element={<SingleKeybind />} />
+      <Route path="/profession/:alt/:realm/:profession" element={<SingleProfession />} />
+      <Route path="/gear/:alt/:realm" element={<SingleGear />} />
+    </Routes>
   );
 }
 
@@ -522,7 +522,7 @@ function AuthRedirect() {
     getData();
   }, [location]);
 
-  if (readyToRedirect) return <Redirect to="/account" />
+  if (readyToRedirect) return <Navigate to="/account" />
   return (
     null
   );
@@ -705,9 +705,7 @@ function Mount() {
 
   // console.log(data);
   // console.log(data.slice(11, 14));
-  const count_data = data.slice(11, 14);
-  // console.log(count_data);
-  // console.log(count_data[2]);
+  const count_data = data.slice(-3);
   return (
     <>
       <Header />
@@ -719,7 +717,7 @@ function Mount() {
         </Col>
         <Col className="main-content">
           <h2>Mount {count_data[0]}/{count_data[2]}</h2>
-          <MountTable alts={data.slice(0, 10)} heads={heads} />
+          <MountTable alts={data.slice(0, -3)} heads={heads} />
         </Col>
       </Row>
     </>
@@ -741,9 +739,7 @@ function Pet() {
 
   // console.log(data);
   // console.log(data.slice(11, 14));
-  const count_data = data.slice(12, 15);
-  // console.log(count_data);
-  // console.log(count_data[2]);
+  const count_data = data.slice(-3);
   return (
     <>
       <Header />
@@ -755,7 +751,7 @@ function Pet() {
         </Col>
         <Col className="main-content">
           <h2>Pet {count_data[0]}/{count_data[2]}</h2>
-          <PetTable alts={data.slice(0, 11)} heads={heads} />
+          <PetTable alts={data.slice(0, -3)} heads={heads} />
         </Col>
       </Row>
     </>
@@ -767,7 +763,7 @@ function Logout() {
     cookies.remove('userid', { path: '/', sameSite: 'Lax', secure: true});
   });
   return (
-    <Redirect to="/" />
+    <Navigate to="/" />
   );
 }
 
@@ -842,6 +838,7 @@ function SingleKeybind() {
 
 function SingleGear() {
   const [data, setData] = useState([]);
+  const slots = ['Head', 'Neck', 'Shoulder', 'Back', 'Chest', 'Wrist', 'Hands', 'Belt', 'Legs', 'Feet', 'Ring 1', 'Ring 2', 'Trinket 1', 'Trinket 2', 'Weapon 1', 'Weapon 2'];
 
   const { alt, realm } = useParams();
 
@@ -857,8 +854,6 @@ function SingleGear() {
     getData();
   }, [alt, realm]);
 
-  console.log(data);
-
   return (
     <>
       <Header />
@@ -870,9 +865,24 @@ function SingleGear() {
         </Col>
         <Col className="main-content">
           <h2>{alt.replace(alt[0], alt[0].toUpperCase())} - {realm.replace(realm[0], realm[0].toUpperCase())}: Gear</h2>
-          <Row>
-            
-          </Row>
+          <table className="alt-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Item</th>
+                <th>ilvl</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td>{slots[index]}</td>
+                  <td>{item[0]}</td>
+                  <td>{item[1]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </Col>
       </Row>
     </>
