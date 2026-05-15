@@ -1,8 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const tdBase = 'px-4 py-2 border border-zinc-700 text-center text-sm text-zinc-100';
+const tdBase = 'px-4 py-2 border border-zinc-700 text-center text-sm';
 const linkCls = 'text-amber-400 hover:text-amber-300 hover:underline underline-offset-2';
+
+const CLASS_COLORS = {
+  Warrior: '#C79C6E',
+  Paladin: '#F58CBA',
+  Hunter: '#ABD473',
+  Rogue: '#FFF569',
+  Priest: '#FFFFFF',
+  Shaman: '#0070DD',
+  Mage: '#69CCF0',
+  Warlock: '#9482C9',
+  Monk: '#00FF96',
+  Druid: '#FF7D0A',
+  DemonHunter: '#A330C9',
+  DeathKnight: '#C41F3B',
+  Evoker: '#33937F',
+};
+
+function classColor(name) {
+  if (typeof name !== 'string') return null;
+  return CLASS_COLORS[name.replace(/\s/g, '')] ?? null;
+}
 
 function AltTableRowData(props) {
   if (props.page === 'profession') {
@@ -10,7 +31,10 @@ function AltTableRowData(props) {
     if (props.alt === props.fullalt[3] && props.fullalt[3] !== 'Missing') {
       return (
         <td className={tdBase}>
-          <Link className={linkCls} to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace('\'', '')}/${props.fullalt[3].toLowerCase()}`}>
+          <Link
+            className={linkCls}
+            to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace("'", '')}/${props.fullalt[3].toLowerCase()}`}
+          >
             {props.fullalt[3]}
           </Link>
         </td>
@@ -19,7 +43,10 @@ function AltTableRowData(props) {
     if (props.alt === props.fullalt[4] && props.fullalt[4] !== 'Missing') {
       return (
         <td className={tdBase}>
-          <Link className={linkCls} to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace('\'', '')}/${props.fullalt[4].toLowerCase()}`}>
+          <Link
+            className={linkCls}
+            to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace("'", '')}/${props.fullalt[4].toLowerCase()}`}
+          >
             {props.fullalt[4]}
           </Link>
         </td>
@@ -28,7 +55,7 @@ function AltTableRowData(props) {
     if (props.alt === 'Missing') {
       return <td className={`${tdBase} text-zinc-500`}>{props.alt}</td>;
     }
-    return <td className={`${tdBase} ${props.fullalt[2].replace(/\s/g, '')}`}>{props.alt}</td>;
+    return <td className={tdBase}>{props.alt}</td>;
   }
 
   if (props.page === 'gear') {
@@ -37,13 +64,16 @@ function AltTableRowData(props) {
     if (props.alt === props.fullalt[3]) {
       return (
         <td className={tdBase}>
-          <Link className={linkCls} to={`/gear/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace('\'', '')}`}>
+          <Link
+            className={linkCls}
+            to={`/gear/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace("'", '')}`}
+          >
             {props.alt}
           </Link>
         </td>
       );
     }
-    return <td className={`${tdBase} ${props.fullalt[2].replace(/\s/g, '')}`}>{props.alt}</td>;
+    return <td className={tdBase}>{props.alt}</td>;
   }
 
   if (props.page === 'kb') {
@@ -52,7 +82,10 @@ function AltTableRowData(props) {
       if (props.alt === props.fullalt[i] && props.fullalt[i] !== '---') {
         return (
           <td className={tdBase}>
-            <Link className={linkCls} to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[i].toLowerCase()}`}>
+            <Link
+              className={linkCls}
+              to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[i].toLowerCase()}`}
+            >
               {props.fullalt[i]}
             </Link>
           </td>
@@ -60,19 +93,23 @@ function AltTableRowData(props) {
       }
     }
     if (props.alt === '---') return <td className={`${tdBase} text-zinc-500`}>{props.alt}</td>;
-    return <td className={`${tdBase} ${props.fullalt[2].replace(/\s/g, '')}`}>{props.alt}</td>;
+    return <td className={tdBase}>{props.alt}</td>;
   }
 
-  return <td className={`${tdBase} ${props.fullalt[3].replace(/\s/g, '')}`}>{props.alt}</td>;
+  return <td className={tdBase}>{props.alt}</td>;
 }
 
-function AltTableRow(props) {
-  const alt = Object.values(props.alt);
+function AltTableRow({ alt: row, page, index }) {
+  const alt = Object.values(row);
+  const classIndex = page ? 2 : 3;
+  const rawClass = alt[classIndex];
+  const color = classColor(typeof rawClass === 'string' ? rawClass : '') ?? '#e4e4e7';
+  const bg = index % 2 === 0 ? '#18181b' : '#27272a';
   return (
-    <tr className="hover:brightness-110 transition-all">
-      <td className="bg-zinc-900 px-4 py-2 border border-zinc-700 text-center text-zinc-500"></td>
-      {alt.map((data, index) => (
-        <AltTableRowData alt={data} key={index} fullalt={props.alt} page={props.page} />
+    <tr style={{ color, backgroundColor: bg }} className="hover:brightness-125 transition-all">
+      <td className="px-4 py-2 border border-zinc-700 text-center text-zinc-500"></td>
+      {alt.map((data, i) => (
+        <AltTableRowData alt={data} key={i} fullalt={row} page={page} />
       ))}
     </tr>
   );
@@ -84,15 +121,20 @@ function AltTable({ alts, heads, page }) {
       <table className="alt-table border-collapse text-sm">
         <tbody>
           <tr>
-            <th className="bg-zinc-800 text-zinc-300 px-4 py-2 border border-zinc-700 font-semibold">#</th>
+            <th className="bg-zinc-800 text-zinc-300 px-4 py-2 border border-zinc-700 font-semibold">
+              #
+            </th>
             {heads.map((col, index) => (
-              <th key={index} className="bg-zinc-800 text-zinc-300 px-4 py-2 border border-zinc-700 text-sm font-semibold">
+              <th
+                key={index}
+                className="bg-zinc-800 text-zinc-300 px-4 py-2 border border-zinc-700 text-sm font-semibold"
+              >
                 {col}
               </th>
             ))}
           </tr>
           {alts.map((row, index) => (
-            <AltTableRow alt={row} key={index} page={page} />
+            <AltTableRow alt={row} key={index} index={index} page={page} />
           ))}
         </tbody>
       </table>

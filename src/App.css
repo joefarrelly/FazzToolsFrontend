@@ -1,28 +1,47 @@
 /* WoW item quality borders */
-.uncommon { border: ridge; border-color: #1EFF00; border-width: 4px; border-radius: 4px; }
-.common    { border: ridge; border-color: #FFFFFF; border-width: 4px; border-radius: 4px; }
-.rare      { border: ridge; border-color: #0070DD; border-width: 4px; border-radius: 4px; }
-.epic      { border: ridge; border-color: #A335EE; border-width: 4px; border-radius: 4px; }
-.legendary { border: ridge; border-color: #FF8000; border-width: 4px; border-radius: 4px; }
+.uncommon {
+  border: ridge;
+  border-color: #1eff00;
+  border-width: 4px;
+  border-radius: 4px;
+}
+.common {
+  border: ridge;
+  border-color: #ffffff;
+  border-width: 4px;
+  border-radius: 4px;
+}
+.rare {
+  border: ridge;
+  border-color: #0070dd;
+  border-width: 4px;
+  border-radius: 4px;
+}
+.epic {
+  border: ridge;
+  border-color: #a335ee;
+  border-width: 4px;
+  border-radius: 4px;
+}
+.legendary {
+  border: ridge;
+  border-color: #ff8000;
+  border-width: 4px;
+  border-radius: 4px;
+}
 
-.uncollected { filter: grayscale(1); opacity: 0.45; }
-
-/* WoW class background tints — muted for dark theme */
-.Warrior     { background-color: rgba(199, 156, 110, 0.25); }
-.Paladin     { background-color: rgba(245, 140, 186, 0.25); }
-.Hunter      { background-color: rgba(171, 212, 115, 0.22); }
-.Rogue       { background-color: rgba(255, 245, 105, 0.18); }
-.Priest      { background-color: rgba(255, 255, 255, 0.08); }
-.Shaman      { background-color: rgba(0, 112, 222, 0.28); }
-.Mage        { background-color: rgba(105, 204, 240, 0.22); }
-.Warlock     { background-color: rgba(148, 130, 201, 0.28); }
-.Monk        { background-color: rgba(0, 255, 150, 0.18); }
-.Druid       { background-color: rgba(255, 125, 10, 0.22); }
-.DemonHunter { background-color: rgba(163, 48, 201, 0.28); }
-.DeathKnight { background-color: rgba(196, 31, 59, 0.28); }
-.Evoker      { background-color: rgba(51, 147, 127, 0.28); }
+.uncollected {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
 
 /* Row counter for AltTable */
-.alt-table { counter-reset: row-num -1; }
-.alt-table tr { counter-increment: row-num; }
-.alt-table tr td:first-child::before { content: counter(row-num); }
+.alt-table {
+  counter-reset: row-num -1;
+}
+.alt-table tr {
+  counter-increment: row-num;
+}
+.alt-table tr td:first-child::before {
+  content: counter(row-num);
+}

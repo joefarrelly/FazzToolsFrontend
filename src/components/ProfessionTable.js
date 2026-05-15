@@ -13,7 +13,9 @@ function ProfessionTableRow({ recipe }) {
         width="48"
         height="48"
       />
-      <span className="text-xs text-zinc-400 text-center">{mat[1]}x {mat[0]}</span>
+      <span className="text-xs text-zinc-400 text-center">
+        {mat[1]}x {mat[0]}
+      </span>
     </div>
   ));
 

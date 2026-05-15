@@ -15,7 +15,13 @@ function Profession() {
       const response = await axios.get(config.url.API_URL + '/api/profile/altprofessions/', {
         params: {
           user: cookies.get('userid'),
-          fields: ['.altName', '.altRealm', '.get_altClass_display', 'get_profession1_display', 'get_profession2_display'],
+          fields: [
+            '.alt_name',
+            '.alt_realm',
+            '.get_alt_class_display',
+            'get_profession_1_display',
+            'get_profession_2_display',
+          ],
         },
       });
       setData(response.data);

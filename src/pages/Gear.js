@@ -6,9 +6,25 @@ import { cookies } from 'cookies';
 import { config } from 'Constants';
 
 const heads = [
-  'Name', 'Realm', 'Avg', 'Head', 'Neck', 'Shoulder', 'Back', 'Chest',
-  'Wrist', 'Hands', 'Belt', 'Legs', 'Feet', 'Ring 1', 'Ring 2',
-  'Trinket 1', 'Trinket 2', 'Weapon 1', 'Weapon 2',
+  'Name',
+  'Realm',
+  'Avg',
+  'Head',
+  'Neck',
+  'Shoulder',
+  'Back',
+  'Chest',
+  'Wrist',
+  'Hands',
+  'Belt',
+  'Legs',
+  'Feet',
+  'Ring 1',
+  'Ring 2',
+  'Trinket 1',
+  'Trinket 2',
+  'Weapon 1',
+  'Weapon 2',
 ];
 
 function Gear() {
@@ -20,7 +36,27 @@ function Gear() {
         params: {
           user: cookies.get('userid'),
           page: 'all',
-          fields: ['.altName', '.altRealm', '.get_altClass_display', 'head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'belt', 'legs', 'feet', 'ring1', 'ring2', 'trinket1', 'trinket2', 'weapon1', 'weapon2'],
+          fields: [
+            '.alt_name',
+            '.alt_realm',
+            '.get_alt_class_display',
+            'head',
+            'neck',
+            'shoulder',
+            'back',
+            'chest',
+            'wrist',
+            'hands',
+            'belt',
+            'legs',
+            'feet',
+            'ring1',
+            'ring2',
+            'trinket1',
+            'trinket2',
+            'weapon1',
+            'weapon2',
+          ],
         },
       });
       setData(response.data);

@@ -11,9 +11,7 @@ function PageLayout({ title, children }) {
           <MenuBar />
         </aside>
         <main className="flex-1 p-6 overflow-x-auto min-w-0">
-          {title && (
-            <h2 className="text-xl font-semibold text-zinc-100 mb-5">{title}</h2>
-          )}
+          {title && <h2 className="text-xl font-semibold text-zinc-100 mb-5">{title}</h2>}
           {children}
         </main>
       </div>
