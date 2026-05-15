@@ -15,7 +15,15 @@ function Account() {
       const response = await axios.get(config.url.API_URL + '/api/profile/alts/', {
         params: {
           user: cookies.get('userid'),
-          fields: ['altFaction', 'altLevel', 'get_altRace_display', 'get_altClass_display', 'altName', 'altRealm', 'altAccountId'],
+          fields: [
+            'alt_faction',
+            'alt_level',
+            'get_alt_race_display',
+            'get_alt_class_display',
+            'alt_name',
+            'alt_realm',
+            'alt_account_id',
+          ],
         },
       });
       setData(response.data);

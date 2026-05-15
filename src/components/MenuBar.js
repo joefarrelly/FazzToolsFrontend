@@ -25,7 +25,9 @@ function LoginLogout() {
         <SidebarLink to="/mount">Mount</SidebarLink>
         <SidebarLink to="/pet">Pet</SidebarLink>
         <div className="mt-4 pt-4 border-t border-zinc-800">
-          <SidebarLink to="/logout" danger>Logout</SidebarLink>
+          <SidebarLink to="/logout" danger>
+            Logout
+          </SidebarLink>
         </div>
       </>
     );

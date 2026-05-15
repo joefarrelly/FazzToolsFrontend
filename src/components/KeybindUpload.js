@@ -14,9 +14,9 @@ function KeybindUpload({ inputKey, onChange }) {
 
   async function submitHandler() {
     const formData = new FormData();
-    formData.append('userId', cookies.get('userid'));
-    formData.append('userFile', selectedFile);
-    formData.append('userLastUpdate', new Date().toISOString());
+    formData.append('user_id', cookies.get('userid'));
+    formData.append('user_file', selectedFile);
+    formData.append('user_last_update', new Date().toISOString());
     await axios.put(
       config.url.API_URL + '/api/profile/users/' + cookies.get('userid') + '/',
       formData,
