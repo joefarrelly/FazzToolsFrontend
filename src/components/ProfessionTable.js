@@ -5,10 +5,19 @@ function RecipeRow({ recipe }) {
   const mats = recipe.slice(5);
 
   return (
-    <div className={`border-b border-zinc-800 last:border-0 flex items-center justify-between px-4 py-2.5 gap-4 ${!learned ? 'opacity-40' : ''}`}>
+    <div
+      className={`border-b border-zinc-800 last:border-0 flex items-center justify-between px-4 py-2.5 gap-4 ${!learned ? 'opacity-40' : ''}`}
+    >
       <div className="flex items-center gap-4 min-w-0">
         {icon && icon !== 'Not Found' && (
-          <img src={icon} alt={name} title={name} width="28" height="28" className="shrink-0 rounded" />
+          <img
+            src={icon}
+            alt={name}
+            title={name}
+            width="28"
+            height="28"
+            className="shrink-0 rounded"
+          />
         )}
         <span className={`text-sm truncate ${learned ? 'text-zinc-200' : 'text-zinc-400 italic'}`}>
           {name}
