@@ -1,94 +1,109 @@
 import React, { useState } from 'react';
-import CollapsePanel from 'components/CollapsePanel';
 
-function ProfessionTableRow({ recipe }) {
-  const [open, setOpen] = useState(false);
-  const mats = recipe.slice(3).map((mat, index) => (
-    <div className="flex flex-col items-center gap-1" key={index}>
-      <img
-        className={mat[3].toLowerCase()}
-        src={mat[2]}
-        title={mat[0]}
-        alt={mat[0]}
-        width="48"
-        height="48"
-      />
-      <span className="text-xs text-zinc-400 text-center">
-        {mat[1]}x {mat[0]}
-      </span>
-    </div>
-  ));
+function RecipeRow({ recipe }) {
+  const [name, learned, rank, qty, icon] = recipe;
+  const mats = recipe.slice(5);
 
   return (
-    <div className="mb-1">
-      <div
-        className="w-72 bg-zinc-800/40 hover:bg-zinc-700/60 rounded px-3 py-2 cursor-pointer transition-colors"
-        onClick={() => setOpen(!open)}
-      >
-        <div className="text-sm text-zinc-200">{recipe[0]}</div>
-        <div className="text-xs text-zinc-500">
-          Rank: {recipe[1]} &bull; Qty: {recipe[2]}
-        </div>
+    <div
+      className={`border-b border-zinc-800 last:border-0 flex items-center justify-between px-4 py-2.5 gap-4 ${!learned ? 'opacity-40' : ''}`}
+    >
+      <div className="flex items-center gap-4 min-w-0">
+        {icon && icon !== 'Not Found' && (
+          <img
+            src={icon}
+            alt={name}
+            title={name}
+            width="28"
+            height="28"
+            className="shrink-0 rounded"
+          />
+        )}
+        <span className={`text-sm truncate ${learned ? 'text-zinc-200' : 'text-zinc-400 italic'}`}>
+          {name}
+        </span>
+        <span className="text-xs text-zinc-500 shrink-0">Rank {rank}</span>
+        <span className="text-xs text-zinc-500 shrink-0">Qty {qty}</span>
       </div>
-      <CollapsePanel open={open}>
-        <div className="flex flex-wrap gap-3 pt-2 pl-2 pb-2">{mats}</div>
-      </CollapsePanel>
+      {mats.length > 0 && (
+        <div className="flex items-center gap-3 shrink-0">
+          {mats.map((mat, i) => (
+            <div key={i} className="flex items-center gap-1.5">
+              <img
+                className={mat[3].toLowerCase()}
+                src={mat[2]}
+                title={mat[0]}
+                alt={mat[0]}
+                width="28"
+                height="28"
+              />
+              <span className="text-xs text-zinc-400">
+                <span className="text-zinc-500">{mat[1]}x</span> {mat[0]}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-function ProfessionTableRowTemp({ recipe }) {
+function CategorySection({ category }) {
   const [open, setOpen] = useState(false);
-  return (
-    <div>
-      <button
-        className="w-60 text-left bg-zinc-800/60 hover:bg-zinc-700 text-zinc-300 px-3 py-1.5 rounded transition-colors text-sm flex items-center justify-between"
-        type="button"
-        onClick={() => setOpen(!open)}
-      >
-        <span>{recipe[0]}</span>
-        <span className="text-zinc-500 text-xs">{open ? '▲' : '▼'}</span>
-      </button>
-      <CollapsePanel open={open}>
-        <div className="pl-4 pt-1 space-y-1">
-          {recipe[1].map((data, index) => (
-            <ProfessionTableRow recipe={data} key={index} />
-          ))}
-        </div>
-      </CollapsePanel>
-    </div>
-  );
-}
 
-function ProfessionTableCol({ tier }) {
-  const [open, setOpen] = useState(false);
   return (
-    <div>
+    <div className="mb-3">
       <button
-        className="w-80 text-left bg-zinc-800 hover:bg-zinc-700 text-zinc-200 px-4 py-2 rounded transition-colors font-medium text-sm flex items-center justify-between"
         type="button"
         onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-1 py-1 text-left group"
       >
-        <span>{tier[0]}</span>
-        <span className="text-zinc-500 text-xs">{open ? '▲' : '▼'}</span>
+        <h3 className="text-xs font-semibold text-amber-500 uppercase tracking-widest">
+          {category[0]}
+        </h3>
+        <span className="text-zinc-600 group-hover:text-zinc-400 transition-colors text-xs">
+          {open ? '▾' : '▸'}
+        </span>
       </button>
-      <CollapsePanel open={open}>
-        <div className="pl-4 pt-1 space-y-1">
-          {tier[1].map((data, index) => (
-            <ProfessionTableRowTemp recipe={data} key={index} />
+      {open && (
+        <div className="bg-zinc-800/30 rounded-lg border border-zinc-700/50 overflow-hidden mt-2">
+          {category[1].map((recipe, i) => (
+            <RecipeRow key={i} recipe={recipe} />
           ))}
         </div>
-      </CollapsePanel>
+      )}
     </div>
   );
 }
 
 function ProfessionTable({ tiers }) {
+  const [activeTier, setActiveTier] = useState(0);
+
+  if (!tiers.length) return null;
+
   return (
-    <div className="space-y-1">
-      {tiers.map((data, index) => (
-        <ProfessionTableCol tier={data} key={index} />
-      ))}
+    <div className="flex gap-6">
+      <nav className="shrink-0 w-48 space-y-1">
+        {tiers.map((tier, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => setActiveTier(i)}
+            className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
+              i === activeTier
+                ? 'bg-zinc-800 text-amber-400'
+                : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200'
+            }`}
+          >
+            {tier[0]}
+          </button>
+        ))}
+      </nav>
+      <div className="flex-1 min-w-0">
+        {tiers[activeTier][1].map((category, i) => (
+          <CategorySection key={i} category={category} />
+        ))}
+      </div>
     </div>
   );
 }
