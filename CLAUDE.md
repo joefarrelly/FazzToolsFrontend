@@ -59,11 +59,18 @@ Absolute imports are configured via `jsconfig.json` (`baseUrl: "src"`), so impor
 
 **`src/Constants.js`** — exports a `config` object with `config.url.API_URL` and `config.url.REDIRECT_URL` that automatically switch between dev (`localhost`) and prod (`fazztoolsapi.ddns.net`) based on `NODE_ENV`.
 
+**Environment variables** — copy `.env.example` to `.env` and fill in values before running locally:
+- `REACT_APP_API_URL` — backend base URL (defaults to `http://localhost:8000`)
+- `REACT_APP_REDIRECT_URL` — OAuth redirect URI (defaults to `http://localhost:3000/redirect/`)
+- `REACT_APP_BLIZZ_CLIENT_ID` — Blizzard OAuth client ID (no default; required for auth)
+
 **Authentication** uses Blizzard OAuth (EU). The flow is:
-1. `/auth` redirects to battle.net OAuth
+1. `/auth` redirects to battle.net OAuth using `REACT_APP_BLIZZ_CLIENT_ID`
 2. Battle.net redirects back to `/redirect` with an auth code
 3. `AuthRedirect` POSTs the code to the backend, which returns a `userid`
 4. `userid` is stored in a cookie and used in all subsequent API requests as a query param
+
+`axios.defaults.withCredentials = true` is set globally in `src/index.js`.
 
 **Routing** uses React Router v6 (`BrowserRouter` + `Routes`). Detail views use URL params (e.g. `/gear/:alt/:realm`, `/keybind/:alt/:realm/:spec`) accessed via `useParams`. The `public/_redirects` file handles Netlify SPA routing so all paths serve `index.html`.
 

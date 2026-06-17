@@ -23,11 +23,16 @@ const slots = [
   'Weapon 2',
 ];
 
+function capitalize(str) {
+  return str ? str[0].toUpperCase() + str.slice(1) : '';
+}
+
 function SingleGear() {
   const [data, setData] = useState([]);
   const { alt, realm } = useParams();
 
   useEffect(() => {
+    if (!alt || !realm) return;
     async function getData() {
       const response = await axios.get(config.url.API_URL + '/api/profile/altequipments/', {
         params: {
@@ -62,7 +67,8 @@ function SingleGear() {
     getData();
   }, [alt, realm]);
 
-  const title = `${alt[0].toUpperCase()}${alt.slice(1)} - ${realm[0].toUpperCase()}${realm.slice(1)}: Gear`;
+  if (!alt || !realm) return null;
+  const title = `${capitalize(alt)} - ${capitalize(realm)}: Gear`;
   return (
     <PageLayout title={title}>
       <table className="border-collapse text-sm">
