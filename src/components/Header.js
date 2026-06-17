@@ -27,7 +27,7 @@ function Header() {
     setUpdate(new Date(response.data[0]).toLocaleString());
   }
 
-  if (!cookies.get('lastupdate')) {
+  if (cookies.get('userid') && !cookies.get('lastupdate')) {
     getLastUpdate();
   }
 

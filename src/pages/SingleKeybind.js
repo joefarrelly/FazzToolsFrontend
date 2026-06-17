@@ -6,11 +6,16 @@ import KeybindTable from 'components/KeybindTable';
 import { cookies } from 'cookies';
 import { config } from 'Constants';
 
+function capitalize(str) {
+  return str ? str[0].toUpperCase() + str.slice(1) : '';
+}
+
 function SingleKeybind() {
   const [data, setData] = useState([]);
   const { alt, realm, spec } = useParams();
 
   useEffect(() => {
+    if (!alt || !realm || !spec) return;
     async function getData() {
       const response = await axios.get(config.url.API_URL + '/api/profile/users/', {
         params: { user: cookies.get('userid'), page: 'single', alt, realm, spec },
@@ -20,7 +25,8 @@ function SingleKeybind() {
     getData();
   }, [alt, realm, spec]);
 
-  const title = `${alt[0].toUpperCase()}${alt.slice(1)} - ${realm[0].toUpperCase()}${realm.slice(1)}: ${spec[0].toUpperCase()}${spec.slice(1)}`;
+  if (!alt || !realm || !spec) return null;
+  const title = `${capitalize(alt)} - ${capitalize(realm)}: ${capitalize(spec)}`;
   return (
     <PageLayout title={title}>
       <div className="flex flex-wrap gap-6">

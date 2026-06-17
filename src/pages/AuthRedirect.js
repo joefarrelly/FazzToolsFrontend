@@ -10,14 +10,16 @@ function AuthRedirect() {
   const location = useLocation();
 
   useEffect(() => {
+    let cancelled = false;
     async function getData() {
       try {
         const query = new URLSearchParams(location.search);
         const response = await axios.post(config.url.API_URL + '/api/custom/bnetlogin/', {
           state: query.get('state'),
           code: query.get('code'),
-          client_id: '39658b8731b945fcba53f216556351b6',
+          client_id: process.env.REACT_APP_BLIZZ_CLIENT_ID,
         });
+        if (cancelled) return;
         if (!response.data?.user) {
           setError('Login failed. Please try again.');
           return;
@@ -25,10 +27,13 @@ function AuthRedirect() {
         cookies.set('userid', response.data.user, { path: '/', sameSite: 'Lax', secure: true });
         setReadyToRedirect(true);
       } catch {
-        setError('Login failed. Please try again.');
+        if (!cancelled) setError('Login failed. Please try again.');
       }
     }
     getData();
+    return () => {
+      cancelled = true;
+    };
   }, [location]);
 
   if (readyToRedirect) return <Navigate to="/account" />;
