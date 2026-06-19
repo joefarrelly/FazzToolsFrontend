@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import PageLayout from 'components/PageLayout';
 import KeybindTable from 'components/KeybindTable';
+import LoadingSpinner from 'components/LoadingSpinner';
 import { cookies } from 'cookies';
 import { config } from 'Constants';
 
@@ -12,15 +13,23 @@ function capitalize(str) {
 
 function SingleKeybind() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { alt, realm, spec } = useParams();
 
   useEffect(() => {
     if (!alt || !realm || !spec) return;
     async function getData() {
-      const response = await axios.get(config.url.API_URL + '/api/profile/users/', {
-        params: { user: cookies.get('userid'), page: 'single', alt, realm, spec },
-      });
-      setData(response.data);
+      try {
+        const response = await axios.get(config.url.API_URL + '/api/profile/users/', {
+          params: { user: cookies.get('userid'), page: 'single', alt, realm, spec },
+        });
+        setData(response.data);
+      } catch (err) {
+        setError(err.message ?? 'Failed to load data.');
+      } finally {
+        setLoading(false);
+      }
     }
     getData();
   }, [alt, realm, spec]);
@@ -29,11 +38,15 @@ function SingleKeybind() {
   const title = `${capitalize(alt)} - ${capitalize(realm)}: ${capitalize(spec)}`;
   return (
     <PageLayout title={title}>
-      <div className="flex flex-wrap gap-6">
-        {data.map((table, index) => (
-          <KeybindTable key={index} binds={table} />
-        ))}
-      </div>
+      {loading && <LoadingSpinner />}
+      {error && <p className="text-red-400 text-sm">{error}</p>}
+      {!loading && !error && (
+        <div className="flex flex-wrap gap-6">
+          {data.map((table, index) => (
+            <KeybindTable key={index} binds={table} />
+          ))}
+        </div>
+      )}
     </PageLayout>
   );
 }

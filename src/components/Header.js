@@ -3,20 +3,38 @@ import axios from 'axios';
 import { cookies } from 'cookies';
 import { config } from 'Constants';
 
+const COOLDOWN_MS = 300_000;
+const STALE_MS = 30 * 24 * 60 * 60 * 1000;
+
+function isStale(lastupdate) {
+  if (!lastupdate) return false;
+  return Date.now() - parseInt(lastupdate) > STALE_MS;
+}
+
 function Header() {
-  let disable = false;
   const [update, setUpdate] = useState(
     new Date(parseInt(cookies.get('lastupdate'))).toLocaleString()
   );
+  const [btnState, setBtnState] = useState('idle'); // 'idle' | 'loading' | 'done' | 'error'
 
-  function updateAllAlt() {
-    axios.post(config.url.API_URL + '/api/custom/scanalt/', { userid: cookies.get('userid') });
-    cookies.set('lastupdate', new Date().getTime(), { path: '/', sameSite: 'Lax', secure: true });
-    setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
-  }
-
-  if (new Date().getTime() < parseInt(cookies.get('lastupdate')) + 300000) {
-    disable = true;
+  async function updateAllAlt() {
+    setBtnState('loading');
+    try {
+      await axios.post(config.url.API_URL + '/api/custom/scanalt/', {
+        userid: cookies.get('userid'),
+      });
+      cookies.set('lastupdate', new Date().getTime(), {
+        path: '/',
+        sameSite: 'Lax',
+        secure: true,
+      });
+      setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
+      setBtnState('done');
+    } catch {
+      setBtnState('error');
+    } finally {
+      setTimeout(() => setBtnState('idle'), 3000);
+    }
   }
 
   async function getLastUpdate() {
@@ -31,21 +49,42 @@ function Header() {
     getLastUpdate();
   }
 
+  const lastupdate = cookies.get('lastupdate');
+  const onCooldown = btnState !== 'idle' || Date.now() < parseInt(lastupdate) + COOLDOWN_MS;
+  const stale = isStale(lastupdate);
+
+  const btnLabel = { idle: 'Update', loading: 'Updating…', done: 'Queued!', error: 'Failed' }[
+    btnState
+  ];
+  const btnCls =
+    btnState === 'error'
+      ? 'bg-red-700 hover:bg-red-600 text-zinc-100'
+      : btnState === 'done'
+        ? 'bg-green-700 text-zinc-100'
+        : 'bg-amber-600 hover:bg-amber-500 text-zinc-950';
+
   if (cookies.get('userid')) {
     return (
-      <header className="bg-zinc-900 border-b border-zinc-800 px-6 py-4 flex items-center justify-between shrink-0">
-        <h1 className="text-2xl font-bold text-amber-400 tracking-wide">Fazz Tools</h1>
-        <div className="flex items-center gap-4">
-          <span className="text-zinc-400 text-sm">Last updated: {update}</span>
-          <button
-            disabled={disable}
-            onClick={updateAllAlt}
-            className="bg-amber-600 hover:bg-amber-500 disabled:opacity-40 disabled:cursor-not-allowed text-zinc-950 font-semibold px-3 py-1.5 rounded text-sm transition-colors"
-          >
-            Update
-          </button>
-        </div>
-      </header>
+      <>
+        <header className="bg-zinc-900 border-b border-zinc-800 px-6 py-4 flex items-center justify-between shrink-0">
+          <h1 className="text-2xl font-bold text-amber-400 tracking-wide">Fazz Tools</h1>
+          <div className="flex items-center gap-4">
+            <span className="text-zinc-400 text-sm">Last updated: {update}</span>
+            <button
+              disabled={onCooldown}
+              onClick={updateAllAlt}
+              className={`${btnCls} disabled:opacity-40 disabled:cursor-not-allowed font-semibold px-3 py-1.5 rounded text-sm transition-colors`}
+            >
+              {btnLabel}
+            </button>
+          </div>
+        </header>
+        {stale && (
+          <div className="bg-amber-900/60 border-b border-amber-700 px-6 py-2 text-amber-300 text-sm text-center">
+            Your data is over 30 days old — click <strong>Update</strong> to sync your characters.
+          </div>
+        )}
+      </>
     );
   }
 
