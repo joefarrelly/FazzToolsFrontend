@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import PageLayout from 'components/PageLayout';
 import ProfessionTable from 'components/ProfessionTable';
+import LoadingSpinner from 'components/LoadingSpinner';
 import { config } from 'Constants';
 
 function capitalize(str) {
@@ -11,15 +12,23 @@ function capitalize(str) {
 
 function SingleProfession() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { alt, realm, profession } = useParams();
 
   useEffect(() => {
     if (!alt || !realm || !profession) return;
     async function getData() {
-      const response = await axios.get(config.url.API_URL + '/api/profile/altprofessiondatas/', {
-        params: { alt, realm, profession },
-      });
-      setData(response.data);
+      try {
+        const response = await axios.get(config.url.API_URL + '/api/profile/altprofessiondatas/', {
+          params: { alt, realm, profession },
+        });
+        setData(response.data);
+      } catch (err) {
+        setError(err.message ?? 'Failed to load data.');
+      } finally {
+        setLoading(false);
+      }
     }
     getData();
   }, [alt, realm, profession]);
@@ -28,7 +37,9 @@ function SingleProfession() {
   const title = `${capitalize(alt)} - ${capitalize(realm)}: ${capitalize(profession)}`;
   return (
     <PageLayout title={title}>
-      <ProfessionTable tiers={data} />
+      {loading && <LoadingSpinner />}
+      {error && <p className="text-red-400 text-sm">{error}</p>}
+      {!loading && !error && <ProfessionTable tiers={data} />}
     </PageLayout>
   );
 }

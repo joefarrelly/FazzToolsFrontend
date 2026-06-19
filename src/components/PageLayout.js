@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from 'components/Header';
 import MenuBar from 'components/MenuBar';
+import ErrorBoundary from 'components/ErrorBoundary';
 
 function PageLayout({ title, children }) {
   return (
@@ -12,7 +13,7 @@ function PageLayout({ title, children }) {
         </aside>
         <main className="flex-1 p-6 overflow-x-auto min-w-0">
           {title && <h2 className="text-xl font-semibold text-zinc-100 mb-5">{title}</h2>}
-          {children}
+          <ErrorBoundary>{children}</ErrorBoundary>
         </main>
       </div>
     </div>
