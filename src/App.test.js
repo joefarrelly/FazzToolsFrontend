@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+jest.mock('axios');
+jest.mock('cookies', () => ({ cookies: { get: jest.fn(() => null), set: jest.fn() } }));
+
+test('renders brand heading', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText('Fazz Tools')).toBeInTheDocument();
 });

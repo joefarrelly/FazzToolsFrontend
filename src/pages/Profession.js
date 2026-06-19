@@ -3,6 +3,7 @@ import axios from 'axios';
 import PageLayout from 'components/PageLayout';
 import AltTable from 'components/AltTable';
 import LoadingSpinner from 'components/LoadingSpinner';
+import { cookies } from 'cookies';
 import { config } from 'Constants';
 
 const heads = ['Name', 'Realm', 'Profession 1', 'Profession 2'];
@@ -17,6 +18,7 @@ function Profession() {
       try {
         const response = await axios.get(config.url.API_URL + '/api/profile/altprofessions/', {
           params: {
+            user: cookies.get('userid'),
             fields: [
               '.alt_name',
               '.alt_realm',
