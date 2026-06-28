@@ -6,7 +6,7 @@ import { config } from 'Constants';
 
 function AuthRedirect() {
   const [readyToRedirect, setReadyToRedirect] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ function AuthRedirect() {
           setError('Login failed. Please try again.');
           return;
         }
-        cookies.set('userid', response.data.user, { path: '/', sameSite: 'Lax', secure: true });
+        cookies.set('userid', response.data.user, { path: '/', sameSite: 'lax', secure: true });
         setReadyToRedirect(true);
       } catch {
         if (!cancelled) setError('Login failed. Please try again.');

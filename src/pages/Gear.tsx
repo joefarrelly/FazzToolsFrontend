@@ -5,6 +5,7 @@ import AltTable from 'components/AltTable';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { cookies } from 'cookies';
 import { config } from 'Constants';
+import type { AltRow } from 'types';
 
 const heads = [
   'Name',
@@ -29,9 +30,9 @@ const heads = [
 ];
 
 function Gear() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<AltRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function getData() {
@@ -65,7 +66,7 @@ function Gear() {
         });
         setData(response.data);
       } catch (err) {
-        setError(err.message ?? 'Failed to load data.');
+        setError(err instanceof Error ? err.message : 'Failed to load data.');
       } finally {
         setLoading(false);
       }

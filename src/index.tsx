@@ -8,7 +8,8 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const rootElement = document.getElementById('root') as HTMLElement;
+const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <App />
@@ -28,7 +29,7 @@ $(document).ready(function () {
       }
     );
     $(this).click(function () {
-      var sortOrder;
+      let sortOrder: number;
       if ($(this).is('.asc')) {
         $(this).removeClass('asc');
         $(this).addClass('desc selected');
@@ -40,15 +41,15 @@ $(document).ready(function () {
       }
       $(this).siblings().removeClass('asc selected');
       $(this).siblings().removeClass('desc selected');
-      var arrData = $('table').find('tbody >tr:has(td)').get();
+      const arrData = $('table').find('tbody >tr:has(td)').get();
       arrData.sort(function (a, b) {
-        var val1 = $(a).children('td').eq(col).text().toUpperCase().replace(/,/g, '');
-        var val2 = $(b).children('td').eq(col).text().toUpperCase().replace(/,/g, '');
-        if ($.isNumeric(val1) && $.isNumeric(val2))
-          return sortOrder === 1 ? val1 - val2 : val2 - val1;
+        const val1 = $(a).children('td').eq(col).text().toUpperCase().replace(/,/g, '');
+        const val2 = $(b).children('td').eq(col).text().toUpperCase().replace(/,/g, '');
+        if (!isNaN(Number(val1)) && !isNaN(Number(val2)))
+          return sortOrder === 1 ? Number(val1) - Number(val2) : Number(val2) - Number(val1);
         else return val1 < val2 ? -sortOrder : val1 > val2 ? sortOrder : 0;
       });
-      $.each(arrData, function (index, row) {
+      $.each(arrData, function (_index, row) {
         $('tbody').append(row);
       });
     });

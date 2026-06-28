@@ -3,22 +3,29 @@ import axios from 'axios';
 import { cookies } from 'cookies';
 import { config } from 'Constants';
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-function validateFile(file) {
+type UploadState = 'idle' | 'loading' | 'done' | 'error';
+
+function validateFile(file: File | null): string | null {
   if (!file) return null;
   if (!file.name.endsWith('.lua')) return 'File must be a .lua file.';
   if (file.size > MAX_FILE_SIZE) return 'File must be under 5 MB.';
   return null;
 }
 
-function KeybindUpload({ inputKey, onChange }) {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [validationError, setValidationError] = useState(null);
-  const [uploadState, setUploadState] = useState('idle'); // 'idle' | 'loading' | 'done' | 'error'
+interface KeybindUploadProps {
+  inputKey: React.Key;
+  onChange: (timestamp: number) => void;
+}
 
-  function changeHandler(event) {
-    const file = event.target.files[0] ?? null;
+function KeybindUpload({ inputKey, onChange }: KeybindUploadProps) {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const [uploadState, setUploadState] = useState<UploadState>('idle');
+
+  function changeHandler(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] ?? null;
     const error = validateFile(file);
     setSelectedFile(file);
     setValidationError(error);
@@ -26,6 +33,7 @@ function KeybindUpload({ inputKey, onChange }) {
   }
 
   async function submitHandler() {
+    if (!selectedFile) return;
     const error = validateFile(selectedFile);
     if (error) {
       setValidationError(error);
@@ -54,9 +62,13 @@ function KeybindUpload({ inputKey, onChange }) {
   }
 
   const canSubmit = selectedFile && !validationError && uploadState === 'idle';
-  const btnLabel = { idle: 'Submit', loading: 'Uploading…', done: 'Uploaded!', error: 'Failed' }[
-    uploadState
-  ];
+  const btnLabels: Record<UploadState, string> = {
+    idle: 'Submit',
+    loading: 'Uploading…',
+    done: 'Uploaded!',
+    error: 'Failed',
+  };
+  const btnLabel = btnLabels[uploadState];
   const btnCls =
     uploadState === 'error'
       ? 'bg-red-700 hover:bg-red-600 text-zinc-100'

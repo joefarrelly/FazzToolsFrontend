@@ -1,6 +1,10 @@
-import React from 'react';
+import type { KeybindEntry } from 'types';
 
-function KeybindTableRow({ bind }) {
+interface KeybindTableRowProps {
+  bind: string[];
+}
+
+function KeybindTableRow({ bind }: KeybindTableRowProps) {
   return (
     <tr className="hover:bg-zinc-800/50 transition-colors">
       {bind.map((col, index) => (
@@ -15,14 +19,18 @@ function KeybindTableRow({ bind }) {
   );
 }
 
-function KeybindTable({ binds }) {
+interface KeybindTableProps {
+  binds: KeybindEntry;
+}
+
+function KeybindTable({ binds }: KeybindTableProps) {
   return (
     <div className="mb-4">
       <table className="border-collapse text-sm">
         <thead>
           <tr>
             <th
-              colSpan="2"
+              colSpan={2}
               className="bg-zinc-700 text-zinc-100 px-4 py-2 border border-zinc-600 font-semibold text-center"
             >
               {binds[0]}

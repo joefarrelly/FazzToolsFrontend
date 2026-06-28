@@ -24,15 +24,15 @@ const slots = [
   'Weapon 2',
 ];
 
-function capitalize(str) {
+function capitalize(str: string): string {
   return str ? str[0].toUpperCase() + str.slice(1) : '';
 }
 
 function SingleGear() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<[string, number][]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { alt, realm } = useParams();
+  const [error, setError] = useState<string | null>(null);
+  const { alt, realm } = useParams<{ alt: string; realm: string }>();
 
   useEffect(() => {
     if (!alt || !realm) return;
@@ -68,7 +68,7 @@ function SingleGear() {
         });
         setData(response.data);
       } catch (err) {
-        setError(err.message ?? 'Failed to load data.');
+        setError(err instanceof Error ? err.message : 'Failed to load data.');
       } finally {
         setLoading(false);
       }

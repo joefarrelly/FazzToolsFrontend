@@ -4,7 +4,7 @@ import { cookies } from 'cookies';
 
 function Logout() {
   useEffect(() => {
-    cookies.remove('userid', { path: '/', sameSite: 'Lax', secure: true });
+    cookies.remove('userid', { path: '/', sameSite: 'lax', secure: true });
   });
   return <Navigate to="/" />;
 }

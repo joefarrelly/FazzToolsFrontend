@@ -1,6 +1,11 @@
 import React from 'react';
 
-function CollapsePanel({ open, children }) {
+interface CollapsePanelProps {
+  open: boolean;
+  children: React.ReactNode;
+}
+
+function CollapsePanel({ open, children }: CollapsePanelProps) {
   return (
     <div
       className={`overflow-hidden transition-all duration-300 ${

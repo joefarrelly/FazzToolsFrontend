@@ -6,16 +6,17 @@ import KeybindTable from 'components/KeybindTable';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { cookies } from 'cookies';
 import { config } from 'Constants';
+import type { KeybindEntry } from 'types';
 
-function capitalize(str) {
+function capitalize(str: string): string {
   return str ? str[0].toUpperCase() + str.slice(1) : '';
 }
 
 function SingleKeybind() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<KeybindEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { alt, realm, spec } = useParams();
+  const [error, setError] = useState<string | null>(null);
+  const { alt, realm, spec } = useParams<{ alt: string; realm: string; spec: string }>();
 
   useEffect(() => {
     if (!alt || !realm || !spec) return;
@@ -26,7 +27,7 @@ function SingleKeybind() {
         });
         setData(response.data);
       } catch (err) {
-        setError(err.message ?? 'Failed to load data.');
+        setError(err instanceof Error ? err.message : 'Failed to load data.');
       } finally {
         setLoading(false);
       }
