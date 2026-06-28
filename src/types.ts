@@ -29,3 +29,23 @@ export type MaterialItem = [string, number, string, string]; // [name, qty, icon
 export type RecipeData = [string, boolean, number, number, string, ...MaterialItem[]];
 export type CategoryData = [string, RecipeData[]];
 export type TierData = [string, CategoryData[]];
+
+export interface AchievementEntry {
+  alt: number;
+  alt_name: string;
+  achievement: number;
+  achievement_name: string;
+  achievement_points: number;
+  achievement_category: string;
+  completed_timestamp: number | null;
+}
+
+export interface ReputationEntry {
+  alt: number;
+  alt_name: string;
+  faction: number;
+  faction_name: string;
+  faction_category: string;
+  standing_type: string;
+  standing_value: number;
+}

@@ -10,6 +10,8 @@ import Gear from 'pages/Gear';
 import Profession from 'pages/Profession';
 import Mount from 'pages/Mount';
 import Pet from 'pages/Pet';
+import Achievement from 'pages/Achievement';
+import Reputation from 'pages/Reputation';
 import Logout from 'pages/Logout';
 import SingleKeybind from 'pages/SingleKeybind';
 import SingleProfession from 'pages/SingleProfession';
@@ -28,6 +30,8 @@ function App() {
         <Route path="/profession" element={<Profession />} />
         <Route path="/mount" element={<Mount />} />
         <Route path="/pet" element={<Pet />} />
+        <Route path="/achievement" element={<Achievement />} />
+        <Route path="/reputation" element={<Reputation />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/keybind/:alt/:realm/:spec" element={<SingleKeybind />} />
         <Route path="/profession/:alt/:realm/:profession" element={<SingleProfession />} />

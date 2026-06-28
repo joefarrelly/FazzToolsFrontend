@@ -30,6 +30,8 @@ function LoginLogout() {
         <SidebarLink to="/profession">Profession</SidebarLink>
         <SidebarLink to="/mount">Mount</SidebarLink>
         <SidebarLink to="/pet">Pet</SidebarLink>
+        <SidebarLink to="/achievement">Achievements</SidebarLink>
+        <SidebarLink to="/reputation">Reputations</SidebarLink>
         <div className="mt-4 pt-4 border-t border-zinc-800">
           <SidebarLink to="/logout" danger>
             Logout
