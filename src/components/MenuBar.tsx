@@ -2,7 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { cookies } from 'cookies';
 
-function SidebarLink({ to, children, danger }) {
+interface SidebarLinkProps {
+  to: string;
+  danger?: boolean;
+  children: React.ReactNode;
+}
+
+function SidebarLink({ to, children, danger }: SidebarLinkProps) {
   const base = 'block py-2 px-3 rounded text-sm transition-colors';
   const colour = danger
     ? 'text-red-400 hover:bg-zinc-800 hover:text-red-300'

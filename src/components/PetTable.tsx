@@ -1,28 +1,40 @@
 import React, { useState } from 'react';
 import CollapsePanel from 'components/CollapsePanel';
+import type { CollectionEntry, PetItem } from 'types';
 
-function MountTableRow({ alt, grayclass }) {
+interface PetTableRowProps {
+  alt: PetItem;
+  grayclass: string;
+}
+
+function PetTableRow({ alt, grayclass }: PetTableRowProps) {
   return (
     <div
       className="flex items-center justify-between bg-zinc-800/50 border border-zinc-700 rounded mb-1 px-3 py-1"
       style={{ width: '22rem' }}
     >
-      <span className="text-sm text-zinc-200">{alt['name']}</span>
+      <span className="text-sm text-zinc-200">{alt.name}</span>
       <div className={grayclass}>
-        <img
-          src={alt['icon']}
-          title={alt['name']}
-          alt="No Icon"
-          width="48"
-          height="48"
-          className="rounded"
-        />
+        <a href={alt.link} target="_blank" rel="noopener noreferrer">
+          <img
+            src={alt.icon}
+            title={alt.name}
+            alt="No Icon"
+            width="48"
+            height="48"
+            className="rounded"
+          />
+        </a>
       </div>
     </div>
   );
 }
 
-function MountTableCol({ alt }) {
+interface PetTableColProps {
+  alt: CollectionEntry;
+}
+
+function PetTableCol({ alt }: PetTableColProps) {
   const [open, setOpen] = useState(false);
   return (
     <div>
@@ -39,11 +51,11 @@ function MountTableCol({ alt }) {
       </button>
       <CollapsePanel open={open}>
         <div className="pt-1 pl-1">
-          {alt[1].collected.map((row, index) => (
-            <MountTableRow alt={row} key={index} grayclass="epic" />
+          {(alt[1].collected as PetItem[]).map((row, index) => (
+            <PetTableRow alt={row} key={index} grayclass="epic" />
           ))}
-          {alt[1].uncollected.map((row, index) => (
-            <MountTableRow alt={row} key={index} grayclass="epic uncollected" />
+          {(alt[1].uncollected as PetItem[]).map((row, index) => (
+            <PetTableRow alt={row} key={index} grayclass="epic uncollected" />
           ))}
         </div>
       </CollapsePanel>
@@ -51,14 +63,18 @@ function MountTableCol({ alt }) {
   );
 }
 
-function MountTable({ alts }) {
+interface PetTableProps {
+  alts: CollectionEntry[];
+}
+
+function PetTable({ alts }: PetTableProps) {
   return (
     <div className="space-y-1">
       {alts.map((col, index) => (
-        <MountTableCol alt={col} key={index} />
+        <PetTableCol alt={col} key={index} />
       ))}
     </div>
   );
 }
 
-export default MountTable;
+export default PetTable;

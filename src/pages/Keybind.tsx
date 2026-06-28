@@ -6,14 +6,15 @@ import KeybindUpload from 'components/KeybindUpload';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { cookies } from 'cookies';
 import { config } from 'Constants';
+import type { AltRow } from 'types';
 
 const heads = ['Name', 'Realm', 'Spec 1', 'Spec 2', 'Spec 3', 'Spec 4'];
 
 function Keybind() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<AltRow[]>([]);
   const [inputKey, setInputKey] = useState(Date.now());
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function getData() {
@@ -23,7 +24,7 @@ function Keybind() {
         });
         setData(response.data);
       } catch (err) {
-        setError(err.message ?? 'Failed to load data.');
+        setError(err instanceof Error ? err.message : 'Failed to load data.');
       } finally {
         setLoading(false);
       }

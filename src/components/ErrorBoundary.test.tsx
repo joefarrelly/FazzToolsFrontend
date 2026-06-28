@@ -1,15 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import ErrorBoundary from './ErrorBoundary';
 
-function ThrowingComponent() {
+function ThrowingComponent(): never {
   throw new Error('boom');
 }
 
+let consoleSpy: jest.SpyInstance<void, Parameters<typeof console.error>>;
+
 beforeEach(() => {
-  jest.spyOn(console, 'error').mockImplementation(() => {});
+  consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 });
 afterEach(() => {
-  console.error.mockRestore();
+  consoleSpy.mockRestore();
 });
 
 test('renders children normally', () => {

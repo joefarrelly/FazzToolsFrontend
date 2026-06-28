@@ -20,44 +20,47 @@ This is a Create React App (React 18) single-page application styled with Tailwi
 ```
 src/
   components/       # Shared UI — imported by multiple pages
-    AltTable.js         # Table used by Account, Keybind, Gear, Profession
-    CollapsePanel.js    # Animated expand/collapse wrapper
-    Header.js           # Top bar with brand + Update button
-    KeybindTable.js     # Keybind detail table
-    KeybindUpload.js    # .lua file upload form
-    MenuBar.js          # Sidebar nav (includes SidebarLink, LoginLogout)
-    MountTable.js       # Mount accordion list
-    PageLayout.js       # Wraps Header + MenuBar sidebar + main content
-    PetTable.js         # Pet accordion list
-    ProfessionTable.js  # Profession recipe accordion
+    AltTable.tsx        # Table used by Account, Keybind, Gear, Profession
+    CollapsePanel.tsx   # Animated expand/collapse wrapper
+    Header.tsx          # Top bar with brand + Update button
+    KeybindTable.tsx    # Keybind detail table
+    KeybindUpload.tsx   # .lua file upload form
+    MenuBar.tsx         # Sidebar nav (includes SidebarLink, LoginLogout)
+    MountTable.tsx      # Mount accordion list
+    PageLayout.tsx      # Wraps Header + MenuBar sidebar + main content
+    PetTable.tsx        # Pet accordion list
+    ProfessionTable.tsx # Profession recipe accordion
   pages/            # One file per route
-    Account.js
-    Auth.js
-    AuthRedirect.js
-    Gear.js
-    Home.js
-    Keybind.js
-    Logout.js
-    Mount.js
-    Pet.js
-    Profession.js
-    SingleGear.js
-    SingleKeybind.js
-    SingleProfession.js
-  App.js            # BrowserRouter + Routes only
+    Account.tsx
+    Auth.tsx
+    AuthRedirect.tsx
+    Gear.tsx
+    Home.tsx
+    Keybind.tsx
+    Logout.tsx
+    Mount.tsx
+    Pet.tsx
+    Profession.tsx
+    SingleGear.tsx
+    SingleKeybind.tsx
+    SingleProfession.tsx
+  App.tsx           # BrowserRouter + Routes only
   App.css           # WoW-specific styles (class colors, item quality borders)
-  Constants.js      # API URL config
-  cookies.js        # Shared universal-cookie instance
+  Constants.ts      # API URL config
+  cookies.ts        # Shared universal-cookie instance
+  types.ts          # Shared TypeScript types (AltRow, PageType, etc.)
   index.css         # Tailwind directives + body base styles
 ```
 
-Absolute imports are configured via `jsconfig.json` (`baseUrl: "src"`), so imports look like `import AltTable from 'components/AltTable'` rather than relative paths.
+Absolute imports are configured via `baseUrl: "src"` in `tsconfig.json`, so imports look like `import AltTable from 'components/AltTable'` rather than relative paths.
 
 ### Key modules
 
-**`src/cookies.js`** — exports a single shared `cookies` instance used across all components that need auth state.
+**`src/cookies.ts`** — exports a single shared `cookies` instance used across all components that need auth state.
 
-**`src/Constants.js`** — exports a `config` object with `config.url.API_URL` and `config.url.REDIRECT_URL` that automatically switch between dev (`localhost`) and prod (`fazztoolsapi.ddns.net`) based on `NODE_ENV`.
+**`src/Constants.ts`** — exports a `config` object with `config.url.API_URL` and `config.url.REDIRECT_URL` that automatically switch between dev (`localhost`) and prod (`fazztoolsapi.ddns.net`) based on `NODE_ENV`.
+
+**`src/types.ts`** — shared TypeScript types: `AltRow` (`(string | number)[]`), `PageType`, `MountItem`, `PetItem`, `CollectionData`, `KeybindEntry`, `RecipeData`, etc.
 
 **Environment variables** — copy `.env.example` to `.env` and fill in values before running locally:
 - `REACT_APP_API_URL` — backend base URL (defaults to `http://localhost:8000`)
@@ -70,7 +73,7 @@ Absolute imports are configured via `jsconfig.json` (`baseUrl: "src"`), so impor
 3. `AuthRedirect` POSTs the code to the backend, which returns a `userid`
 4. `userid` is stored in a cookie and used in all subsequent API requests as a query param
 
-`axios.defaults.withCredentials = true` is set globally in `src/index.js`.
+`axios.defaults.withCredentials = true` is set globally in `src/index.tsx`.
 
 **Routing** uses React Router v6 (`BrowserRouter` + `Routes`). Detail views use URL params (e.g. `/gear/:alt/:realm`, `/keybind/:alt/:realm/:spec`) accessed via `useParams`. The `public/_redirects` file handles Netlify SPA routing so all paths serve `index.html`.
 

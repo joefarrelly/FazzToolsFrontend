@@ -18,7 +18,7 @@ test('submit is disabled with no file selected', () => {
 
 test('shows error and keeps submit disabled for non-.lua file', () => {
   render(<KeybindUpload inputKey={1} onChange={() => {}} />);
-  const input = document.querySelector('input[type="file"]');
+  const input = document.querySelector('input[type="file"]') as HTMLInputElement;
 
   const txtFile = new File(['content'], 'export.txt', { type: 'text/plain' });
   fireEvent.change(input, { target: { files: [txtFile] } });
@@ -29,7 +29,7 @@ test('shows error and keeps submit disabled for non-.lua file', () => {
 
 test('shows error and keeps submit disabled for oversized .lua file', () => {
   render(<KeybindUpload inputKey={1} onChange={() => {}} />);
-  const input = document.querySelector('input[type="file"]');
+  const input = document.querySelector('input[type="file"]') as HTMLInputElement;
 
   const bigFile = luaFile('big.lua', 6 * 1024 * 1024);
   fireEvent.change(input, { target: { files: [bigFile] } });
@@ -40,7 +40,7 @@ test('shows error and keeps submit disabled for oversized .lua file', () => {
 
 test('enables submit and clears errors for a valid .lua file', async () => {
   render(<KeybindUpload inputKey={1} onChange={() => {}} />);
-  const input = document.querySelector('input[type="file"]');
+  const input = document.querySelector('input[type="file"]') as HTMLInputElement;
 
   await userEvent.upload(input, luaFile('FazzToolsScraperDB.lua', 50 * 1024));
 

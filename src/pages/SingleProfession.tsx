@@ -5,16 +5,21 @@ import PageLayout from 'components/PageLayout';
 import ProfessionTable from 'components/ProfessionTable';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { config } from 'Constants';
+import type { TierData } from 'types';
 
-function capitalize(str) {
+function capitalize(str: string): string {
   return str ? str[0].toUpperCase() + str.slice(1) : '';
 }
 
 function SingleProfession() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<TierData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { alt, realm, profession } = useParams();
+  const [error, setError] = useState<string | null>(null);
+  const { alt, realm, profession } = useParams<{
+    alt: string;
+    realm: string;
+    profession: string;
+  }>();
 
   useEffect(() => {
     if (!alt || !realm || !profession) return;
@@ -25,7 +30,7 @@ function SingleProfession() {
         });
         setData(response.data);
       } catch (err) {
-        setError(err.message ?? 'Failed to load data.');
+        setError(err instanceof Error ? err.message : 'Failed to load data.');
       } finally {
         setLoading(false);
       }

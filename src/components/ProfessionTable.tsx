@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
+import type { TierData, CategoryData, RecipeData, MaterialItem } from 'types';
 
-function RecipeRow({ recipe }) {
+interface RecipeRowProps {
+  recipe: RecipeData;
+}
+
+function RecipeRow({ recipe }: RecipeRowProps) {
   const [name, learned, rank, qty, icon] = recipe;
-  const mats = recipe.slice(5);
+  const mats = recipe.slice(5) as MaterialItem[];
 
   return (
     <div
@@ -48,7 +53,11 @@ function RecipeRow({ recipe }) {
   );
 }
 
-function CategorySection({ category }) {
+interface CategorySectionProps {
+  category: CategoryData;
+}
+
+function CategorySection({ category }: CategorySectionProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -76,7 +85,11 @@ function CategorySection({ category }) {
   );
 }
 
-function ProfessionTable({ tiers }) {
+interface ProfessionTableProps {
+  tiers: TierData[];
+}
+
+function ProfessionTable({ tiers }: ProfessionTableProps) {
   const [activeTier, setActiveTier] = useState(0);
 
   if (!tiers.length) return null;

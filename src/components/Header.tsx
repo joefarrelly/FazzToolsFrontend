@@ -6,7 +6,9 @@ import { config } from 'Constants';
 const COOLDOWN_MS = 300_000;
 const STALE_MS = 30 * 24 * 60 * 60 * 1000;
 
-function isStale(lastupdate) {
+type BtnState = 'idle' | 'loading' | 'done' | 'error';
+
+function isStale(lastupdate: string | undefined): boolean {
   if (!lastupdate) return false;
   return Date.now() - parseInt(lastupdate) > STALE_MS;
 }
@@ -15,7 +17,7 @@ function Header() {
   const [update, setUpdate] = useState(
     new Date(parseInt(cookies.get('lastupdate'))).toLocaleString()
   );
-  const [btnState, setBtnState] = useState('idle'); // 'idle' | 'loading' | 'done' | 'error'
+  const [btnState, setBtnState] = useState<BtnState>('idle');
 
   async function updateAllAlt() {
     setBtnState('loading');
@@ -25,7 +27,7 @@ function Header() {
       });
       cookies.set('lastupdate', new Date().getTime(), {
         path: '/',
-        sameSite: 'Lax',
+        sameSite: 'lax',
         secure: true,
       });
       setUpdate(new Date(parseInt(cookies.get('lastupdate'))).toLocaleString());
@@ -41,21 +43,25 @@ function Header() {
     const response = await axios.get(config.url.API_URL + '/api/profile/users/', {
       params: { user: cookies.get('userid'), page: 'header' },
     });
-    cookies.set('lastupdate', response.data[0], { path: '/', sameSite: 'Lax', secure: true });
+    cookies.set('lastupdate', response.data[0], { path: '/', sameSite: 'lax', secure: true });
     setUpdate(new Date(response.data[0]).toLocaleString());
   }
 
   if (cookies.get('userid') && !cookies.get('lastupdate')) {
-    getLastUpdate();
+    void getLastUpdate();
   }
 
-  const lastupdate = cookies.get('lastupdate');
-  const onCooldown = btnState !== 'idle' || Date.now() < parseInt(lastupdate) + COOLDOWN_MS;
+  const lastupdate: string | undefined = cookies.get('lastupdate');
+  const onCooldown = btnState !== 'idle' || Date.now() < parseInt(lastupdate ?? '0') + COOLDOWN_MS;
   const stale = isStale(lastupdate);
 
-  const btnLabel = { idle: 'Update', loading: 'Updating…', done: 'Queued!', error: 'Failed' }[
-    btnState
-  ];
+  const btnLabels: Record<BtnState, string> = {
+    idle: 'Update',
+    loading: 'Updating…',
+    done: 'Queued!',
+    error: 'Failed',
+  };
+  const btnLabel = btnLabels[btnState];
   const btnCls =
     btnState === 'error'
       ? 'bg-red-700 hover:bg-red-600 text-zinc-100'

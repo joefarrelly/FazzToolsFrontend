@@ -1,5 +1,3 @@
-import React from 'react';
-
 function LoadingSpinner() {
   return (
     <div className="flex items-center justify-center py-20" role="status" aria-label="Loading">

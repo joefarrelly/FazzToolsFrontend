@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import type { AltRow, PageType } from 'types';
 
 const tdBase = 'px-4 py-2 border border-zinc-700 text-center text-sm';
 const linkCls = 'text-amber-400 hover:text-amber-300 hover:underline underline-offset-2';
 
-const CLASS_COLORS = {
+const CLASS_COLORS: Record<string, string> = {
   Warrior: '#C79C6E',
   Paladin: '#F58CBA',
   Hunter: '#ABD473',
@@ -20,86 +21,99 @@ const CLASS_COLORS = {
   Evoker: '#33937F',
 };
 
-function classColor(name) {
-  if (typeof name !== 'string') return null;
+function classColor(name: string): string | null {
   return CLASS_COLORS[name.replace(/\s/g, '')] ?? null;
 }
 
-function AltTableRowData(props) {
-  if (props.page === 'profession') {
-    if (props.alt === props.fullalt[2]) return null;
-    if (props.alt === props.fullalt[3] && props.fullalt[3] !== 'Missing') {
+interface AltTableRowDataProps {
+  alt: string | number;
+  fullalt: AltRow;
+  page?: PageType;
+}
+
+function AltTableRowData({ alt, fullalt, page }: AltTableRowDataProps) {
+  if (page === 'profession') {
+    if (alt === fullalt[2]) return null;
+    if (alt === fullalt[3] && fullalt[3] !== 'Missing') {
       return (
         <td className={tdBase}>
           <Link
             className={linkCls}
-            to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace("'", '')}/${props.fullalt[3].toLowerCase()}`}
+            to={`/profession/${String(fullalt[0]).toLowerCase()}/${String(fullalt[1]).toLowerCase().replace("'", '')}/${String(fullalt[3]).toLowerCase()}`}
           >
-            {props.fullalt[3]}
+            {fullalt[3]}
           </Link>
         </td>
       );
     }
-    if (props.alt === props.fullalt[4] && props.fullalt[4] !== 'Missing') {
+    if (alt === fullalt[4] && fullalt[4] !== 'Missing') {
       return (
         <td className={tdBase}>
           <Link
             className={linkCls}
-            to={`/profession/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace("'", '')}/${props.fullalt[4].toLowerCase()}`}
+            to={`/profession/${String(fullalt[0]).toLowerCase()}/${String(fullalt[1]).toLowerCase().replace("'", '')}/${String(fullalt[4]).toLowerCase()}`}
           >
-            {props.fullalt[4]}
+            {fullalt[4]}
           </Link>
         </td>
       );
     }
-    if (props.alt === 'Missing') {
-      return <td className={`${tdBase} text-zinc-500`}>{props.alt}</td>;
+    if (alt === 'Missing') {
+      return <td className={`${tdBase} text-zinc-500`}>{alt}</td>;
     }
-    return <td className={tdBase}>{props.alt}</td>;
+    return <td className={tdBase}>{alt}</td>;
   }
 
-  if (props.page === 'gear') {
-    if (props.alt === props.fullalt[2]) return null;
-    if (props.fullalt.includes(props.alt, 4)) return <td className={tdBase}>{props.alt}</td>;
-    if (props.alt === props.fullalt[3]) {
+  if (page === 'gear') {
+    if (alt === fullalt[2]) return null;
+    for (const item of fullalt.slice(4)) {
+      if (item === alt) return <td className={tdBase}>{alt}</td>;
+    }
+    if (alt === fullalt[3]) {
       return (
         <td className={tdBase}>
           <Link
             className={linkCls}
-            to={`/gear/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase().replace("'", '')}`}
+            to={`/gear/${String(fullalt[0]).toLowerCase()}/${String(fullalt[1]).toLowerCase().replace("'", '')}`}
           >
-            {props.alt}
+            {alt}
           </Link>
         </td>
       );
     }
-    return <td className={tdBase}>{props.alt}</td>;
+    return <td className={tdBase}>{alt}</td>;
   }
 
-  if (props.page === 'kb') {
-    if (props.alt === props.fullalt[2]) return null;
+  if (page === 'kb') {
+    if (alt === fullalt[2]) return null;
     for (const i of [3, 4, 5, 6]) {
-      if (props.alt === props.fullalt[i] && props.fullalt[i] !== '---') {
+      if (alt === fullalt[i] && fullalt[i] !== '---') {
         return (
           <td className={tdBase}>
             <Link
               className={linkCls}
-              to={`/keybind/${props.fullalt[0].toLowerCase()}/${props.fullalt[1].toLowerCase()}/${props.fullalt[i].toLowerCase()}`}
+              to={`/keybind/${String(fullalt[0]).toLowerCase()}/${String(fullalt[1]).toLowerCase()}/${String(fullalt[i]).toLowerCase()}`}
             >
-              {props.fullalt[i]}
+              {fullalt[i]}
             </Link>
           </td>
         );
       }
     }
-    if (props.alt === '---') return <td className={`${tdBase} text-zinc-500`}>{props.alt}</td>;
-    return <td className={tdBase}>{props.alt}</td>;
+    if (alt === '---') return <td className={`${tdBase} text-zinc-500`}>{alt}</td>;
+    return <td className={tdBase}>{alt}</td>;
   }
 
-  return <td className={tdBase}>{props.alt}</td>;
+  return <td className={tdBase}>{alt}</td>;
 }
 
-function AltTableRow({ alt: row, page, index }) {
+interface AltTableRowProps {
+  alt: AltRow;
+  page?: PageType;
+  index: number;
+}
+
+function AltTableRow({ alt: row, page, index }: AltTableRowProps) {
   const alt = Object.values(row);
   const classIndex = page ? 2 : 3;
   const rawClass = alt[classIndex];
@@ -115,7 +129,13 @@ function AltTableRow({ alt: row, page, index }) {
   );
 }
 
-function AltTable({ alts, heads, page }) {
+interface AltTableProps {
+  alts: AltRow[];
+  heads: string[];
+  page?: PageType;
+}
+
+function AltTable({ alts, heads, page }: AltTableProps) {
   return (
     <div className="overflow-x-auto">
       <table className="alt-table border-collapse text-sm">
