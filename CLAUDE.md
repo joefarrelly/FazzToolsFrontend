@@ -26,12 +26,13 @@ src/
     KeybindTable.tsx    # Keybind detail table
     KeybindUpload.tsx   # .lua file upload form
     MenuBar.tsx         # Sidebar nav (includes SidebarLink, LoginLogout)
-    MountTable.tsx      # Mount accordion list
+    MountTable.tsx      # Mount icon-grid accordion (collected + toggle for uncollected)
     PageLayout.tsx      # Wraps Header + MenuBar sidebar + main content
-    PetTable.tsx        # Pet accordion list
+    PetTable.tsx        # Pet icon-grid accordion (collected + toggle for uncollected)
     ProfessionTable.tsx # Profession recipe accordion
   pages/            # One file per route
     Account.tsx
+    Achievement.tsx     # Achievements grouped by category; lazy-loads per-category on expand
     Auth.tsx
     AuthRedirect.tsx
     Gear.tsx
@@ -41,6 +42,7 @@ src/
     Mount.tsx
     Pet.tsx
     Profession.tsx
+    Reputation.tsx      # Reputations grouped by alt → expansion; standing derived from raw value
     SingleGear.tsx
     SingleKeybind.tsx
     SingleProfession.tsx

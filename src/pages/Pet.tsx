@@ -29,8 +29,11 @@ function Pet() {
   }, []);
 
   const countData = data.slice(-3);
+  const collected = countData[0]?.[0] ?? '';
+  const total = countData[2]?.[0] ?? '';
+  const pct = total && collected ? Math.round((Number(collected) / Number(total)) * 100) : null;
   return (
-    <PageLayout title={`Pet ${countData[0]?.[0] ?? ''}/${countData[2]?.[0] ?? ''}`}>
+    <PageLayout title={`Pets — ${collected}/${total}${pct !== null ? ` (${pct}%)` : ''}`}>
       {loading && <LoadingSpinner />}
       {error && <p className="text-red-400 text-sm">{error}</p>}
       {!loading && !error && <PetTable alts={data.slice(0, -3)} />}
