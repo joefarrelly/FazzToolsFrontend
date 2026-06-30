@@ -13,38 +13,6 @@ interface AltTableRowDataProps {
 }
 
 function AltTableRowData({ alt, fullalt, page }: AltTableRowDataProps) {
-  if (page === 'profession') {
-    if (alt === fullalt[2]) return null;
-    if (alt === fullalt[3] && fullalt[3] !== 'Missing') {
-      return (
-        <td className={tdBase}>
-          <Link
-            className={linkCls}
-            to={`/profession/${String(fullalt[0]).toLowerCase()}/${String(fullalt[1]).toLowerCase().replace("'", '')}/${String(fullalt[3]).toLowerCase()}`}
-          >
-            {fullalt[3]}
-          </Link>
-        </td>
-      );
-    }
-    if (alt === fullalt[4] && fullalt[4] !== 'Missing') {
-      return (
-        <td className={tdBase}>
-          <Link
-            className={linkCls}
-            to={`/profession/${String(fullalt[0]).toLowerCase()}/${String(fullalt[1]).toLowerCase().replace("'", '')}/${String(fullalt[4]).toLowerCase()}`}
-          >
-            {fullalt[4]}
-          </Link>
-        </td>
-      );
-    }
-    if (alt === 'Missing') {
-      return <td className={`${tdBase} text-zinc-500`}>{alt}</td>;
-    }
-    return <td className={tdBase}>{alt}</td>;
-  }
-
   if (page === 'gear') {
     if (alt === fullalt[2]) return null;
     for (const item of fullalt.slice(4)) {

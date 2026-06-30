@@ -1,4 +1,4 @@
-export type PageType = 'gear' | 'profession';
+export type PageType = 'gear';
 
 export type AltRow = (string | number)[];
 

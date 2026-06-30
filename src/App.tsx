@@ -5,7 +5,6 @@ import Auth from 'pages/Auth';
 import AuthRedirect from 'pages/AuthRedirect';
 import Account from 'pages/Account';
 import Gear from 'pages/Gear';
-import Profession from 'pages/Profession';
 import Mount from 'pages/Mount';
 import Pet from 'pages/Pet';
 import Achievement from 'pages/Achievement';
@@ -24,7 +23,6 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/redirect" element={<AuthRedirect />} />
         <Route path="/gear" element={<Gear />} />
-        <Route path="/profession" element={<Profession />} />
         <Route path="/mount" element={<Mount />} />
         <Route path="/pet" element={<Pet />} />
         <Route path="/achievement" element={<Achievement />} />
