@@ -20,11 +20,10 @@ This is a Create React App (React 18) single-page application styled with Tailwi
 ```
 src/
   components/       # Shared UI — imported by multiple pages
-    AltTable.tsx        # Table used by Account, Keybind, Gear, Profession
+    AltTable.tsx        # Table used by Account, Gear, Profession
     CollapsePanel.tsx   # Animated expand/collapse wrapper
     Header.tsx          # Top bar with brand + Update button
-    KeybindTable.tsx    # Keybind detail table
-    KeybindUpload.tsx   # .lua file upload form
+    KeybindUpload.tsx   # .lua addon file upload form (despite the name, generic upload widget)
     MenuBar.tsx         # Sidebar nav (includes SidebarLink, LoginLogout)
     MountTable.tsx      # Mount icon-grid accordion (collected + toggle for uncollected)
     PageLayout.tsx      # Wraps Header + MenuBar sidebar + main content
@@ -37,14 +36,12 @@ src/
     AuthRedirect.tsx
     Gear.tsx
     Home.tsx
-    Keybind.tsx
     Logout.tsx
     Mount.tsx
     Pet.tsx
     Profession.tsx
     Reputation.tsx      # Reputations grouped by alt → expansion; standing derived from raw value
     SingleGear.tsx
-    SingleKeybind.tsx
     SingleProfession.tsx
   App.tsx           # BrowserRouter + Routes only
   App.css           # WoW-specific styles (class colors, item quality borders)
@@ -62,7 +59,7 @@ Absolute imports are configured via `baseUrl: "src"` in `tsconfig.json`, so impo
 
 **`src/Constants.ts`** — exports a `config` object with `config.url.API_URL` and `config.url.REDIRECT_URL` that automatically switch between dev (`localhost`) and prod (`fazztoolsapi.ddns.net`) based on `NODE_ENV`.
 
-**`src/types.ts`** — shared TypeScript types: `AltRow` (`(string | number)[]`), `PageType`, `MountItem`, `PetItem`, `CollectionData`, `KeybindEntry`, `RecipeData`, etc.
+**`src/types.ts`** — shared TypeScript types: `AltRow` (`(string | number)[]`), `PageType`, `MountItem`, `PetItem`, `CollectionData`, `RecipeData`, etc.
 
 **Environment variables** — copy `.env.example` to `.env` and fill in values before running locally:
 - `REACT_APP_API_URL` — backend base URL (defaults to `http://localhost:8000`)
@@ -77,15 +74,15 @@ Absolute imports are configured via `baseUrl: "src"` in `tsconfig.json`, so impo
 
 `axios.defaults.withCredentials = true` is set globally in `src/index.tsx`.
 
-**Routing** uses React Router v6 (`BrowserRouter` + `Routes`). Detail views use URL params (e.g. `/gear/:alt/:realm`, `/keybind/:alt/:realm/:spec`) accessed via `useParams`. The `public/_redirects` file handles Netlify SPA routing so all paths serve `index.html`.
+**Routing** uses React Router v6 (`BrowserRouter` + `Routes`). Detail views use URL params (e.g. `/gear/:alt/:realm`) accessed via `useParams`. The `public/_redirects` file handles Netlify SPA routing so all paths serve `index.html`.
 
 **Page layout pattern**: every page uses `<PageLayout title="...">` which renders `<Header />` + sidebar `<MenuBar />` + the page's main content. `MenuBar` conditionally shows authenticated links based on whether the `userid` cookie exists.
 
-**`AltTable`**: shared table used by Account, Keybind, Gear, and Profession. Per-page rendering is controlled by a `page` prop (`'kb'`, `'gear'`, `'profession'`) which governs which columns are hidden and which cells link to detail views.
+**`AltTable`**: shared table used by Account, Gear, and Profession. Per-page rendering is controlled by a `page` prop (`'gear'`, `'profession'`) which governs which columns are hidden and which cells link to detail views.
 
 **Data slicing in Mount/Pet**: the API appends count metadata at the end of the response array. `data.slice(0, -3)` passes actual records to the table; `data.slice(-3)` retrieves the counts.
 
-**Keybind upload**: users upload a `.lua` file (WoW addon export) via `KeybindUpload`, which PUTs it to the backend as `multipart/form-data`.
+**Addon file upload**: users upload a `.lua` file (WoW addon export) via `KeybindUpload`, which PUTs it to the backend as `multipart/form-data`. The backend currently only stores it (no feature consumes it yet — reserved for future addon-only data like gold/currencies/lockouts).
 
 ### Styling
 

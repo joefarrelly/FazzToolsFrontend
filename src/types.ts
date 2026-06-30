@@ -1,4 +1,4 @@
-export type PageType = 'kb' | 'gear' | 'profession';
+export type PageType = 'gear' | 'profession';
 
 export type AltRow = (string | number)[];
 
@@ -21,9 +21,6 @@ export interface CollectionData {
 }
 
 export type CollectionEntry = [string, CollectionData];
-
-// [title, rows] where each row is [spell, bind]
-export type KeybindEntry = [string, string[][]];
 
 export type MaterialItem = [string, number, string, string]; // [name, qty, icon, quality]
 export type RecipeData = [string, boolean, number, number, string, ...MaterialItem[]];
