@@ -23,11 +23,11 @@ src/
     AccountTable.tsx    # Account page's per-alt table (ilvl, M+ rating, professions as columns)
     AltTable.tsx        # Table used by Gear, Profession (Account no longer uses this — see below)
     CollapsePanel.tsx   # Animated expand/collapse wrapper
-    Header.tsx          # Top bar with brand + Update button
+    Header.tsx          # Top nav bar: brand + MenuBar nav links + Update button + staleness banner
     KeybindUpload.tsx   # .lua addon file upload form (despite the name, generic upload widget)
-    MenuBar.tsx         # Sidebar nav (includes SidebarLink, LoginLogout)
+    MenuBar.tsx         # Inline top nav links (includes NavLink, LoginLogout); active tab underlined
     MountTable.tsx      # Mount icon-grid accordion (collected + toggle for uncollected)
-    PageLayout.tsx      # Wraps Header + MenuBar sidebar + main content
+    PageLayout.tsx      # Wraps Header (top nav) + a centered max-w-7xl main content area
     PetTable.tsx        # Pet icon-grid accordion (collected + toggle for uncollected)
     ProfessionTable.tsx # Profession recipe accordion
   pages/            # One file per route
@@ -80,7 +80,7 @@ Absolute imports are configured via `baseUrl: "src"` in `tsconfig.json`, so impo
 
 **Routing** uses React Router v6 (`BrowserRouter` + `Routes`). Detail views use URL params (e.g. `/gear/:alt/:realm`, `/alt/:alt/:realm`) accessed via `useParams`. The `public/_redirects` file handles Netlify SPA routing so all paths serve `index.html`.
 
-**Page layout pattern**: every page uses `<PageLayout title="...">` which renders `<Header />` + sidebar `<MenuBar />` + the page's main content. `MenuBar` conditionally shows authenticated links based on whether the `userid` cookie exists. `AltDetail` has no sidebar link — it's only reachable by clicking an alt name on the Account page.
+**Page layout pattern**: every page uses `<PageLayout title="...">` which renders `<Header />` (a single top nav bar — brand, `<MenuBar />` nav links, and Update controls all in one row, modelled on a sibling project's `renegades-bot/web/templates/base.html`) + a centered `max-w-7xl` main content area. `MenuBar` conditionally shows authenticated links based on whether the `userid` cookie exists, and underlines the active tab via `useLocation()`. `AltDetail` has no nav link — it's only reachable by clicking an alt name on the Account page.
 
 **`AltTable`**: shared table used by Gear and Profession (the account-wide overview pages). Per-page rendering is controlled by a `page` prop (`'gear'`, `'profession'`) which governs which columns are hidden and which cells link to detail views. The Account page does **not** use this anymore — it has its own table component (`AccountTable`), styled separately since it needs extra columns (ilvl, M+ rating, professions) that `AltTable`'s `page` prop branching doesn't support.
 
