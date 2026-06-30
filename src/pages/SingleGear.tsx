@@ -4,6 +4,7 @@ import axios from 'axios';
 import PageLayout from 'components/PageLayout';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { config } from 'Constants';
+import { capitalize } from 'format';
 
 const slots = [
   'Head',
@@ -23,10 +24,6 @@ const slots = [
   'Weapon 1',
   'Weapon 2',
 ];
-
-function capitalize(str: string): string {
-  return str ? str[0].toUpperCase() + str.slice(1) : '';
-}
 
 function SingleGear() {
   const [data, setData] = useState<[string, number][]>([]);

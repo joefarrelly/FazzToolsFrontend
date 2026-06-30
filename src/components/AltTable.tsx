@@ -1,29 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { classColor } from 'classColors';
 import type { AltRow, PageType } from 'types';
 
 const tdBase = 'px-4 py-2 border border-zinc-700 text-center text-sm';
 const linkCls = 'text-amber-400 hover:text-amber-300 hover:underline underline-offset-2';
-
-const CLASS_COLORS: Record<string, string> = {
-  Warrior: '#C79C6E',
-  Paladin: '#F58CBA',
-  Hunter: '#ABD473',
-  Rogue: '#FFF569',
-  Priest: '#FFFFFF',
-  Shaman: '#0070DD',
-  Mage: '#69CCF0',
-  Warlock: '#9482C9',
-  Monk: '#00FF96',
-  Druid: '#FF7D0A',
-  DemonHunter: '#A330C9',
-  DeathKnight: '#C41F3B',
-  Evoker: '#33937F',
-};
-
-function classColor(name: string): string | null {
-  return CLASS_COLORS[name.replace(/\s/g, '')] ?? null;
-}
 
 interface AltTableRowDataProps {
   alt: string | number;
