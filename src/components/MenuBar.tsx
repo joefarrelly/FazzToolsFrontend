@@ -25,7 +25,6 @@ function LoginLogout() {
     return (
       <>
         <SidebarLink to="/account">Account</SidebarLink>
-        <SidebarLink to="/keybind">Keybind</SidebarLink>
         <SidebarLink to="/gear">Gear</SidebarLink>
         <SidebarLink to="/profession">Profession</SidebarLink>
         <SidebarLink to="/mount">Mount</SidebarLink>

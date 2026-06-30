@@ -84,26 +84,6 @@ function AltTableRowData({ alt, fullalt, page }: AltTableRowDataProps) {
     return <td className={tdBase}>{alt}</td>;
   }
 
-  if (page === 'kb') {
-    if (alt === fullalt[2]) return null;
-    for (const i of [3, 4, 5, 6]) {
-      if (alt === fullalt[i] && fullalt[i] !== '---') {
-        return (
-          <td className={tdBase}>
-            <Link
-              className={linkCls}
-              to={`/keybind/${String(fullalt[0]).toLowerCase()}/${String(fullalt[1]).toLowerCase()}/${String(fullalt[i]).toLowerCase()}`}
-            >
-              {fullalt[i]}
-            </Link>
-          </td>
-        );
-      }
-    }
-    if (alt === '---') return <td className={`${tdBase} text-zinc-500`}>{alt}</td>;
-    return <td className={tdBase}>{alt}</td>;
-  }
-
   return <td className={tdBase}>{alt}</td>;
 }
 
