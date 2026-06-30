@@ -20,11 +20,11 @@ This is a Create React App (React 18) single-page application styled with Tailwi
 ```
 src/
   components/       # Shared UI — imported by multiple pages
-    AccountTable.tsx    # Account page's per-alt table (ilvl, M+ rating, professions as columns)
+    AccountTable.tsx    # Account page's per-alt table (ilvl, M+ rating, professions, gold, played time as columns)
+    AddonFileUpload.tsx # .lua addon file upload form, mounted on Account above AccountTable
     AltTable.tsx        # Table used by Gear only (Account no longer uses this — see below)
     CollapsePanel.tsx   # Animated expand/collapse wrapper
     Header.tsx          # Top nav bar: brand + MenuBar nav links + Update button + staleness banner
-    KeybindUpload.tsx   # .lua addon file upload form (despite the name, generic upload widget)
     MenuBar.tsx         # Inline top nav links (includes NavLink, LoginLogout); active tab underlined
     MountTable.tsx      # Mount icon-grid accordion (collected + toggle for uncollected)
     PageLayout.tsx      # Wraps Header (top nav) + a centered max-w-7xl main content area
@@ -87,7 +87,7 @@ Absolute imports are configured via `baseUrl: "src"` in `tsconfig.json`, so impo
 
 **Data slicing in Mount/Pet**: the API appends count metadata at the end of the response array. `data.slice(0, -3)` passes actual records to the table; `data.slice(-3)` retrieves the counts.
 
-**Addon file upload**: users upload a `.lua` file (WoW addon export) via `KeybindUpload`, which PUTs it to the backend as `multipart/form-data`. The backend currently only stores it (no feature consumes it yet — reserved for future addon-only data like gold/currencies/lockouts).
+**Addon file upload**: users upload a `.lua` file (WoW addon export) via `AddonFileUpload`, mounted above `AccountTable` on the Account page, which PUTs it to the backend as `multipart/form-data`. `Account.tsx` joins the parsed gold/played-time data (`/api/profile/users/?page=addon`) into `AccountTable`'s Gold and Played Time columns — `'—'` when an alt hasn't appeared in an uploaded file yet. Currencies/lockouts/keystone/vault are captured by the addon but not yet surfaced (same join pattern, not built).
 
 ### Styling
 

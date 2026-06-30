@@ -14,12 +14,12 @@ function validateFile(file: File | null): string | null {
   return null;
 }
 
-interface KeybindUploadProps {
+interface AddonFileUploadProps {
   inputKey: React.Key;
   onChange: (timestamp: number) => void;
 }
 
-function KeybindUpload({ inputKey, onChange }: KeybindUploadProps) {
+function AddonFileUpload({ inputKey, onChange }: AddonFileUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [uploadState, setUploadState] = useState<UploadState>('idle');
@@ -100,4 +100,4 @@ function KeybindUpload({ inputKey, onChange }: KeybindUploadProps) {
   );
 }
 
-export default KeybindUpload;
+export default AddonFileUpload;

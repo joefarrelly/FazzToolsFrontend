@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { classColor } from 'classColors';
+import { formatGold, formatPlayedTime } from 'format';
 
 export interface AccountAlt {
   altId: number;
@@ -12,6 +13,11 @@ export interface AccountAlt {
   className: string;
   faction: string;
   ilvl: number;
+}
+
+export interface AddonAltData {
+  gold: number | null;
+  playedTimeTotal: number | null;
 }
 
 const thBase =
@@ -45,6 +51,7 @@ interface AccountTableRowProps {
   alt: AccountAlt;
   mythicRating: number | null;
   professions: [string, string] | null;
+  addon: AddonAltData | null;
   rowNumber: number;
   index: number;
 }
@@ -53,6 +60,7 @@ function AccountTableRow({
   alt,
   mythicRating,
   professions,
+  addon,
   rowNumber,
   index,
 }: AccountTableRowProps) {
@@ -82,6 +90,12 @@ function AccountTableRow({
       </td>
       <ProfessionCell altName={alt.name} realmSlug={alt.realmSlug} profession={prof1} />
       <ProfessionCell altName={alt.name} realmSlug={alt.realmSlug} profession={prof2} />
+      <td className={`${tdBase} text-zinc-300 text-right`}>
+        {addon?.gold != null ? formatGold(addon.gold) : '—'}
+      </td>
+      <td className={`${tdBase} text-zinc-300 text-center`}>
+        {addon?.playedTimeTotal != null ? formatPlayedTime(addon.playedTimeTotal) : '—'}
+      </td>
     </tr>
   );
 }
@@ -90,9 +104,10 @@ interface AccountTableProps {
   alts: AccountAlt[];
   mythicByAlt: Map<number, number>;
   professionsByAlt: Map<number, [string, string]>;
+  addonByAlt: Map<number, AddonAltData>;
 }
 
-function AccountTable({ alts, mythicByAlt, professionsByAlt }: AccountTableProps) {
+function AccountTable({ alts, mythicByAlt, professionsByAlt, addonByAlt }: AccountTableProps) {
   return (
     <div className="overflow-x-auto rounded border border-zinc-800">
       <table className="border-collapse text-sm w-full">
@@ -108,6 +123,8 @@ function AccountTable({ alts, mythicByAlt, professionsByAlt }: AccountTableProps
             <th className={thBase}>M+ Rating</th>
             <th className={thBase}>Profession 1</th>
             <th className={thBase}>Profession 2</th>
+            <th className={`${thBase} text-right`}>Gold</th>
+            <th className={thBase}>Played Time</th>
           </tr>
         </thead>
         <tbody>
@@ -117,6 +134,7 @@ function AccountTable({ alts, mythicByAlt, professionsByAlt }: AccountTableProps
               alt={alt}
               mythicRating={mythicByAlt.get(alt.altId) ?? null}
               professions={professionsByAlt.get(alt.altId) ?? null}
+              addon={addonByAlt.get(alt.altId) ?? null}
               rowNumber={index + 1}
               index={index}
             />
