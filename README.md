@@ -1,10 +1,13 @@
 # FazzToolsFrontend
 
 [![Deploy](https://github.com/joefarrelly/FazzToolsFrontend/actions/workflows/deploy.yml/badge.svg)](https://github.com/joefarrelly/FazzToolsFrontend/actions/workflows/deploy.yml)
+[![Lint and Test](https://github.com/joefarrelly/FazzToolsFrontend/actions/workflows/lint.yml/badge.svg)](https://github.com/joefarrelly/FazzToolsFrontend/actions/workflows/lint.yml)
+
+**Suite:** [Backend](https://github.com/joefarrelly/FazzToolsAPI) · [Frontend](https://github.com/joefarrelly/FazzToolsFrontend) · [Addon](https://github.com/joefarrelly/FazzToolsScraper)
 
 React frontend for **FazzTools** — a World of Warcraft companion app.
 
-Displays character data (professions, equipment, mounts, pets, keybinds) synced from the Blizzard Battle.net API. Authenticates via Blizzard OAuth and communicates with the Django REST backend.
+Displays character data (professions, equipment, mounts, pets, achievements, reputations) synced from the Blizzard Battle.net API. Authenticates via Blizzard OAuth and communicates with the Django REST backend.
 
 The companion backend lives at [FazzToolsAPI](../FazzToolsAPI).
 
