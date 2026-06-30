@@ -87,7 +87,7 @@ Absolute imports are configured via `baseUrl: "src"` in `tsconfig.json`, so impo
 
 **Data slicing in Mount/Pet**: the API appends count metadata at the end of the response array. `data.slice(0, -3)` passes actual records to the table; `data.slice(-3)` retrieves the counts.
 
-**Addon file upload**: users upload a `.lua` file (WoW addon export) via `AddonFileUpload`, mounted above `AccountTable` on the Account page, which PUTs it to the backend as `multipart/form-data`. `Account.tsx` joins the parsed gold/played-time data (`/api/profile/users/?page=addon`) into `AccountTable`'s Gold and Played Time columns — `'—'` when an alt hasn't appeared in an uploaded file yet. Currencies/lockouts/keystone/vault are captured by the addon but not yet surfaced (same join pattern, not built).
+**Addon file upload**: users upload a `.lua` file (WoW addon export) via `AddonFileUpload`, mounted above `AccountTable` on the Account page, which PUTs it to the backend as `multipart/form-data`. The backend parses it on upload and stores gold/played-time in `ProfileAltAddonData`; `Account.tsx` fetches `/api/profile/altaddondata/` and joins it into `AccountTable`'s Gold and Played Time columns — `'—'` when an alt hasn't appeared in an uploaded file yet. Currencies/lockouts/keystone/vault are captured by the addon but not yet surfaced (same join pattern, not built).
 
 ### Styling
 

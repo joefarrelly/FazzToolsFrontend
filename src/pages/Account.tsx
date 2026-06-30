@@ -69,7 +69,7 @@ function Account() {
             fields: ['.alt_id', 'get_profession_1_display', 'get_profession_2_display'],
           },
         }),
-        axios.get(config.url.API_URL + '/api/profile/users/', { params: { user, page: 'addon' } }),
+        axios.get(config.url.API_URL + '/api/profile/altaddondata/', { params: { user } }),
       ]);
 
       const sortedAlts = (altsRes.data as RawAltRow[])
