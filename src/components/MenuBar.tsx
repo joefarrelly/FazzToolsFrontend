@@ -24,13 +24,14 @@ function LoginLogout() {
   if (cookies.get('userid')) {
     return (
       <>
-        <SidebarLink to="/account">Account</SidebarLink>
+        <SidebarLink to="/">Account</SidebarLink>
         <SidebarLink to="/gear">Gear</SidebarLink>
         <SidebarLink to="/profession">Profession</SidebarLink>
         <SidebarLink to="/mount">Mount</SidebarLink>
         <SidebarLink to="/pet">Pet</SidebarLink>
         <SidebarLink to="/achievement">Achievements</SidebarLink>
         <SidebarLink to="/reputation">Reputations</SidebarLink>
+        <SidebarLink to="/mythicplus">Mythic+</SidebarLink>
         <div className="mt-4 pt-4 border-t border-zinc-800">
           <SidebarLink to="/logout" danger>
             Logout
@@ -45,7 +46,6 @@ function LoginLogout() {
 function MenuBar() {
   return (
     <nav className="p-3 space-y-1">
-      <SidebarLink to="/">Home</SidebarLink>
       <LoginLogout />
     </nav>
   );
