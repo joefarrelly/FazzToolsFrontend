@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import KeybindUpload from './KeybindUpload';
+import AddonFileUpload from './AddonFileUpload';
 
 jest.mock('axios');
 jest.mock('cookies', () => ({ cookies: { get: jest.fn(() => 'user123'), set: jest.fn() } }));
@@ -12,12 +12,12 @@ function luaFile(name = 'binds.lua', sizeBytes = 1024) {
 }
 
 test('submit is disabled with no file selected', () => {
-  render(<KeybindUpload inputKey={1} onChange={() => {}} />);
+  render(<AddonFileUpload inputKey={1} onChange={() => {}} />);
   expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
 });
 
 test('shows error and keeps submit disabled for non-.lua file', () => {
-  render(<KeybindUpload inputKey={1} onChange={() => {}} />);
+  render(<AddonFileUpload inputKey={1} onChange={() => {}} />);
   const input = document.querySelector('input[type="file"]') as HTMLInputElement;
 
   const txtFile = new File(['content'], 'export.txt', { type: 'text/plain' });
@@ -28,7 +28,7 @@ test('shows error and keeps submit disabled for non-.lua file', () => {
 });
 
 test('shows error and keeps submit disabled for oversized .lua file', () => {
-  render(<KeybindUpload inputKey={1} onChange={() => {}} />);
+  render(<AddonFileUpload inputKey={1} onChange={() => {}} />);
   const input = document.querySelector('input[type="file"]') as HTMLInputElement;
 
   const bigFile = luaFile('big.lua', 6 * 1024 * 1024);
@@ -39,7 +39,7 @@ test('shows error and keeps submit disabled for oversized .lua file', () => {
 });
 
 test('enables submit and clears errors for a valid .lua file', async () => {
-  render(<KeybindUpload inputKey={1} onChange={() => {}} />);
+  render(<AddonFileUpload inputKey={1} onChange={() => {}} />);
   const input = document.querySelector('input[type="file"]') as HTMLInputElement;
 
   await userEvent.upload(input, luaFile('FazzToolsScraperDB.lua', 50 * 1024));

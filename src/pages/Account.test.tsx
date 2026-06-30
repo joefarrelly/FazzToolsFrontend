@@ -33,6 +33,7 @@ test('renders alt data on success', async () => {
   mockedAxios.get.mockImplementation((url: string) => {
     if (url.includes('/altmythicplus/')) return Promise.resolve({ data: [] });
     if (url.includes('/altprofessions/')) return Promise.resolve({ data: [] });
+    if (url.includes('/api/profile/users/')) return Promise.resolve({ data: [] });
     return Promise.resolve({
       data: [[1, 'Testchar', 'Stormrage', 'stormrage', 70, 'Human', 'Warrior', 'Alliance', 615]],
     });
