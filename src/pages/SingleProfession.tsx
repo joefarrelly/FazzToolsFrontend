@@ -5,11 +5,8 @@ import PageLayout from 'components/PageLayout';
 import ProfessionTable from 'components/ProfessionTable';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { config } from 'Constants';
+import { capitalize } from 'format';
 import type { TierData } from 'types';
-
-function capitalize(str: string): string {
-  return str ? str[0].toUpperCase() + str.slice(1) : '';
-}
 
 function SingleProfession() {
   const [data, setData] = useState<TierData[]>([]);

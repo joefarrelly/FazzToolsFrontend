@@ -30,8 +30,12 @@ test('shows error message when request fails', async () => {
 });
 
 test('renders alt data on success', async () => {
-  mockedAxios.get.mockResolvedValue({
-    data: [['Alliance', 70, 'Human', 'Warrior', 'Testchar', 'Stormrage', 1]],
+  mockedAxios.get.mockImplementation((url: string) => {
+    if (url.includes('/altmythicplus/')) return Promise.resolve({ data: [] });
+    if (url.includes('/altprofessions/')) return Promise.resolve({ data: [] });
+    return Promise.resolve({
+      data: [[1, 'Testchar', 'Stormrage', 'stormrage', 70, 'Human', 'Warrior', 'Alliance', 615]],
+    });
   });
   renderAccount();
   await screen.findByText('Testchar');

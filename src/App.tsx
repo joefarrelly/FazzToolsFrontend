@@ -14,6 +14,7 @@ import MythicPlus from 'pages/MythicPlus';
 import Logout from 'pages/Logout';
 import SingleProfession from 'pages/SingleProfession';
 import SingleGear from 'pages/SingleGear';
+import AltDetail from 'pages/AltDetail';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/profession/:alt/:realm/:profession" element={<SingleProfession />} />
         <Route path="/gear/:alt/:realm" element={<SingleGear />} />
+        <Route path="/alt/:alt/:realm" element={<AltDetail />} />
       </Routes>
     </BrowserRouter>
   );
