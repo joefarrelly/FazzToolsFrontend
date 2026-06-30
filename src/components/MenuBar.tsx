@@ -29,7 +29,6 @@ function LoginLogout() {
       <>
         <NavLink to="/">Account</NavLink>
         <NavLink to="/gear">Gear</NavLink>
-        <NavLink to="/profession">Profession</NavLink>
         <NavLink to="/mount">Mount</NavLink>
         <NavLink to="/pet">Pet</NavLink>
         <NavLink to="/achievement">Achievements</NavLink>

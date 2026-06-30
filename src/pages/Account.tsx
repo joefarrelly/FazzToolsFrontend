@@ -62,7 +62,10 @@ function Account() {
           }),
         ]);
 
-        setAlts((altsRes.data as RawAltRow[]).map(parseAlt));
+        const sortedAlts = (altsRes.data as RawAltRow[])
+          .map(parseAlt)
+          .sort((a, b) => b.level - a.level || b.ilvl - a.ilvl);
+        setAlts(sortedAlts);
         setMythicByAlt(
           new Map((mythicRes.data as MythicPlusEntry[]).map((m) => [m.alt, m.mythic_rating]))
         );
