@@ -9,13 +9,7 @@ import { classColor } from 'classColors';
 import { capitalize } from 'format';
 import { cookies } from 'cookies';
 import { config } from 'Constants';
-import type {
-  AchievementEntry,
-  MythicPlusDungeonEntry,
-  MythicPlusEntry,
-  ReputationEntry,
-  TierData,
-} from 'types';
+import type { MythicPlusDungeonEntry, MythicPlusEntry, ReputationEntry, TierData } from 'types';
 
 const GEAR_SLOTS = [
   'Head',
@@ -82,7 +76,6 @@ function AltDetail() {
   const [prof2Data, setProf2Data] = useState<TierData[]>([]);
   const [mythicSummary, setMythicSummary] = useState<MythicPlusEntry | null>(null);
   const [mythicDungeons, setMythicDungeons] = useState<MythicPlusDungeonEntry[]>([]);
-  const [achievements, setAchievements] = useState<AchievementEntry[]>([]);
   const [reputations, setReputations] = useState<ReputationEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -125,33 +118,30 @@ function AltDetail() {
         });
 
         const params = { user, alt: altName, realm: realmSlug };
-        const [gearRes, prof1Res, prof2Res, mythicRes, dungeonsRes, achievementsRes, repsRes] =
-          await Promise.all([
-            axios.get(config.url.API_URL + '/api/profile/altequipments/', {
-              params: { page: 'single', alt: altName, realm: realmSlug },
-            }),
-            prof1Name === 'Missing'
-              ? Promise.resolve({ data: [] })
-              : axios.get(config.url.API_URL + '/api/profile/altprofessiondatas/', {
-                  params: { alt: altName, realm: realmSlug, profession: prof1Name },
-                }),
-            prof2Name === 'Missing'
-              ? Promise.resolve({ data: [] })
-              : axios.get(config.url.API_URL + '/api/profile/altprofessiondatas/', {
-                  params: { alt: altName, realm: realmSlug, profession: prof2Name },
-                }),
-            axios.get(config.url.API_URL + '/api/profile/altmythicplus/', { params }),
-            axios.get(config.url.API_URL + '/api/profile/altmythicplusdungeons/', { params }),
-            axios.get(config.url.API_URL + '/api/profile/altachievements/', { params }),
-            axios.get(config.url.API_URL + '/api/profile/altreputations/', { params }),
-          ]);
+        const [gearRes, prof1Res, prof2Res, mythicRes, dungeonsRes, repsRes] = await Promise.all([
+          axios.get(config.url.API_URL + '/api/profile/altequipments/', {
+            params: { page: 'single', alt: altName, realm: realmSlug },
+          }),
+          prof1Name === 'Missing'
+            ? Promise.resolve({ data: [] })
+            : axios.get(config.url.API_URL + '/api/profile/altprofessiondatas/', {
+                params: { alt: altName, realm: realmSlug, profession: prof1Name },
+              }),
+          prof2Name === 'Missing'
+            ? Promise.resolve({ data: [] })
+            : axios.get(config.url.API_URL + '/api/profile/altprofessiondatas/', {
+                params: { alt: altName, realm: realmSlug, profession: prof2Name },
+              }),
+          axios.get(config.url.API_URL + '/api/profile/altmythicplus/', { params }),
+          axios.get(config.url.API_URL + '/api/profile/altmythicplusdungeons/', { params }),
+          axios.get(config.url.API_URL + '/api/profile/altreputations/', { params }),
+        ]);
 
         setGear(gearRes.data as [string, number][]);
         setProf1Data(prof1Res.data as TierData[]);
         setProf2Data(prof2Res.data as TierData[]);
         setMythicSummary((mythicRes.data as MythicPlusEntry[])[0] ?? null);
         setMythicDungeons(dungeonsRes.data as MythicPlusDungeonEntry[]);
-        setAchievements(achievementsRes.data as AchievementEntry[]);
         setReputations(repsRes.data as ReputationEntry[]);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load data.');
@@ -166,7 +156,6 @@ function AltDetail() {
 
   const color = header ? (classColor(header.className) ?? '#e4e4e7') : '#e4e4e7';
   const title = header ? `${header.altName} — ${capitalize(realm)}` : capitalize(alt);
-  const achievementPoints = achievements.reduce((s, a) => s + a.achievement_points, 0);
 
   return (
     <PageLayout title={title}>
@@ -238,24 +227,6 @@ function AltDetail() {
                     </div>
                   </div>
                 ))
-            )}
-          </Section>
-
-          <Section title="Achievements" subtitle={`${achievementPoints.toLocaleString()} pts`}>
-            {achievements.length === 0 ? (
-              <p className="text-zinc-500 text-xs px-2 py-1">No achievements recorded.</p>
-            ) : (
-              achievements.map((a) => (
-                <div
-                  key={a.achievement}
-                  className="flex items-center justify-between bg-zinc-800/50 border border-zinc-700/50 rounded px-3 py-2 mb-1"
-                >
-                  <span className="text-sm text-zinc-200">{a.achievement_name}</span>
-                  <span className="text-xs text-amber-400/80 font-medium ml-4 shrink-0">
-                    {a.achievement_points} pts
-                  </span>
-                </div>
-              ))
             )}
           </Section>
 
