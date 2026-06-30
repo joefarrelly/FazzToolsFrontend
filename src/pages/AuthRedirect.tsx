@@ -36,7 +36,7 @@ function AuthRedirect() {
     };
   }, [location]);
 
-  if (readyToRedirect) return <Navigate to="/account" />;
+  if (readyToRedirect) return <Navigate to="/" />;
   if (error)
     return (
       <div className="flex items-center justify-center min-h-screen">

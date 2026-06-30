@@ -46,3 +46,20 @@ export interface ReputationEntry {
   standing_type: string;
   standing_value: number;
 }
+
+export interface MythicPlusEntry {
+  alt: number;
+  alt_name: string;
+  season_id: number;
+  mythic_rating: number;
+}
+
+export interface MythicPlusDungeonEntry {
+  alt: number;
+  dungeon: number;
+  dungeon_name: string;
+  keystone_level: number;
+  score: number;
+  completed_timestamp: string | null;
+  is_completed_within_time: boolean;
+}
