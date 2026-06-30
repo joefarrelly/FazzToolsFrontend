@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PageLayout from 'components/PageLayout';
 import LoadingSpinner from 'components/LoadingSpinner';
-import AccountAltRow, { type AccountAlt } from 'components/AccountAltRow';
+import AccountTable, { type AccountAlt } from 'components/AccountTable';
 import { cookies } from 'cookies';
 import { config } from 'Constants';
 import type { MythicPlusEntry } from 'types';
@@ -88,16 +88,7 @@ function Account() {
       {loading && <LoadingSpinner />}
       {error && <p className="text-red-400 text-sm">{error}</p>}
       {!loading && !error && (
-        <div className="max-w-2xl">
-          {alts.map((alt) => (
-            <AccountAltRow
-              key={alt.altId}
-              alt={alt}
-              mythicRating={mythicByAlt.get(alt.altId) ?? null}
-              professions={professionsByAlt.get(alt.altId) ?? null}
-            />
-          ))}
-        </div>
+        <AccountTable alts={alts} mythicByAlt={mythicByAlt} professionsByAlt={professionsByAlt} />
       )}
     </PageLayout>
   );

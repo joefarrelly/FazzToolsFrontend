@@ -20,7 +20,7 @@ This is a Create React App (React 18) single-page application styled with Tailwi
 ```
 src/
   components/       # Shared UI — imported by multiple pages
-    AccountAltRow.tsx   # Account page's per-alt accordion row (collapsed summary + expand panel)
+    AccountTable.tsx    # Account page's per-alt table (ilvl, M+ rating, professions as columns)
     AltTable.tsx        # Table used by Gear, Profession (Account no longer uses this — see below)
     CollapsePanel.tsx   # Animated expand/collapse wrapper
     Header.tsx          # Top bar with brand + Update button
@@ -47,7 +47,7 @@ src/
     SingleProfession.tsx # Click-through target from Profession.tsx (same note as SingleGear)
   App.tsx           # BrowserRouter + Routes only
   App.css           # WoW-specific styles (class colors, item quality borders)
-  classColors.ts    # WoW class → hex color map, shared by AltTable and AccountAltRow
+  classColors.ts    # WoW class → hex color map, shared by AltTable and AccountTable
   Constants.ts      # API URL config
   cookies.ts        # Shared universal-cookie instance
   format.ts         # capitalize() — shared by SingleGear, SingleProfession, AltDetail
@@ -82,9 +82,9 @@ Absolute imports are configured via `baseUrl: "src"` in `tsconfig.json`, so impo
 
 **Page layout pattern**: every page uses `<PageLayout title="...">` which renders `<Header />` + sidebar `<MenuBar />` + the page's main content. `MenuBar` conditionally shows authenticated links based on whether the `userid` cookie exists. `AltDetail` has no sidebar link — it's only reachable by clicking an alt name on the Account page.
 
-**`AltTable`**: shared table used by Gear and Profession (the account-wide overview pages). Per-page rendering is controlled by a `page` prop (`'gear'`, `'profession'`) which governs which columns are hidden and which cells link to detail views. The Account page does **not** use this anymore — it has its own accordion-row component (`AccountAltRow`) since it's expand-in-place rather than tabular.
+**`AltTable`**: shared table used by Gear and Profession (the account-wide overview pages). Per-page rendering is controlled by a `page` prop (`'gear'`, `'profession'`) which governs which columns are hidden and which cells link to detail views. The Account page does **not** use this anymore — it has its own table component (`AccountTable`), styled separately since it needs extra columns (ilvl, M+ rating, professions) that `AltTable`'s `page` prop branching doesn't support.
 
-**Account page redesign (alts as the focal point)**: `Account.tsx` fetches `/api/profile/alts/`, `/api/profile/altmythicplus/`, and `/api/profile/altprofessions/` in parallel and joins them by `alt_id` into a per-alt summary (ilvl, M+ rating, professions) shown inline on expand via `AccountAltRow`. Achievement points and reputation are deliberately *not* shown inline — achievements are scraped from one representative alt per faction (not every alt, see `scan_user_collection` in the backend), so they aren't meaningfully per-alt data; reputation was a judgement call to keep the row light. Clicking an alt's name (not the row background) navigates to `AltDetail` instead of toggling the row. The standalone Gear/Profession/Achievement/Reputation/Mythic+ pages are intentionally untouched by this — they're a known-incomplete first step of a larger planned redesign, not yet decided whether they'll be folded in or stay as account-wide views.
+**Account page redesign (alts as the focal point)**: `Account.tsx` fetches `/api/profile/alts/`, `/api/profile/altmythicplus/`, and `/api/profile/altprofessions/` in parallel and joins them by `alt_id` into a per-alt row (ilvl, M+ rating, professions) rendered via `AccountTable`. Achievement points and reputation are deliberately left off this table — achievements are scraped from one representative alt per faction (not every alt, see `scan_user_collection` in the backend), so they aren't meaningfully per-alt data; reputation was a judgement call to keep the table focused. Clicking an alt's name navigates to `AltDetail` (gear/professions/M+/reputations for that one alt — also no achievements section, same reasoning). The standalone Gear/Profession/Achievement/Reputation/Mythic+ pages are intentionally untouched by this — they're a known-incomplete first step of a larger planned redesign, not yet decided whether they'll be folded in or stay as account-wide views.
 
 **Data slicing in Mount/Pet**: the API appends count metadata at the end of the response array. `data.slice(0, -3)` passes actual records to the table; `data.slice(-3)` retrieves the counts.
 
